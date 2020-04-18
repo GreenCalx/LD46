@@ -45,6 +45,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   villager_ref: {fileID: 5222546602782046459, guid: b8113b85ce9cf5f46a1cf99402f1d1ee,
     type: 3}
+  village_center: {fileID: 549699841818479652, guid: a35533ddedbdecb4c8f6b8ded75f9971,
+    type: 3}
   food: 0
   moral: 0
   villagers: []

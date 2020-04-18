@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using System;
 using UnityEngine;
-
+//using UnityEngine.Physics2DModule;
 using jobs;
 
 
@@ -25,6 +25,9 @@ public class Villager : MonoBehaviour
     public string name;
     public string job_str;
 
+    // time
+    private float last_move_update;
+ 
 
     public string generateName()
     {
@@ -72,7 +75,8 @@ public class Villager : MonoBehaviour
 
     public void doJob()
     {
-        this.job.applyJobEffect();
+        if (this.job != null)
+            this.job.applyJobEffect();
     }
 
     public void update_graphics()
@@ -81,10 +85,35 @@ public class Villager : MonoBehaviour
         if (!!sr)
         {
             Sprite sprite = ( this.sex == SEX.Female ) ?
-                Resources.Load("villager_female", typeof(Sprite)) as Sprite :
-                Resources.Load("villager_male", typeof(Sprite)) as Sprite   ;
+                Resources.Load<Sprite>( Constants.villager_female_sprite ) :
+                Resources.Load<Sprite>( Constants.villager_male_sprite   ) ;
             sr.sprite = sprite;
         }
+    }
+
+    public void move()
+    {
+        Rigidbody2D rb2d = this.gameObject.GetComponent<Rigidbody2D>();
+        if (!rb2d)
+            return;
+        if (Time.time - last_move_update >= Constants.move_time_step)
+        {
+            float min = Constants.villager_move_step * (-1);
+            float max = Constants.villager_move_step ;
+            var x = UnityEngine.Random.Range( min, max);
+            var y = UnityEngine.Random.Range( min, max);
+            rb2d.velocity = new Vector2( x, y);
+
+            last_move_update = Time.time;
+        }
+    }
+
+    public void revertDirection()
+    {
+        Rigidbody2D rb2d = this.gameObject.GetComponent<Rigidbody2D>();
+        if (!rb2d)
+            return;
+        rb2d.velocity = -rb2d.velocity;
     }
 
     // Start is called before the first frame update
@@ -92,11 +121,12 @@ public class Villager : MonoBehaviour
     {
        randomize();
        update_graphics();
+       last_move_update = Time.time;
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        this.move();
     }
 }

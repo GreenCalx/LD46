@@ -6,12 +6,7 @@ public class Village : MonoBehaviour
 {
     // Prefabs
     public GameObject villager_ref;
-
-    // const TWEAKS
-    public const int START_POP  = 6;
-    public const int MAX_FOOD   = 100;
-    public const int MAX_MORAL  = 100;
-    public const float time_step = 50f; // 5 seconds
+    public GameObject village_center;
 
     // STATE
     public int food;
@@ -21,19 +16,26 @@ public class Village : MonoBehaviour
     // TIME MGT
     private float last_job_update;
     
+    public void spawnVillager()
+    {
+        GameObject new_villager = Instantiate(villager_ref) as GameObject;
+        new_villager.transform.position = village_center.transform.position;
+        this.villagers.Add( new_villager );
+    }
 
     // Start is called before the first frame update
     void Start()
     {   
-        this.food    = MAX_FOOD;
-        this.moral   = MAX_MORAL;
+        this.food    = Constants.MAX_FOOD;
+        this.moral   = Constants.MAX_MORAL;
 
-        villagers = new List<GameObject>(START_POP);
+        villagers = new List<GameObject>(Constants.START_POP);
         
-        for (int i=0; i<START_POP; i++)
+        for (int i=0; i<Constants.START_POP; i++)
         {
-            GameObject new_villager = Instantiate(villager_ref) as GameObject;
-            this.villagers.Add( new_villager );
+            //GameObject new_villager = Instantiate(villager_ref) as GameObject;
+            //this.villagers.Add( new_villager );
+            this.spawnVillager();
         }
 
         last_job_update = Time.time;
@@ -42,7 +44,8 @@ public class Village : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Time.time - last_job_update >= time_step)
+        // UPDATE JOBS
+        if (Time.time - last_job_update >= Constants.job_time_step)
         {
             Debug.Log("DO JOB");
             foreach(GameObject v_go in villagers)
@@ -51,7 +54,21 @@ public class Village : MonoBehaviour
                 if (!!v)
                     v.doJob();
             }
+            last_job_update = Time.time;
         }
 
+        // UPDATE VILLAGER POSITION
+
+
     }//! Update
+
+    void OnTriggerExit2D( Collider2D other)
+    {
+        Villager v = other.GetComponent<Villager>();
+        if (!!v) // a villager is at the limit of the village
+        {
+            Debug.Log("outta boundz");
+            v.revertDirection();
+        }
+    }
 }
