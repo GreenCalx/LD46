@@ -8,9 +8,12 @@ public class PlayerController : MonoBehaviour
 {
     // GameObjects
     public GameObject village_go;
+    public GameObject ogre_go;
     public GameObject UI_ref;
     private GameObject UI_go;
     private GameObject selected_villager;
+    public GameObject  UIStats_ref;
+    private GameObject UIStats_go;
 
     // Icons
     private Sprite male_ico     ;
@@ -76,6 +79,11 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        // load resources
+        this.male_ico     = Resources.Load<Sprite>(Constants.male_ico);
+        this.female_ico   = Resources.Load<Sprite>(Constants.female_ico);
+
+        // Villager Panel UI
         UI_go = Instantiate(UI_ref);
 
         // Set listeners on buttons
@@ -87,13 +95,18 @@ public class PlayerController : MonoBehaviour
                 b.onClick.AddListener(sacrificeVillager);
             }
         }
-
-        // load resources
-        this.male_ico     = Resources.Load<Sprite>(Constants.male_ico);
-        this.female_ico   = Resources.Load<Sprite>(Constants.female_ico);
-
         // start with ui deactivated
         UI_go.gameObject.SetActive(false);
+
+        // Stats Panel UI
+        UIStats_go = Instantiate(UIStats_ref);
+        StatsUI ui_stats = UIStats_go.GetComponent<StatsUI>();
+        if (!!ui_stats)
+        {
+            ui_stats.village_go   = this.village_go.gameObject;
+            ui_stats.ogre_go      = this.ogre_go.gameObject;
+        }
+
     }
 
 

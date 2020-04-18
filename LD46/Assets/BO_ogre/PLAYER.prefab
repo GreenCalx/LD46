@@ -43,6 +43,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce8c42b32a449874a99b9a1f3bcb16d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  village_go: {fileID: 4955009197996425420, guid: 4dd99c5394b675848a6c8f7a3110331e,
+  village_go: {fileID: 0}
+  ogre_go: {fileID: 0}
+  UI_ref: {fileID: 6665337944704472112, guid: 322e6c3a1eff6af4a8e81e8834e415ff, type: 3}
+  UIStats_ref: {fileID: 842944366442411254, guid: 16235026c857bf14f84cdfb4f1e7737c,
     type: 3}
-  UI: {fileID: 6665337944704472112, guid: 322e6c3a1eff6af4a8e81e8834e415ff, type: 3}

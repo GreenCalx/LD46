@@ -71,8 +71,8 @@ public class Village : MonoBehaviour
             last_job_update = Time.time;
         }
 
-        // UPDATE VILLAGER POSITION
-
+        if (this.food>0)
+            this.food--;
 
     }//! Update
 

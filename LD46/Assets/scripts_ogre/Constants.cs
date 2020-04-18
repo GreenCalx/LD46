@@ -25,6 +25,10 @@ public class Constants
     public const string close_panel_name     = "ClosePanel";
     public const string sacrifice_btn_name     = "sacrifice_btn";
 
+    public const string ogre_moral_bar  = "ogre_moral_bar";
+    public const string ogre_food_bar   = "ogre_food_bar";
+    public const string village_moral_bar  = "village_moral_bar";
+    public const string village_food_bar   = "village_food_bar";
 
     // Time
     public const float job_time_step = 10f; // 10 seconds    
@@ -42,4 +46,9 @@ public class Constants
     public const int MAX_MORAL  = 100;
     public const float villager_move_step = 0.5f;
     public const int BELT_CONVEYOR_CAPACITY = 10;
+
+    // Colors
+    public const string UI_red     = "#CA1C18";
+    public const string UI_orange  = "#CB8D18";
+    public const string UI_green   = "#1EA427";
 }

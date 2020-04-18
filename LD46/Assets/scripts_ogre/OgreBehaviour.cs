@@ -17,6 +17,7 @@ public class OgreBehaviour : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (this.moral > 0)
+            this.moral--;
     }
 }

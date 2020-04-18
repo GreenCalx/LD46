@@ -120,6 +120,18 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &97281101 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1568342808087306893, guid: 1a2540033f8fa314284ada34252e8024,
+    type: 3}
+  m_PrefabInstance: {fileID: 1568342808070017687}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &407196561 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4955009197996425420, guid: 4dd99c5394b675848a6c8f7a3110331e,
+    type: 3}
+  m_PrefabInstance: {fileID: 4955009198405618977}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &549699840994844529
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -531,6 +543,14 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 876757474, guid: 4dd99c5394b675848a6c8f7a3110331e, type: 3}
+      propertyPath: m_Offset.y
+      value: 0.14737737
+      objectReference: {fileID: 0}
+    - target: {fileID: 876757474, guid: 4dd99c5394b675848a6c8f7a3110331e, type: 3}
+      propertyPath: m_Size.y
+      value: 1.7297957
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4dd99c5394b675848a6c8f7a3110331e, type: 3}
@@ -948,10 +968,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2297449264465197729, guid: 9b93065a015a6ff4caf75fa6e0558b43,
         type: 3}
-      propertyPath: UI_ref
+      propertyPath: village_go
       value: 
-      objectReference: {fileID: 6665337944704472112, guid: 322e6c3a1eff6af4a8e81e8834e415ff,
+      objectReference: {fileID: 407196561}
+    - target: {fileID: 2297449264465197729, guid: 9b93065a015a6ff4caf75fa6e0558b43,
         type: 3}
+      propertyPath: ogre_go
+      value: 
+      objectReference: {fileID: 97281101}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9b93065a015a6ff4caf75fa6e0558b43, type: 3}
 --- !u!1001 &9195838069495555745
