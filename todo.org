@@ -16,6 +16,8 @@
 ** heartbeat game
    basically ther is a heart where you have to click on it to make it beat and the dude stay alive
    but you have a lot of external things that comes bother you and stop you from clicking on the heart
+** super hexagone like
+** cube ou on doit rester sur les faces et il tourne et il y a des pieges
 ** What to keep alive?
 *** an industry or something like rural areas or something
 *** keep a language/culture alive 
