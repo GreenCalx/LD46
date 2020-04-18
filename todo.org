@@ -1,10 +1,31 @@
 * Game design
-  everything related to game ideas
+  everything related to game ideas about theme : Keep it alive 
 ** wind and fire
 *** puzzle game, action clicks
 *** one flame in the middle
 *** series of tubes that user can click and rotate that lead to or off the flame
 *** severals dude come an blow in tubes in an attempt to kill the flame
 ** classic tamagotchi
-** 
+** physics based? keep the momentum going?
+   maybe something tarzan like?
+** bouzi shelters reloaded
+** shark attack
+   divers is attacked by sharks, have to stay alive by swimming and creating pool of blood by killing other things
+** louixo idea: save goldfish
+   you hve to give him water but you only have a broken container de get water
+** heartbeat game
+   basically ther is a heart where you have to click on it to make it beat and the dude stay alive
+   but you have a lot of external things that comes bother you and stop you from clicking on the heart
+** What to keep alive?
+*** an industry or something like rural areas or something
+*** keep a language/culture alive 
+*** keep a memory alive 
+*** an animal/a dude/a plant
+*** keep faith/love alive
+*** tsumego: life and death problems
+*** tower defense with a king to defend (legion reborn td)
+*** door of a castle: dudes are attacking and you need to defend
+*** keep the rythm alive from an ever sleeping band: keep them from sleeping to keep the dancefloor alive
+*** keep alive the child in you: keep doing stupid shits while you grow
+*** keeping an internet connection alive somehow
 
