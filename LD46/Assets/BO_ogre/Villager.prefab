@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 4306507253367986042}
   - component: {fileID: 8760668198782772585}
   - component: {fileID: 2627119925951557136}
+  - component: {fileID: 8984890854905244526}
   - component: {fileID: 5222546602782046461}
   m_Layer: 0
   m_Name: Villager
@@ -117,7 +118,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.004169345, y: -0.012334198}
+  m_Offset: {x: 0.0053516626, y: -0.012531251}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -128,8 +129,24 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.022412539, y: 0.0436067}
+  m_Size: {x: 0.028717756, y: 0.066069305}
   m_EdgeRadius: 0
+--- !u!70 &8984890854905244526
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5222546602782046459}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0.006305337, y: -0.0112313405}
+  m_Size: {x: 0.07724261, y: 0.13753732}
+  m_Direction: 0
 --- !u!114 &5222546602782046461
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -146,3 +163,6 @@ MonoBehaviour:
   sex: 0
   name: '""'
   job_str: '""'
+  is_on_belt: 0
+  go_to_belt: 0
+  destination: {fileID: 0}

@@ -12,6 +12,15 @@ public class Constants
     public const string villager_male_sprite = "res_ogre/villager_male";
     public const string villager_female_sprite = "res_ogre/villager_female";
 
+    // UI tags
+    public const string villager_panel_name_field   = "Name_field";
+    public const string villager_panel_job_field    = "job_field";
+    public const string villager_panel_level_field  = "level_field";
+    public const string villager_panel_name  = "VillagerPanel";
+    public const string close_panel_name     = "ClosePanel";
+    public const string sacrifice_btn_name     = "sacrifice_btn";
+
+
     // Time
     public const float job_time_step = 10f; // 10 seconds    
     public const float move_time_step = 0.5f; // 1 seconds    
@@ -19,7 +28,7 @@ public class Constants
 
     // Speeds
     public const float villager_speed = 0.5f; // 1 seconds    
-    public const float belt_speed = 1f; // 1 seconds    
+    public const float belt_speed = 1f; // 1 seconds   
 
 
     // Tweak consts

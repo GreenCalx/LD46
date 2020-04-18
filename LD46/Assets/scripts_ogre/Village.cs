@@ -65,8 +65,8 @@ public class Village : MonoBehaviour
                     v.doJob();
 
                 // TEST
-                if (!v.is_on_belt)
-                    sendVillagerToBelt(v);
+                //if (!v.is_on_belt)
+                //    sendVillagerToBelt(v);
             }
             last_job_update = Time.time;
         }
@@ -82,7 +82,6 @@ public class Village : MonoBehaviour
         Villager v = other.GetComponent<Villager>();
         if (!!v) 
         {
-            Debug.Log("outta boundz");
             v.revertDirection();
         }
     }
