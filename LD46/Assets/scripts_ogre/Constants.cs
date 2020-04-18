@@ -11,12 +11,17 @@ public class Constants
     // Graphx
     public const string villager_male_sprite = "res_ogre/villager_male";
     public const string villager_female_sprite = "res_ogre/villager_female";
+    public const string female_ico  = "res_ogre/FEMALE_ICO";
+    public const string male_ico    = "res_ogre/MALE_ICO";
+
 
     // UI tags
     public const string villager_panel_name_field   = "Name_field";
     public const string villager_panel_job_field    = "job_field";
     public const string villager_panel_level_field  = "level_field";
     public const string villager_panel_name  = "VillagerPanel";
+    public const string villager_panel_sex_ico  = "sex_ico";
+
     public const string close_panel_name     = "ClosePanel";
     public const string sacrifice_btn_name     = "sacrifice_btn";
 

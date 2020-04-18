@@ -6,13 +6,15 @@ using UnityEngine.EventSystems;
 
 public class PlayerController : MonoBehaviour
 {
-
+    // GameObjects
     public GameObject village_go;
-
     public GameObject UI_ref;
     private GameObject UI_go;
-
     private GameObject selected_villager;
+
+    // Icons
+    private Sprite male_ico     ;
+    private Sprite female_ico   ;
 
     public void spawnVillagerPanel(Villager v)
     {
@@ -35,6 +37,25 @@ public class PlayerController : MonoBehaviour
             { t.text = level; }
         }
 
+        Image[] images = UI_go.GetComponentsInChildren<Image>();
+        foreach (Image image in images)
+        {
+            if( image.name == Constants.villager_panel_sex_ico )
+            { 
+                image.sprite = (v.sex == Villager.SEX.Female) ? female_ico : male_ico;
+            }
+        }
+
+    }
+
+    // /!\ only used to close panel when selected villager is sacrificed, 
+    // otherwise we close the panel with ClosePanel (cf. UIController.cs )
+    public void unselectVillager()
+    {
+        if (UI_go == null)
+            return;
+        UI_go.gameObject.SetActive(false);
+        selected_villager = null;
     }
 
     public void sacrificeVillager()
@@ -48,6 +69,7 @@ public class PlayerController : MonoBehaviour
         if (!!village)
         {
             village.sendVillagerToBelt(villager);
+            unselectVillager();
         }
     }
 
@@ -66,7 +88,11 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        // start ith ui deactivated
+        // load resources
+        this.male_ico     = Resources.Load<Sprite>(Constants.male_ico);
+        this.female_ico   = Resources.Load<Sprite>(Constants.female_ico);
+
+        // start with ui deactivated
         UI_go.gameObject.SetActive(false);
     }
 
