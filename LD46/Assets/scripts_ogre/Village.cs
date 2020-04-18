@@ -7,6 +7,7 @@ public class Village : MonoBehaviour
     // Prefabs
     public GameObject villager_ref;
     public GameObject village_center;
+    public GameObject conveyor_belt;
 
     // STATE
     public int food;
@@ -21,6 +22,15 @@ public class Village : MonoBehaviour
         GameObject new_villager = Instantiate(villager_ref) as GameObject;
         new_villager.transform.position = village_center.transform.position;
         this.villagers.Add( new_villager );
+    }
+
+    public void sendVillagerToBelt(Villager v)
+    {
+        BeltConveyor bc = conveyor_belt.GetComponent<BeltConveyor>();
+        if(!!bc){
+            v.destination   = bc.getLoadingPoint();
+            v.go_to_belt    = true;
+        }
     }
 
     // Start is called before the first frame update
@@ -53,6 +63,10 @@ public class Village : MonoBehaviour
                 Villager v = v_go.GetComponent<Villager>();
                 if (!!v)
                     v.doJob();
+
+                // TEST
+                if (!v.is_on_belt)
+                    sendVillagerToBelt(v);
             }
             last_job_update = Time.time;
         }
@@ -62,10 +76,11 @@ public class Village : MonoBehaviour
 
     }//! Update
 
-    void OnTriggerExit2D( Collider2D other)
+    void OnTriggerExit2D( Collider2D other) 
     {
+        // a villager is at the limit of the village
         Villager v = other.GetComponent<Villager>();
-        if (!!v) // a villager is at the limit of the village
+        if (!!v) 
         {
             Debug.Log("outta boundz");
             v.revertDirection();

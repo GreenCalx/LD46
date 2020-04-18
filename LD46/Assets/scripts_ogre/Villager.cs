@@ -27,6 +27,11 @@ public class Villager : MonoBehaviour
 
     // time
     private float last_move_update;
+
+    // constraints
+    public bool is_on_belt;
+    public bool go_to_belt;
+    public Transform destination;
  
 
     public string generateName()
@@ -91,21 +96,36 @@ public class Villager : MonoBehaviour
         }
     }
 
-    public void move()
+    public void moveRandom()
     {
+        if (is_on_belt)
+            return;
+
         Rigidbody2D rb2d = this.gameObject.GetComponent<Rigidbody2D>();
         if (!rb2d)
             return;
+
         if (Time.time - last_move_update >= Constants.move_time_step)
         {
+
             float min = Constants.villager_move_step * (-1);
             float max = Constants.villager_move_step ;
             var x = UnityEngine.Random.Range( min, max);
             var y = UnityEngine.Random.Range( min, max);
             rb2d.velocity = new Vector2( x, y);
-
             last_move_update = Time.time;
         }
+    }
+
+    public void moveToDestination()
+    {
+        Rigidbody2D rb2d = this.gameObject.GetComponent<Rigidbody2D>();
+        if (!rb2d)
+            return;
+
+        rb2d.velocity = new Vector2(0, 0);
+        transform.position = Vector2.MoveTowards( transform.position, destination.position, Constants.villager_speed * Time.deltaTime);
+
     }
 
     public void revertDirection()
@@ -122,11 +142,18 @@ public class Villager : MonoBehaviour
        randomize();
        update_graphics();
        last_move_update = Time.time;
+       this.is_on_belt = false;
+       this.go_to_belt = false;
     }
 
     // Update is called once per frame
     void Update()
     {
-        this.move();
+        if( is_on_belt)
+            {}
+        else if (go_to_belt && destination)
+            this.moveToDestination();
+        else
+            this.moveRandom();
     }
 }
