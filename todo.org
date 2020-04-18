@@ -1,0 +1,10 @@
+* Game design
+  everything related to game ideas
+** wind and fire
+*** puzzle game, action clicks
+*** one flame in the middle
+*** series of tubes that user can click and rotate that lead to or off the flame
+*** severals dude come an blow in tubes in an attempt to kill the flame
+** classic tamagotchi
+** 
+
