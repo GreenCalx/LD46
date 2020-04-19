@@ -24,6 +24,11 @@ public class Village : MonoBehaviour
         this.villagers.Add( new_villager );
     }
 
+    public void removeVillager(GameObject iGo)
+    {
+        villagers.Remove(iGo);
+    }
+
     public void sendVillagerToBelt(Villager v)
     {
         BeltConveyor bc = conveyor_belt.GetComponent<BeltConveyor>();

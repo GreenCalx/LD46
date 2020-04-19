@@ -167,7 +167,15 @@ public class Villager : MonoBehaviour
     {
         // here is animation of killing if needed
         // for now just remove gameobject from game
-        GameObject.Destroy(this);
+        var go = GameObject.Find("Village");
+        if (go)
+        {
+            var script = go.GetComponent<Village>();
+
+            script.removeVillager(this.gameObject);
+
+            GameObject.Destroy(this.gameObject);
+        }
     }
 
     // Start is called before the first frame update

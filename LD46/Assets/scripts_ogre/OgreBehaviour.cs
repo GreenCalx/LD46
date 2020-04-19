@@ -18,8 +18,8 @@ public class OgreBehaviour : MonoBehaviour
     public float EatingAnimationDuration = 2; // 2 seconds animation
     public float CurrentAnimationTime = 0;
 
-    enum States { EATING, REST, GETTING_TARGET, ANGRY, HUNGRY }
-    private States currentState = States.REST;
+    public enum States { EATING, REST, GETTING_TARGET, ANGRY, HUNGRY }
+    public States currentState = States.REST;
 
     // Start is called before the first frame update
     void Start()
@@ -43,6 +43,7 @@ public class OgreBehaviour : MonoBehaviour
     {
         // here is the animation process if needed
         CurrentAnimationTime = EatingAnimationDuration;
+        needEat = false;
     }
     void EatingAnimationStop()
     {
