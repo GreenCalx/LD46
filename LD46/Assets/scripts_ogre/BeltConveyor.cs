@@ -17,12 +17,12 @@ public class BeltConveyor : MonoBehaviour
 
     public Transform getLoadingPoint()
     {
-        return gameObject.transform.Find(Constants.BELT_LOADING_POINT);;
+        return gameObject.transform.Find(Constants.BELT_LOADING_POINT);
     }
 
     public Transform getDischargePoint()
     {
-        return gameObject.transform.Find(Constants.BELT_DISCHARGE_POINT);;
+        return gameObject.transform.Find(Constants.BELT_DISCHARGE_POINT);
     }
 
     void OnTriggerEnter2D( Collider2D other) 

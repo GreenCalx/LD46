@@ -20,6 +20,7 @@ public class Villager : MonoBehaviour
     public int level;
     public Job job;
     public SEX sex;
+    public int exp;
 
     // villager weak attributes
     public string name;
@@ -27,6 +28,7 @@ public class Villager : MonoBehaviour
 
     // time
     private float last_move_update;
+    private float last_exp_update;
 
     // constraints
     public bool is_on_belt;
@@ -69,7 +71,6 @@ public class Villager : MonoBehaviour
         this.sex   = this.generateSex();
         this.level = this.generateLevel();
         assignJob( new jobs.Beggar() ); // starts beggar regardless of level
-        //this.job_str = this.job.getJobName();
     }
 
     public void assignJob( jobs.Job iJob )
@@ -108,7 +109,6 @@ public class Villager : MonoBehaviour
 
         if (Time.time - last_move_update >= Constants.move_time_step)
         {
-
             float min = Constants.villager_move_step * (-1);
             float max = Constants.villager_move_step ;
             var x = UnityEngine.Random.Range( min, max);
@@ -137,12 +137,38 @@ public class Villager : MonoBehaviour
         rb2d.velocity = -rb2d.velocity;
     }
 
+    public void updateExperience()
+    {
+        if (Time.time - last_exp_update >= Constants.villager_exp_gain_time_step)
+        {
+            this.exp += Constants.VILLAGER_EXP_GAIN;
+
+            if ( this.exp > Constants.VILLAGER_EXP_REQ_LEVEL3  && (level == 3) )
+            { /* level 3 is last level, no more to do */}
+            if ( (this.exp >= Constants.VILLAGER_EXP_REQ_LEVEL3) && (level==2) )
+            {
+                this.level = 3;
+            }
+            else if ( (this.exp >= Constants.VILLAGER_EXP_REQ_LEVEL2) && (level==1) )
+            {
+                this.level = 2;
+            }
+            else if ( (this.exp >= Constants.VILLAGER_EXP_REQ_LEVEL1) && (level==0) )
+            {
+                this.level = 1;
+            }
+
+            last_exp_update = Time.time;
+        }
+    }
+
     // Start is called before the first frame update
     void Start()
     {
        randomize();
        update_graphics();
        last_move_update = Time.time;
+       last_exp_update  = Time.time;
        this.is_on_belt = false;
        this.go_to_belt = false;
     }
@@ -150,11 +176,15 @@ public class Villager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // Update position
         if( is_on_belt)
             {}
         else if (go_to_belt && destination)
             this.moveToDestination();
         else
             this.moveRandom();
+
+        // Update exp
+        this.updateExperience();
     }
 }

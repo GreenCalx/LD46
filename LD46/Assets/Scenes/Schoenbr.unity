@@ -126,6 +126,12 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 1568342808070017687}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &120315733 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4365090925749281605, guid: 6bbb84454a92039488b2f55d252af039,
+    type: 3}
+  m_PrefabInstance: {fileID: 4365090926313566005}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &407196561 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4955009197996425420, guid: 4dd99c5394b675848a6c8f7a3110331e,
@@ -556,12 +562,17 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 876757474, guid: 4dd99c5394b675848a6c8f7a3110331e, type: 3}
       propertyPath: m_Offset.y
-      value: 0.18117726
+      value: 0.17144918
       objectReference: {fileID: 0}
     - target: {fileID: 876757474, guid: 4dd99c5394b675848a6c8f7a3110331e, type: 3}
       propertyPath: m_Size.y
-      value: 2.6999953
+      value: 2.7194514
       objectReference: {fileID: 0}
+    - target: {fileID: 4955009197996425423, guid: 4dd99c5394b675848a6c8f7a3110331e,
+        type: 3}
+      propertyPath: conveyor_belt
+      value: 
+      objectReference: {fileID: 120315733}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4dd99c5394b675848a6c8f7a3110331e, type: 3}
 --- !u!1001 &6014882191753422425

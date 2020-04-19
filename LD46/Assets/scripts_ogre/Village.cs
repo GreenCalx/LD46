@@ -63,10 +63,6 @@ public class Village : MonoBehaviour
                 Villager v = v_go.GetComponent<Villager>();
                 if (!!v)
                     v.doJob();
-
-                // TEST
-                //if (!v.is_on_belt)
-                //    sendVillagerToBelt(v);
             }
             last_job_update = Time.time;
         }

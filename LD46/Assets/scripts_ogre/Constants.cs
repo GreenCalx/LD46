@@ -56,6 +56,7 @@ public class Constants
     public const float job_time_step = 10f; // 10 seconds    
     public const float move_time_step = 0.5f; // 1 seconds    
     public const float belt_time_step = 1f;
+    public const float villager_exp_gain_time_step = 5f; // 5 Seconds
 
     // Speeds
     public const float villager_speed = 0.5f; // 1 seconds    
@@ -68,6 +69,10 @@ public class Constants
     public const int MAX_MORAL  = 100;
     public const float villager_move_step = 0.5f;
     public const int BELT_CONVEYOR_CAPACITY = 10;
+    public const int VILLAGER_EXP_GAIN = 1;
+    public const int VILLAGER_EXP_REQ_LEVEL1 = 5;
+    public const int VILLAGER_EXP_REQ_LEVEL2 = 10;
+    public const int VILLAGER_EXP_REQ_LEVEL3 = 15;
 
     // Colors
     public const string UI_red     = "#CA1C18";
