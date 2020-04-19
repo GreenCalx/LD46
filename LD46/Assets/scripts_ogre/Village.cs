@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Village : MonoBehaviour
 {
@@ -124,6 +125,10 @@ public class Village : MonoBehaviour
 
             last_time_villagers_ate = Time.time;
         }
+
+        // check if player is game over
+        if ( villagers.Count == 0 )
+            SceneManager.LoadScene(Constants.GAME_OVER_SCENE, LoadSceneMode.Single);
 
     }//! Update
 
