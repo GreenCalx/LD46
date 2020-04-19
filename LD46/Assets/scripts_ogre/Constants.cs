@@ -54,9 +54,11 @@ public class Constants
 
     // Time
     public const float job_time_step = 10f; // 10 seconds    
-    public const float move_time_step = 0.5f; // 1 seconds    
+    public const float move_time_step = 0.5f; // .5 seconds    
     public const float belt_time_step = 1f;
     public const float villager_exp_gain_time_step = 5f; // 5 Seconds
+    public const float villager_change_job_time = 3f; // 3 Seconds
+
 
     // Speeds
     public const float villager_speed = 0.5f; // 1 seconds    
@@ -78,4 +80,7 @@ public class Constants
     public const string UI_red     = "#CA1C18";
     public const string UI_orange  = "#CB8D18";
     public const string UI_green   = "#1EA427"; 
+
+    // Animator vars
+    public const string villager_change_job = "change_job";
 }

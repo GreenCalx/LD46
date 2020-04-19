@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 2627119925951557136}
   - component: {fileID: 8984890854905244526}
   - component: {fileID: 5222546602782046461}
+  - component: {fileID: -309811047963029103}
   m_Layer: 0
   m_Name: Villager
   m_TagString: Untagged
@@ -161,8 +162,28 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   level: 0
   sex: 0
+  exp: 0
   name: '""'
   job_str: '""'
   is_on_belt: 0
   go_to_belt: 0
   destination: {fileID: 0}
+--- !u!95 &-309811047963029103
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5222546602782046459}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: d131e1bccff3f31488b7b8ca55ad4208, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
