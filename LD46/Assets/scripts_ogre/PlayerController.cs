@@ -19,6 +19,9 @@ public class PlayerController : MonoBehaviour
     private Sprite male_ico     ;
     private Sprite female_ico   ;
 
+    // Panels
+    public Image iAssignPanel;
+
     public void spawnVillagerPanel(Villager v)
     {
         if (UI_go == null)
@@ -78,27 +81,19 @@ public class PlayerController : MonoBehaviour
 
     public void toggleAssignPanel()
     {
-        Canvas[] child_canvas = UI_go.GetComponentsInChildren<Canvas>();
-
-        Canvas ui_canvas = null;
-        foreach( Canvas c in child_canvas )
+        if (iAssignPanel == null)
         {
-            if ( c.name == Constants.ui_panel_name )
+            Image[] child_panels = UI_go.GetComponentsInChildren<Image>();
+            foreach (Image im in child_panels)
             {
-                ui_canvas = c;
-            }
-        }
-        if (!!ui_canvas)
-        {
-            child_canvas = ui_canvas.gameObject.GetComponentsInChildren<Canvas>();
-            foreach( Canvas c in child_canvas )
-            {
-                if ( c.name == Constants.assign_panel_name )
+                if (im.name == Constants.assign_panel_name)
                 {
-                    c.gameObject.SetActive(!gameObject.activeInHierarchy);
+                    //im.gameObject.SetActive(!im.gameObject.activeInHierarchy);
+                    iAssignPanel = im;
                 }
             }
         }
+        iAssignPanel.gameObject.SetActive(!iAssignPanel.gameObject.activeInHierarchy);
     }
 
     // Start is called before the first frame update
@@ -121,7 +116,8 @@ public class PlayerController : MonoBehaviour
             }
             if (b.gameObject.name == Constants.assign_btn_name)
             {
-                b.onClick.AddListener(toggleAssignPanel);
+                toggleAssignPanel(); // deactivate panel at start
+                b.onClick.AddListener( toggleAssignPanel );
             }
 
         }
