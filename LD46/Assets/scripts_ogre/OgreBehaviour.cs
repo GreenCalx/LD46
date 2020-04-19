@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class OgreBehaviour : MonoBehaviour
 {
@@ -48,9 +49,32 @@ public class OgreBehaviour : MonoBehaviour
         }
     }
 
+    jobs.Job getJob(int job)
+    {
+        switch (job)
+        {
+            case 0: return new jobs.Beggar();
+            case 1: return new jobs.Farmer();
+            case 2: return new jobs.Builder();
+            case 3: return new jobs.Cleric();
+            case 4: return new jobs.Bard();
+            case 5: return new jobs.King();
+            default: return new jobs.Job();
+        }
+    }
+
     void DisplayNeededFood(int level, int job, int sex)
     {
         Debug.Log("NEED FOOD :" + level + " " + job + " " + sex);
+        var ui = GetComponentInChildren<Canvas>();
+        if (ui) ui.enabled = true;
+        var icon = GetComponentInChildren<Image>();
+
+        Villager v = new Villager();
+        v.sex = (Villager.SEX)sex;
+        v.job = getJob(job);
+        v.level = level;
+        icon.sprite = v.job.getJobSprite(v.sex);
     }
 
     void AskFood()
@@ -70,7 +94,7 @@ public class OgreBehaviour : MonoBehaviour
         CurrentAnimationTime = EatingAnimationDuration;
         needEat = false;
 
-        food = Mathf.Max( food + Constants.Villager_food, 100);
+        food = Mathf.Min( food + Constants.Villager_food, 100);
     }
     void EatingAnimationStop()
     {
@@ -169,6 +193,7 @@ public class OgreBehaviour : MonoBehaviour
                 }
             }
 
+            
         }
 
 
