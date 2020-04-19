@@ -74,13 +74,6 @@ public class OgreRampage : MonoBehaviour
                 }
             }
 
-            if (!FoundHouseCollider)
-            {
-                CurrentBlockFrameCount = 0;
-                GetComponent<BoxCollider2D>().enabled = true;
-                CurrentDisabledTime = DisableColliderTime;
-            }
-
             if (CurrentBlockFrameCount >= UnblockFrameCount)
             {
                 GetComponent<BoxCollider2D>().enabled = false; 
@@ -89,6 +82,20 @@ public class OgreRampage : MonoBehaviour
             if (GetComponent<BoxCollider2D>().enabled == false)
             {
                 CurrentDisabledTime -= Time.fixedDeltaTime;
+                if (CurrentDisabledTime <= 0)
+                {
+                    CurrentDisabledTime = DisableColliderTime;
+                    GetComponent<BoxCollider2D>().enabled = true; 
+                }
+            }
+
+            if (GetComponent<BoxCollider2D>().enabled)
+            {
+                if (!FoundHouseCollider)
+                {
+                  CurrentBlockFrameCount = 0;
+                  CurrentDisabledTime = DisableColliderTime;
+                }
             }
 
         }
