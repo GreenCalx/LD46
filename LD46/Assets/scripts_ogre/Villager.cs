@@ -68,14 +68,18 @@ public class Villager : MonoBehaviour
         this.name  = this.generateName();
         this.sex   = this.generateSex();
         this.level = this.generateLevel();
-        this.job   = new jobs.Beggar(); // starts beggar regardless of level
-        this.job_str = this.job.getJobName();
+        assignJob( new jobs.Beggar() ); // starts beggar regardless of level
+        //this.job_str = this.job.getJobName();
     }
 
     public void assignJob( jobs.Job iJob )
     {
-        if ( iJob.canApplyToJob(this) )
+        if (iJob.canApplyToJob(this))
+        {
             this.job = iJob;
+            this.job_str = iJob.getJobName();
+            update_graphics();
+        }
     }
 
     public void doJob()
@@ -89,10 +93,14 @@ public class Villager : MonoBehaviour
         SpriteRenderer sr = this.gameObject.GetComponent<SpriteRenderer>();
         if (!!sr)
         {
+            /*
             Sprite sprite = ( this.sex == SEX.Female ) ?
                 Resources.Load<Sprite>( Constants.villager_female_sprite ) :
                 Resources.Load<Sprite>( Constants.villager_male_sprite   ) ;
+
             sr.sprite = sprite;
+                */
+            sr.sprite = this.job.getJobSprite(this.sex);
         }
     }
 

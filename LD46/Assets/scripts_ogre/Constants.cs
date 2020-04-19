@@ -9,8 +9,20 @@ public class Constants
     public const string BELT_DISCHARGE_POINT    = "belt_discharge_point";
 
     // Graphx
+    public const string villager_template_sprite = "res_ogre/villager_template";
     public const string villager_male_sprite = "res_ogre/villager_male";
     public const string villager_female_sprite = "res_ogre/villager_female";
+    public const string farmer_male_sprite = "res_ogre/villager_male_farmer";
+    public const string farmer_female_sprite = "res_ogre/villager_female_farmer";
+    public const string builder_male_sprite = "res_ogre/villager_male_builder";
+    public const string builder_female_sprite = "res_ogre/villager_female_builder";
+    public const string cleric_male_sprite = "res_ogre/villager_male_cleric";
+    public const string cleric_female_sprite = "res_ogre/villager_female_cleric";
+    public const string bard_male_sprite = "res_ogre/villager_male_bard";
+    public const string bard_female_sprite = "res_ogre/villager_female_bard";
+    public const string king_male_sprite = "res_ogre/villager_male_king";
+    public const string king_female_sprite = "res_ogre/villager_female_king";
+    
     public const string female_ico  = "res_ogre/FEMALE_ICO";
     public const string male_ico    = "res_ogre/MALE_ICO";
 
@@ -26,7 +38,13 @@ public class Constants
     public const string close_panel_name        = "ClosePanel";
     public const string assign_panel_name        = "AssignPanel";
     public const string sacrifice_btn_name      = "sacrifice_btn";
-     public const string assign_btn_name        = "assign_btn";
+    public const string assign_btn_name        = "assign_btn";
+    // job assignement buttons
+    public const string assign_farmer_btn_name    = "farmer_btn";
+    public const string assign_builder_btn_name   = "builder_btn";
+    public const string assign_cleric_btn_name    = "cleric_btn";
+    public const string assign_bard_btn_name      = "bard_btn";
+    public const string assign_king_btn_name      = "king_btn";
 
 
     public const string ogre_moral_bar  = "ogre_moral_bar";

@@ -10,6 +10,11 @@ namespace jobs {
 
         public virtual void applyJobEffect() {}
 
+        public virtual Sprite getJobSprite( Villager.SEX iSex )
+        {
+            return Resources.Load<Sprite>(Constants.villager_template_sprite);
+        }
+
         public bool canApplyToJob( Villager v)
         {
             return (v.level >= this.level_condition);
@@ -27,6 +32,13 @@ namespace jobs {
         public override void applyJobEffect()
         {
             // does nothing but eat food :(
+        }
+
+        public override Sprite getJobSprite( Villager.SEX iSex )
+        {
+            return ( iSex == Villager.SEX.Female ) ? 
+                Resources.Load<Sprite>( Constants.villager_female_sprite ) :
+                Resources.Load<Sprite>( Constants.villager_male_sprite   ) ;
         }
 
         public Beggar()
@@ -47,6 +59,13 @@ namespace jobs {
             // FOOD ++
         }
 
+        public override Sprite getJobSprite( Villager.SEX iSex )
+        {
+            return (iSex == Villager.SEX.Female) ? 
+                Resources.Load<Sprite>( Constants.farmer_female_sprite ) :
+                Resources.Load<Sprite>( Constants.farmer_male_sprite   ) ;
+        }
+
         public Farmer()
         {
             this.level_condition = 1;
@@ -65,7 +84,12 @@ namespace jobs {
         {
             // Repair broken houses
         }
-        
+        public override Sprite getJobSprite( Villager.SEX iSex )
+        {
+            return (iSex == Villager.SEX.Female) ? 
+                Resources.Load<Sprite>( Constants.builder_female_sprite ) :
+                Resources.Load<Sprite>( Constants.builder_male_sprite   ) ;
+        }
         public Builder()
         {
             this.level_condition = 1;
@@ -83,7 +107,12 @@ namespace jobs {
         {
             // Boost ogre moral
         }
-        
+        public override Sprite getJobSprite( Villager.SEX iSex )
+        {
+            return (iSex == Villager.SEX.Female) ? 
+                Resources.Load<Sprite>( Constants.cleric_female_sprite ) :
+                Resources.Load<Sprite>( Constants.cleric_male_sprite   ) ;
+        }
         public Cleric()
         {
             this.level_condition = 2;
@@ -101,7 +130,12 @@ namespace jobs {
         {
             // Boost ogre moral
         }
-        
+        public override Sprite getJobSprite( Villager.SEX iSex )
+        {
+            return (iSex == Villager.SEX.Female) ? 
+                Resources.Load<Sprite>( Constants.bard_female_sprite ) :
+                Resources.Load<Sprite>( Constants.bard_male_sprite   ) ;
+        }
         public Bard()
         {
             this.level_condition = 2;
@@ -119,7 +153,12 @@ namespace jobs {
         {
             // Boost ogre moral
         }
-        
+        public override Sprite getJobSprite( Villager.SEX iSex )
+        {
+            return (iSex == Villager.SEX.Female) ? 
+                Resources.Load<Sprite>( Constants.king_female_sprite ) :
+                Resources.Load<Sprite>( Constants.king_male_sprite   ) ;
+        }
         public King()
         {
             this.level_condition = 3;
