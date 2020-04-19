@@ -16,7 +16,7 @@ namespace jobs {
 
         protected int level_condition;
 
-        public virtual void applyJobEffect() {}
+        public virtual void applyJobEffect( Village iVillage ) {}
 
         public virtual Sprite getJobSprite( Villager.SEX iSex )
         {
@@ -37,7 +37,7 @@ namespace jobs {
 
     public class Beggar : Job
     {
-        public override void applyJobEffect()
+        public override void applyJobEffect(Village iVillage)
         {
             // does nothing but eat food :(
         }
@@ -62,9 +62,10 @@ namespace jobs {
 
     public class Farmer : Job
     {
-        public override void applyJobEffect()
+        public override void applyJobEffect( Village iVillage )
         {
             // FOOD ++
+            iVillage.food = (int) Mathf.Min( iVillage.food + Constants.FARMER_FOOD_INCOME, Constants.MAX_FOOD);
         }
 
         public override Sprite getJobSprite( Villager.SEX iSex )
@@ -88,9 +89,21 @@ namespace jobs {
     
     public class Builder : Job
     {
-        public override void applyJobEffect()
+        public override void applyJobEffect( Village iVillage )
         {
             // Repair broken houses
+            foreach( GameObject house_go in iVillage.houses)
+            {
+                House house = house_go.GetComponent<House>();
+                if(!house)
+                    continue;
+                if ( house.Life < Constants.HOUSE_MAX_HP )
+                { 
+                    house.Life = Mathf.Min( house.Life + Constants.BUILDER_REPAIR_SPEED, Constants.HOUSE_MAX_HP);
+                    break;
+                }
+            }
+
         }
         public override Sprite getJobSprite( Villager.SEX iSex )
         {
@@ -111,7 +124,7 @@ namespace jobs {
 
     public class Cleric : Job
     {
-        public override void applyJobEffect()
+        public override void applyJobEffect( Village iVillage )
         {
             // Boost ogre moral
         }
@@ -134,9 +147,10 @@ namespace jobs {
 
     public class Bard : Job
     {
-        public override void applyJobEffect()
+        public override void applyJobEffect( Village iVillage )
         {
-            // Boost ogre moral
+            // Boost village moral
+            Mathf.Min( iVillage.moral + Constants.BARD_VILLAGE_MORAL, Constants.MAX_MORAL);
         }
         public override Sprite getJobSprite( Villager.SEX iSex )
         {
@@ -157,9 +171,10 @@ namespace jobs {
 
     public class King : Job
     {
-        public override void applyJobEffect()
+        public override void applyJobEffect( Village iVillage )
         {
-            // Boost ogre moral
+            Mathf.Min( iVillage.moral * Constants.KING_VILLAGE_BUFF_COEF, Constants.MAX_MORAL);
+            Mathf.Min( iVillage.food * Constants.KING_VILLAGE_BUFF_COEF , Constants.MAX_FOOD);
         }
         public override Sprite getJobSprite( Villager.SEX iSex )
         {

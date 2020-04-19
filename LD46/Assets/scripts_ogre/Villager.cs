@@ -16,6 +16,9 @@ public class Villager : MonoBehaviour
         Male = 1
     }
 
+    // Held GO references
+    private GameObject village_go = null;
+
     // villager strong attributes
     public int level;
     public Job job;
@@ -64,13 +67,11 @@ public class Villager : MonoBehaviour
 
     public SEX generateSex()
     {
-        //System.Random random      = new System.Random();  
         return (UnityEngine.Random.Range(0f, 100f) <= 50 ) ? SEX.Male : SEX.Female ; // 50% either male or female
     }
 
     public int generateLevel()
     {
-        //System.Random random      = new System.Random();  
         return ( UnityEngine.Random.Range(0f, 100f) <= 50 ) ? 0 : 1 ; // 50% chance of having a beggar
     }
 
@@ -114,7 +115,12 @@ public class Villager : MonoBehaviour
     public void doJob()
     {
         if (this.job != null)
-            this.job.applyJobEffect();
+        {
+            refreshVillageRef(); // useless? safety..
+            Village v = village_go.GetComponent<Village>();
+            if (!!v)
+                this.job.applyJobEffect(v);
+        }
     }
 
     public void update_graphics()
@@ -165,14 +171,21 @@ public class Villager : MonoBehaviour
         rb2d.velocity = -rb2d.velocity;
     }
 
+
+    public void refreshVillageRef()
+    {
+        if (this.village_go == null)
+            this.village_go =  GameObject.Find( Constants.VILLAGE_GO_NAME );
+    }
+
     public void Kill()
     {
         // here is animation of killing if needed
         // for now just remove gameobject from game
-        var go = GameObject.Find("Village");
-        if (go)
+        refreshVillageRef();
+        if (village_go)
         {
-            var script = go.GetComponent<Village>();
+            var script = village_go.GetComponent<Village>();
 
             script.removeVillager(this.gameObject);
 
@@ -241,6 +254,8 @@ public class Villager : MonoBehaviour
             animator.SetBool( Constants.villager_change_job, false);
             animator.enabled = false;
         }
+
+        refreshVillageRef();
     }
 
     // Update is called once per frame
