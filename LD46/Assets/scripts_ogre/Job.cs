@@ -5,6 +5,14 @@ using UnityEngine;
 namespace jobs {
     public class Job
     {
+        public enum JOB_LIST {
+            BEGGAR = 0,
+            FARMER = 1,
+            BUILDER = 2,
+            CLERIC = 3,
+            BARD = 4,
+            KING = 5
+        }
 
         protected int level_condition;
 

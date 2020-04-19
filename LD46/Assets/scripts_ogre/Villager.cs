@@ -93,13 +93,6 @@ public class Villager : MonoBehaviour
         SpriteRenderer sr = this.gameObject.GetComponent<SpriteRenderer>();
         if (!!sr)
         {
-            /*
-            Sprite sprite = ( this.sex == SEX.Female ) ?
-                Resources.Load<Sprite>( Constants.villager_female_sprite ) :
-                Resources.Load<Sprite>( Constants.villager_male_sprite   ) ;
-
-            sr.sprite = sprite;
-                */
             sr.sprite = this.job.getJobSprite(this.sex);
         }
     }
