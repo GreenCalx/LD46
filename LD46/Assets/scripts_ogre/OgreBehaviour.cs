@@ -7,6 +7,7 @@ public class OgreBehaviour : MonoBehaviour
 {
     public int food;
     public int moral;
+    public GameObject village_go_ref;
 
     public GameObject rightHand;
     public GameObject rightHandRestingPosition;
@@ -38,6 +39,8 @@ public class OgreBehaviour : MonoBehaviour
     {
         this.food = Constants.MAX_FOOD;
         this.moral = Constants.MAX_MORAL;
+
+        this.village_go_ref = GameObject.Find(Constants.VILLAGE_GO_NAME);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -101,9 +104,17 @@ public class OgreBehaviour : MonoBehaviour
 
     void AskFood()
     {
+        // Get constraints ( villager max level, and thus associated job )
+        if (this.village_go_ref==null)
+            this.village_go_ref = GameObject.Find( Constants.VILLAGE_GO_NAME );
+        Village village = this.village_go_ref.GetComponent<Village>();
+        int max_lvl_in_village = village.getMaxLevelVillager();
+
+        int n_available_jobs = jobs.Job.availableJobsForLevel( max_lvl_in_village );
+
         // randomize food type
-        int food_level = (int) (Random.value * 3);
-        int food_job = (int)(Random.value * 6);
+        int food_level = (int) (Random.value * max_lvl_in_village);
+        int food_job = (int)(Random.value * n_available_jobs);
         int food_sex = (int)(Random.value * 2);
 
         DisplayNeededFood(food_level, food_job, food_sex);
@@ -158,7 +169,7 @@ public class OgreBehaviour : MonoBehaviour
         {
             goUp = true;
             goDown = false;
-            var go = GameObject.Find("Village");
+            var go = GameObject.Find(Constants.VILLAGE_GO_NAME);
             if (go)
             {
                 var script = go.GetComponent<Village>();

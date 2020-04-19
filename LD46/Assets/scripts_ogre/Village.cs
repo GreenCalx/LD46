@@ -52,6 +52,18 @@ public class Village : MonoBehaviour
         }
     }
 
+    // Returns the villager with highest levels
+    public int getMaxLevelVillager()
+    {
+        int max_lvl_found = 0;
+        foreach( GameObject v_go in villagers )
+        {
+            Villager v = v_go.GetComponent<Villager>();
+            if (!!v)
+                max_lvl_found = ( v.level > max_lvl_found ) ? v.level : max_lvl_found ;
+        }
+        return max_lvl_found;
+    }
 
     public void DamageHouses()
     {

@@ -28,6 +28,30 @@ namespace jobs {
             return (v.level >= this.level_condition);
         }
 
+        public static int availableJobsForLevel( int iLevel )
+        {
+            int n_jobs = 1; // beggar always available
+            switch (iLevel)
+            {
+                case 0:
+                    n_jobs = 1;
+                    break;
+                case 1:
+                    n_jobs = 3;
+                    break;
+                case 2:
+                    n_jobs = 5;
+                    break;
+                case 3:
+                    n_jobs = 6;
+                    break;
+                default:
+                    n_jobs = 1;
+                    break;
+            }
+            return n_jobs;
+        }
+
         public virtual string getJobName()
         { return "unassigned"; }
 
@@ -89,6 +113,7 @@ namespace jobs {
     
     public class Builder : Job
     {
+        // TODO : Make me move the hiouse i'm repairing physcially
         public override void applyJobEffect( Village iVillage )
         {
             // Repair broken houses
@@ -124,9 +149,18 @@ namespace jobs {
 
     public class Cleric : Job
     {
+        private GameObject ogre_ref;
+
         public override void applyJobEffect( Village iVillage )
         {
             // Boost ogre moral
+            if (ogre_ref == null)
+                ogre_ref = GameObject.Find( Constants.OGRE_GO_NAME );
+            
+            OgreBehaviour ob = ogre_ref.GetComponent<OgreBehaviour>();
+            if (!!ob)
+                ob.moral = (int) Mathf.Min( ob.moral + Constants.CLERIC_OGRE_MORAL, Constants.MAX_MORAL);
+
         }
         public override Sprite getJobSprite( Villager.SEX iSex )
         {
@@ -137,6 +171,7 @@ namespace jobs {
         public Cleric()
         {
             this.level_condition = 2;
+            ogre_ref = GameObject.Find( Constants.OGRE_GO_NAME );
         }
         
         public override string getJobName()
@@ -150,7 +185,7 @@ namespace jobs {
         public override void applyJobEffect( Village iVillage )
         {
             // Boost village moral
-            Mathf.Min( iVillage.moral + Constants.BARD_VILLAGE_MORAL, Constants.MAX_MORAL);
+            iVillage.moral = (int) Mathf.Min( iVillage.moral + Constants.BARD_VILLAGE_MORAL, Constants.MAX_MORAL);
         }
         public override Sprite getJobSprite( Villager.SEX iSex )
         {
@@ -173,8 +208,8 @@ namespace jobs {
     {
         public override void applyJobEffect( Village iVillage )
         {
-            Mathf.Min( iVillage.moral * Constants.KING_VILLAGE_BUFF_COEF, Constants.MAX_MORAL);
-            Mathf.Min( iVillage.food * Constants.KING_VILLAGE_BUFF_COEF , Constants.MAX_FOOD);
+            iVillage.moral = (int) Mathf.Min( iVillage.moral * Constants.KING_VILLAGE_BUFF_COEF, Constants.MAX_MORAL);
+            iVillage.food = (int) Mathf.Min( iVillage.food * Constants.KING_VILLAGE_BUFF_COEF , Constants.MAX_FOOD);
         }
         public override Sprite getJobSprite( Villager.SEX iSex )
         {
