@@ -17,6 +17,7 @@ public class Village : MonoBehaviour
 
     // TIME MGT
     private float last_job_update;
+    private float last_time_villagers_ate;
     
     public void spawnVillager()
     {
@@ -83,6 +84,7 @@ public class Village : MonoBehaviour
             this.spawnHouse();
         }
         last_job_update = Time.time;
+        last_time_villagers_ate = Time.time;
     }
 
     // Update is called once per frame
@@ -101,8 +103,15 @@ public class Village : MonoBehaviour
             last_job_update = Time.time;
         }
 
-        if (this.food>0)
-            this.food--;
+        // Villagers consume food
+        if (Time.time - last_time_villagers_ate >= Constants.villagers_hungry_time_step)
+        {
+            Debug.Log("EAT FOOD");
+            int food_to_consume = villagers.Count * Constants.VILLAGER_FOOD_NEED;
+            this.food = (int) Mathf.Max( this.food - food_to_consume, 0);
+
+            last_time_villagers_ate = Time.time;
+        }
 
     }//! Update
 
