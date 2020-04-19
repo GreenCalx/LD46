@@ -137,6 +137,7 @@ public class Villager : MonoBehaviour
         rb2d.velocity = -rb2d.velocity;
     }
 
+
     public void updateExperience()
     {
         if (Time.time - last_exp_update >= Constants.villager_exp_gain_time_step)
@@ -160,6 +161,13 @@ public class Villager : MonoBehaviour
 
             last_exp_update = Time.time;
         }
+    }
+
+    public void Kill()
+    {
+        // here is animation of killing if needed
+        // for now just remove gameobject from game
+        GameObject.Destroy(this);
     }
 
     // Start is called before the first frame update

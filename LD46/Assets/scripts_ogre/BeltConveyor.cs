@@ -15,6 +15,11 @@ public class BeltConveyor : MonoBehaviour
         objects_on_belt.Add(iGO);
     }
 
+    public void removeOnBelt(GameObject iGO)
+    {
+        objects_on_belt.Remove(iGO);
+    }
+
     public Transform getLoadingPoint()
     {
         return gameObject.transform.Find(Constants.BELT_LOADING_POINT);
