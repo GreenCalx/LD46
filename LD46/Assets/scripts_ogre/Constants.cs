@@ -22,8 +22,12 @@ public class Constants
     public const string villager_panel_name  = "VillagerPanel";
     public const string villager_panel_sex_ico  = "sex_ico";
 
-    public const string close_panel_name     = "ClosePanel";
-    public const string sacrifice_btn_name     = "sacrifice_btn";
+    public const string ui_panel_name           = "UI";
+    public const string close_panel_name        = "ClosePanel";
+    public const string assign_panel_name        = "AssignPanel";
+    public const string sacrifice_btn_name      = "sacrifice_btn";
+     public const string assign_btn_name        = "assign_btn";
+
 
     public const string ogre_moral_bar  = "ogre_moral_bar";
     public const string ogre_food_bar   = "ogre_food_bar";
@@ -50,5 +54,5 @@ public class Constants
     // Colors
     public const string UI_red     = "#CA1C18";
     public const string UI_orange  = "#CB8D18";
-    public const string UI_green   = "#1EA427";
+    public const string UI_green   = "#1EA427"; 
 }

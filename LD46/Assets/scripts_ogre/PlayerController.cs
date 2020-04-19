@@ -76,6 +76,31 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    public void toggleAssignPanel()
+    {
+        Canvas[] child_canvas = UI_go.GetComponentsInChildren<Canvas>();
+
+        Canvas ui_canvas = null;
+        foreach( Canvas c in child_canvas )
+        {
+            if ( c.name == Constants.ui_panel_name )
+            {
+                ui_canvas = c;
+            }
+        }
+        if (!!ui_canvas)
+        {
+            child_canvas = ui_canvas.gameObject.GetComponentsInChildren<Canvas>();
+            foreach( Canvas c in child_canvas )
+            {
+                if ( c.name == Constants.assign_panel_name )
+                {
+                    c.gameObject.SetActive(!gameObject.activeInHierarchy);
+                }
+            }
+        }
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -94,6 +119,11 @@ public class PlayerController : MonoBehaviour
             {
                 b.onClick.AddListener(sacrificeVillager);
             }
+            if (b.gameObject.name == Constants.assign_btn_name)
+            {
+                b.onClick.AddListener(toggleAssignPanel);
+            }
+
         }
         // start with ui deactivated
         UI_go.gameObject.SetActive(false);

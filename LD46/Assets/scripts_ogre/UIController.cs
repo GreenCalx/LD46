@@ -15,6 +15,8 @@ public class UIController : MonoBehaviour
     void Awake()
     {
         this.raycaster = GetComponent<GraphicRaycaster>();
+        this.gameObject.name = Constants.ui_panel_name;
+
     }
 
     // Update is called once per frame
@@ -31,6 +33,7 @@ public class UIController : MonoBehaviour
  
             bool hits_villager_panel    = false;
             bool hits_close_panel       = false;
+            bool hits_assign_panel      = false;
             foreach (RaycastResult result in results)
             {
                 if (ui_debug)
@@ -44,8 +47,12 @@ public class UIController : MonoBehaviour
                 {
                     hits_close_panel = true;
                 }
+                else if ( result.gameObject.name == Constants.assign_panel_name )
+                {
+                    hits_assign_panel = true;
+                }
             }//! foreach raycast result
-            if (!hits_villager_panel && hits_close_panel)
+            if (!hits_villager_panel && !hits_assign_panel && hits_close_panel)
                 gameObject.SetActive(false);
          }
     }//! update
