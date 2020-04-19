@@ -1,33 +1,66 @@
 * Game design
   everything related to game ideas about theme : Keep it alive 
-** wind and fire
+** DONE wind and fire
+   CLOSED: [2020-04-18 sam. 11:59]
 *** puzzle game, action clicks
 *** one flame in the middle
 *** series of tubes that user can click and rotate that lead to or off the flame
 *** severals dude come an blow in tubes in an attempt to kill the flame
-** classic tamagotchi
-** physics based? keep the momentum going?
+** classic tamagotchi with a twist
+*** ogre qu on doit maintenir en vie sans qu il go rampage sur le village
+*** rp like: squelette qui need os des villagois donc a maintenir le village en vie
+** DONE physics based? keep the momentum going?
+   CLOSED: [2020-04-18 sam. 11:38]
    maybe something tarzan like?
-** bouzi shelters reloaded
-** shark attack
+** DONE bouzi shelters reloaded
+   CLOSED: [2020-04-18 sam. 11:26]
+** DONE shark attack
+   CLOSED: [2020-04-18 sam. 11:32]
    divers is attacked by sharks, have to stay alive by swimming and creating pool of blood by killing other things
-** louixo idea: save goldfish
+** DONE louixo idea: save goldfish
+   CLOSED: [2020-04-18 sam. 11:27]
    you hve to give him water but you only have a broken container de get water
-** heartbeat game
+** DONE heartbeat game
+   CLOSED: [2020-04-18 sam. 11:28]
    basically ther is a heart where you have to click on it to make it beat and the dude stay alive
    but you have a lot of external things that comes bother you and stop you from clicking on the heart
-** super hexagone like
+** DONE super hexagone like
+   CLOSED: [2020-04-18 sam. 11:26]
 ** cube ou on doit rester sur les faces et il tourne et il y a des pieges
-** What to keep alive?
-*** an industry or something like rural areas or something
-*** keep a language/culture alive 
-*** keep a memory alive 
-*** an animal/a dude/a plant
-*** keep faith/love alive
-*** tsumego: life and death problems
-*** tower defense with a king to defend (legion reborn td)
-*** door of a castle: dudes are attacking and you need to defend
-*** keep the rythm alive from an ever sleeping band: keep them from sleeping to keep the dancefloor alive
-*** keep alive the child in you: keep doing stupid shits while you grow
-*** keeping an internet connection alive somehow
+*** Cube en 3d sur un plan
+*** 
+** DONE What to keep alive?
+   CLOSED: [2020-04-18 sam. 11:36]
+*** DONE an industry or something like rural areas or something
+    CLOSED: [2020-04-18 sam. 11:28]
+*** DONE keep a language/culture alive 
+    CLOSED: [2020-04-18 sam. 11:26]
+*** DONE keep a memory alive 
+    CLOSED: [2020-04-18 sam. 11:28]
+*** DONE an animal/a dude/a plant
+    CLOSED: [2020-04-18 sam. 11:36]
+*** DONE maintenir la planete en vie
+    CLOSED: [2020-04-18 sam. 11:28]
+*** DONE keep faith/love alive
+    CLOSED: [2020-04-18 sam. 11:29]
+*** DONE tsumego: life and death problems
+    CLOSED: [2020-04-18 sam. 11:36]
+*** DONE tower defense with a king to defend (legion reborn td)
+    CLOSED: [2020-04-18 sam. 11:29]
+*** DONE door of a castle: dudes are attacking and you need to defend
+    CLOSED: [2020-04-18 sam. 11:29]
+*** DONE keep the rythm alive from an ever sleeping band: keep them from sleeping to keep the dancefloor alive
+    CLOSED: [2020-04-18 sam. 11:29]
+*** DONE keep alive the child in you: keep doing stupid shits while you grow
+    CLOSED: [2020-04-18 sam. 11:29]
+*** DONE keeping an internet connection alive somehow
+    CLOSED: [2020-04-18 sam. 11:32]
+*** DONE keep a light alive: electronic circuit
+    CLOSED: [2020-04-18 sam. 11:32]
+* TODOS
+** TODO Tester de faire un POC du project cube
+*** Creer le cube principal et un ;oyen de le rotate
+*** creer le player et le faire rotate avec le cube
+*** faire marcher la physique avec la graviter au centre du cube
+** TODO Romboy commence l4autre project
 

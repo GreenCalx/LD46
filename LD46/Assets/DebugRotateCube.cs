@@ -10,12 +10,17 @@ public class DebugRotateCube : MonoBehaviour
         
     }
 
+    public bool running = false;
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Q)) {
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            running = !running;
+        }
             // rotate cube 90 degrees
-            transform.RotateAround(Vector3.up, 0.1f * Mathf.Deg2Rad*(90));
-        }        
+            if(running)
+            transform.RotateAround(Vector3.forward, -0.1f * Mathf.Deg2Rad*(90) * Time.deltaTime);
+   
     }
 }
