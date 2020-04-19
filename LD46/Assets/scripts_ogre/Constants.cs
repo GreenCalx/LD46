@@ -107,6 +107,6 @@ public class Constants
     public const string villager_change_job = "change_job";
 
     public const int Villager_food = 30;
-            public const int Ogre_Food_Tick_Loss = 10;
+            public const int Ogre_Food_Tick_Loss = -10;
             public const int Ogre_Food_Tick_Time = 1;
 }
