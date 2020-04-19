@@ -143,6 +143,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   FullLife: {fileID: 21300000, guid: 62f61d5294c14f04c865d211130313d6, type: 3}
+  HalfDamaged: {fileID: 21300000, guid: 3a382e7909e47aa469f6733e324c209e, type: 3}
   Damaged: {fileID: 21300000, guid: c738d02b3be517e4f8284be40335f963, type: 3}
-  Life: 1
+  Life: 2
   sr: {fileID: 0}
