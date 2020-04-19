@@ -86,7 +86,14 @@ public class Constants
     public const float BARD_VILLAGE_MORAL = 5f; // moral generated for village
     public const float KING_VILLAGE_BUFF_COEF = 1.5f; // general buff to village moral & food
     public const int HOUSE_MAX_HP = 50;
-    public const int HOUSE_DAMAGED_THR = HOUSE_MAX_HP / 2; 
+    public const int HOUSE_DAMAGED_THR = HOUSE_MAX_HP / 2;
+    public const int OGRE_ANGER_THR = 50;
+    public const int OGRE_GET_CALM_THR = 80;
+    public const int OGRE_MORAL_GAIN_IN_ANGER = 10;
+
+    public const int OGRE_WRONG_LVL_COMMAND_PENALTY = 5;
+    public const int OGRE_WRONG_JOB_COMMAND_PENALTY = 15;
+    public const int OGRE_WRONG_SEX_COMMAND_PENALTY = 10;
 
 
     // Colors

@@ -33,6 +33,7 @@ public class OgreBehaviour : MonoBehaviour
     public States currentState = States.REST;
 
     private Villager currentCommand;
+    private bool has_a_command = false;
 
     // Start is called before the first frame update
     void Start()
@@ -103,6 +104,8 @@ public class OgreBehaviour : MonoBehaviour
         currentCommand.job = getJob(job);
         currentCommand.level = level;
         icon.sprite = currentCommand.job.getJobSprite(currentCommand.sex);
+
+        has_a_command = true;
     }
 
     void AskFood()
@@ -113,11 +116,13 @@ public class OgreBehaviour : MonoBehaviour
         Village village = this.village_go_ref.GetComponent<Village>();
         int max_lvl_in_village = village.getMaxLevelVillager();
 
-        int n_available_jobs = jobs.Job.availableJobsForLevel( max_lvl_in_village );
 
         // randomize food type
         int food_level = (int) (Random.value * max_lvl_in_village);
+        
+        int n_available_jobs = jobs.Job.availableJobsForLevel( food_level ); // available job for selected level
         int food_job = (int)(Random.value * n_available_jobs);
+
         int food_sex = (int)(Random.value * 2);
 
         DisplayNeededFood(food_level, food_job, food_sex);
@@ -177,6 +182,7 @@ public class OgreBehaviour : MonoBehaviour
             {
                 var script = go.GetComponent<Village>();
                 script.DamageHouses();
+                this.moral = (int) Mathf.Min( this.moral + Constants.OGRE_MORAL_GAIN_IN_ANGER, Constants.MAX_MORAL);
             }
         }
         if ( goUp && Vector3.Distance(rightHand.transform.position, rightHandAngryTopTarget.transform.position) < threshold)
@@ -202,13 +208,24 @@ public class OgreBehaviour : MonoBehaviour
     {
         int Result = 0;
 
-        if (currentCommand == null)
+        if (has_a_command == false)
             return Result;
 
+/*
         if (v.level < currentCommand.level) Result -= 10;
         if (v.level > currentCommand.level) Result += 10;
         if (v.sex != currentCommand.sex) Result -= 10;
         if (v.job != currentCommand.job) Result -= 30;
+*/
+        int delta_level = (v.level - currentCommand.level);
+        Result += delta_level * Constants.OGRE_WRONG_LVL_COMMAND_PENALTY;
+
+        int delta_sex = System.Convert.ToInt32(v.sex != currentCommand.sex );
+        Result += delta_sex * Constants.OGRE_WRONG_SEX_COMMAND_PENALTY;
+
+        int delta_job = System.Convert.ToInt32(v.job != currentCommand.job );
+        Result += delta_job * Constants.OGRE_WRONG_JOB_COMMAND_PENALTY;
+
         return Result;
     }
     // Update is called once per frame
@@ -246,6 +263,10 @@ public class OgreBehaviour : MonoBehaviour
                         moral += GetMoralFromCommand(v);
                         moral = Mathf.Clamp(moral, 0, 100);
                         v.Kill();
+                        
+                        // no more command
+                        currentCommand = null; 
+                        has_a_command = false;
                     } 
 
                     currentTarget.GetComponent<Villager>().Kill();
@@ -281,7 +302,7 @@ public class OgreBehaviour : MonoBehaviour
 
         }
 
-        if (moral < 75 && currentState != States.ANGRY )
+        if (moral < Constants.OGRE_ANGER_THR && currentState != States.ANGRY )
         {
             currentState = States.ANGRY;
             AngryAnimationStart();
@@ -302,6 +323,9 @@ public class OgreBehaviour : MonoBehaviour
         {
             // destroy village buildings
             AngryAnimation();
+            if ( this.moral >= Constants.OGRE_GET_CALM_THR )
+                currentState = States.REST;
+                
         }
 
         if(currentState == States.RAMPAGE)

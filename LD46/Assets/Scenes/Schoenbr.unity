@@ -287,6 +287,14 @@ PrefabInstance:
       propertyPath: m_GravityScale
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 917690592, guid: 1a2540033f8fa314284ada34252e8024, type: 3}
+      propertyPath: m_Offset.x
+      value: -1.9761899
+      objectReference: {fileID: 0}
+    - target: {fileID: 917690592, guid: 1a2540033f8fa314284ada34252e8024, type: 3}
+      propertyPath: m_Size.x
+      value: 4.9523797
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1a2540033f8fa314284ada34252e8024, type: 3}
 --- !u!1001 &2637847141338971348
