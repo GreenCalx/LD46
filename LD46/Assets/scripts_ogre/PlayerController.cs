@@ -88,7 +88,6 @@ public class PlayerController : MonoBehaviour
             {
                 if (im.name == Constants.assign_panel_name)
                 {
-                    //im.gameObject.SetActive(!im.gameObject.activeInHierarchy);
                     iAssignPanel = im;
                 }
             }
