@@ -137,6 +137,20 @@ public class Villager : MonoBehaviour
         rb2d.velocity = -rb2d.velocity;
     }
 
+    public void Kill()
+    {
+        // here is animation of killing if needed
+        // for now just remove gameobject from game
+        var go = GameObject.Find("Village");
+        if (go)
+        {
+            var script = go.GetComponent<Village>();
+
+            script.removeVillager(this.gameObject);
+
+            GameObject.Destroy(this.gameObject);
+        }
+    }
 
     public void updateExperience()
     {
@@ -175,6 +189,8 @@ public class Villager : MonoBehaviour
             script.removeVillager(this.gameObject);
 
             GameObject.Destroy(this.gameObject);
+=======
+>>>>>>> 75b0837... fix merge
         }
     }
 

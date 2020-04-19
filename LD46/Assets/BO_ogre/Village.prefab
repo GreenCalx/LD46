@@ -50,9 +50,12 @@ MonoBehaviour:
     type: 3}
   conveyor_belt: {fileID: 4365090925749281605, guid: 6bbb84454a92039488b2f55d252af039,
     type: 3}
+  house_ref: {fileID: 7895185821852927637, guid: b14dabd0aec7cd3479f770cd6805b392,
+    type: 3}
   food: 0
   moral: 0
   villagers: []
+  houses: []
 --- !u!61 &876757474
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -66,7 +69,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.0158844, y: 0.12509048}
+  m_Offset: {x: -0.0158844, y: 0.14737737}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -77,5 +80,5 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 2.3660674, y: 1.7743695}
+  m_Size: {x: 2.3660674, y: 1.7297957}
   m_EdgeRadius: 0
