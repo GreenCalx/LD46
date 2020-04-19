@@ -67,6 +67,7 @@ public class Constants
 
     // Tweak consts
     public const int START_POP  = 6;
+    public const int START_HOUSE = 5;
     public const int MAX_FOOD   = 100;
     public const int MAX_MORAL  = 100;
     public const float villager_move_step = 0.5f;
@@ -83,4 +84,8 @@ public class Constants
 
     // Animator vars
     public const string villager_change_job = "change_job";
+    
+    public const int Villager_food = 30;
+            public const int Ogre_Food_Tick_Loss = 10;
+            public const int Ogre_Food_Tick_Time = 1;
 }

@@ -8,11 +8,12 @@ public class Village : MonoBehaviour
     public GameObject villager_ref;
     public GameObject village_center;
     public GameObject conveyor_belt;
-
+    public GameObject house_ref;
     // STATE
     public int food;
     public int moral;
     public List<GameObject> villagers;
+    public List<GameObject> houses;
 
     // TIME MGT
     private float last_job_update;
@@ -24,6 +25,23 @@ public class Village : MonoBehaviour
         this.villagers.Add( new_villager );
     }
 
+    public void spawnHouse()
+    {
+        var bounds = GetComponent<BoxCollider2D>().bounds;
+        Vector3 spawnPosition = new Vector3(
+               Random.Range(bounds.min.x, bounds.max.x),
+               Random.Range(bounds.min.y, bounds.max.y),
+               Random.Range(bounds.min.z, bounds.max.z)
+           );
+        GameObject new_house = Instantiate(house_ref, spawnPosition, Quaternion.identity) as GameObject;
+        houses.Add(new_house);
+    }
+
+    public void removeVillager(GameObject iGo)
+    {
+        villagers.Remove(iGo);
+    }
+
     public void sendVillagerToBelt(Villager v)
     {
         BeltConveyor bc = conveyor_belt.GetComponent<BeltConveyor>();
@@ -33,6 +51,15 @@ public class Village : MonoBehaviour
         }
     }
 
+
+    public void DamageHouses()
+    {
+        foreach (GameObject house in houses)
+        {
+            var script = house.GetComponent<House>();
+            if (script) script.Damage();
+        }
+    }
     // Start is called before the first frame update
     void Start()
     {   
@@ -40,6 +67,7 @@ public class Village : MonoBehaviour
         this.moral   = Constants.MAX_MORAL;
 
         villagers = new List<GameObject>(Constants.START_POP);
+        houses = new List<GameObject>(Constants.START_HOUSE);
         
         for (int i=0; i<Constants.START_POP; i++)
         {
@@ -48,6 +76,12 @@ public class Village : MonoBehaviour
             this.spawnVillager();
         }
 
+        for (int i=0; i<Constants.START_HOUSE; i++)
+        {
+            //GameObject new_villager = Instantiate(villager_ref) as GameObject;
+            //this.villagers.Add( new_villager );
+            this.spawnHouse();
+        }
         last_job_update = Time.time;
     }
 
