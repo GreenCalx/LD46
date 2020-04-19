@@ -43,14 +43,17 @@ public class OgreBehaviour : MonoBehaviour
         this.village_go_ref = GameObject.Find(Constants.VILLAGE_GO_NAME);
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    private void OnTriggerStay2D(Collider2D collision)
     {
         // this merans something on the bgelt is copming, start to go towards it to take it
         // first find collider
-        if (collision.gameObject.name != "conveyor_belt")
+        if ( currentState != States.GETTING_TARGET)
         {
-            currentTarget = collision.gameObject;
-            currentState = States.GETTING_TARGET;
+            if (collision.gameObject.name != "conveyor_belt")
+            {
+                currentTarget = collision.gameObject;
+                currentState = States.GETTING_TARGET;
+            }
         }
     }
 
@@ -198,6 +201,10 @@ public class OgreBehaviour : MonoBehaviour
     int GetMoralFromCommand(Villager v)
     {
         int Result = 0;
+
+        if (currentCommand == null)
+            return Result;
+
         if (v.level < currentCommand.level) Result -= 10;
         if (v.level > currentCommand.level) Result += 10;
         if (v.sex != currentCommand.sex) Result -= 10;

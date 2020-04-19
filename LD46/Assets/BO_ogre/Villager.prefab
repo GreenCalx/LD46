@@ -103,7 +103,7 @@ Rigidbody2D:
   m_GravityScale: 0
   m_Material: {fileID: 0}
   m_Interpolate: 0
-  m_SleepingMode: 1
+  m_SleepingMode: 0
   m_CollisionDetection: 0
   m_Constraints: 4
 --- !u!61 &2627119925951557136
@@ -167,6 +167,7 @@ MonoBehaviour:
   job_str: '""'
   is_on_belt: 0
   go_to_belt: 0
+  changing_job: 0
   destination: {fileID: 0}
 --- !u!95 &-309811047963029103
 Animator:
