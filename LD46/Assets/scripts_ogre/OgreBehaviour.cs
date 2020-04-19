@@ -166,6 +166,9 @@ public class OgreBehaviour : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+            // food update
+            FoodTick();
+
         if (currentState == States.GETTING_TARGET)
         {
             rightHand.transform.position = Vector3.Lerp(rightHand.transform.position, currentTarget.transform.position, Time.deltaTime);
@@ -201,8 +204,6 @@ public class OgreBehaviour : MonoBehaviour
 
         if (currentState == States.REST)
         {
-            // food update
-            FoodTick();
             // from state rest to hungry
             if (food < 75)
             {
