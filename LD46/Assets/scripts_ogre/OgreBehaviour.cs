@@ -49,6 +49,21 @@ public class OgreBehaviour : MonoBehaviour
         }
     }
 
+    public void ResetBehavior()
+    {
+        this.moral = Constants.MAX_MORAL;
+        this.food = Constants.MAX_FOOD;
+
+        currentState = States.REST;
+
+        rightHand.transform.position = rightHandRestingPosition.transform.position;
+        leftHand.transform.position = leftHandRestingPosition.transform.position;
+
+            GetComponent<SpriteRenderer>().enabled = false;
+            foreach (SpriteRenderer sr in GetComponentsInChildren<SpriteRenderer>()) sr.enabled = false;
+
+    }
+
     jobs.Job getJob(int job)
     {
         switch (job)
@@ -117,7 +132,7 @@ public class OgreBehaviour : MonoBehaviour
         CurrentFoodTick -= Time.deltaTime;
         if (CurrentFoodTick <= 0)
         {
-            food -= Constants.Ogre_Food_Tick_Loss;
+            food = Mathf.Min(0, food - Constants.Ogre_Food_Tick_Loss);
             CurrentFoodTick = Constants.Ogre_Food_Tick_Time;
         }
     }
@@ -166,6 +181,7 @@ public class OgreBehaviour : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (currentState != States.RAMPAGE)
             // food update
             FoodTick();
 
@@ -252,6 +268,16 @@ public class OgreBehaviour : MonoBehaviour
             // disable main ogre sprite
             // activate little ogre sprite in village
             // eat villagers until full
+            // NOTE : ResetBehavior is called by littleOgre when rampage is finished
+            GetComponent<SpriteRenderer>().enabled = false;
+            foreach (SpriteRenderer sr in GetComponentsInChildren<SpriteRenderer>()) sr.enabled = false;
+
+            var go =GameObject.Find("littleOgre");
+            if (go)
+            {
+                var script = go.GetComponent<OgreRampage>();
+                if (script.currentState == OgreRampage.States.DEACTIVATED) script.Activate();
+            }
         }
     }
 }
