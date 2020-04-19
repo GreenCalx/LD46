@@ -8,6 +8,7 @@ public class Constants
     public const string BELT_LOADING_POINT      = "belt_loading_point";
     public const string BELT_DISCHARGE_POINT    = "belt_discharge_point";
     public const string VILLAGE_GO_NAME = "Village";
+    public const string OGRE_GO_NAME = "ogre";
 
     // Graphx
     public const string villager_template_sprite = "res_ogre/villager_template";
