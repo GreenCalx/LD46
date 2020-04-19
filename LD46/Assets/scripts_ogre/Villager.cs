@@ -37,6 +37,13 @@ public class Villager : MonoBehaviour
     public bool changing_job;
     public Transform destination;
 
+    public void stop_movement()
+    {
+        Rigidbody2D rb2d = this.gameObject.GetComponent<Rigidbody2D>();
+        if (!rb2d)
+            return;
+        rb2d.velocity = new Vector2( 0f, 0f);
+    }
 
     public string generateName()
     {
@@ -79,6 +86,9 @@ public class Villager : MonoBehaviour
     {
         if (iJob.canApplyToJob(this))
         {
+            // freeze during transformation
+            stop_movement();
+
             // update job & villager sprite
             this.job = iJob;
             this.job_str = iJob.getJobName();
@@ -88,15 +98,18 @@ public class Villager : MonoBehaviour
             last_changejob_update = Time.time;
             changing_job = true;
             
-            // Start changing job animation
-            Animator animator = GetComponent<Animator>();
-            if (!!animator)
+            // Start changing job animation ( unless beggar since its starting job )
+            if ( !String.Equals( iJob.getJobName(), Constants.beggar_job_name) )
             {
-                animator.SetBool( Constants.villager_change_job, true);
-                update_graphics();
-            }
+                Animator animator = GetComponent<Animator>();
+                if (!!animator)
+                {
+                    animator.SetBool( Constants.villager_change_job, true);
+                    animator.enabled = true;
+                }
+            }//! job change animation
         }
-    }
+    }//! assignJob
 
     public void doJob()
     {
@@ -197,12 +210,15 @@ public class Villager : MonoBehaviour
         if (Time.time - last_changejob_update >= Constants.villager_change_job_time)
         {
             // done changing job
-            // Start changing job animation
+            //  > Start changing job animation
             Animator animator = GetComponent<Animator>();
             if (!!animator)
             {
                 animator.SetBool( Constants.villager_change_job, false);
+                animator.enabled = false;
             }
+            this.changing_job = false;
+            this.update_graphics();
         }
     }
 
@@ -217,6 +233,14 @@ public class Villager : MonoBehaviour
        this.is_on_belt = false;
        this.go_to_belt = false;
        this.changing_job = false;
+
+        // init animator and deactivate it to prevent sprite overloading
+        Animator animator = GetComponent<Animator>();
+        if (!!animator)
+        {
+            animator.SetBool( Constants.villager_change_job, false);
+            animator.enabled = false;
+        }
     }
 
     // Update is called once per frame

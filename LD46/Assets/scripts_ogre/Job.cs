@@ -56,7 +56,7 @@ namespace jobs {
 
         public override string getJobName()
         {
-            return "Beggar";
+            return Constants.beggar_job_name;
         }
     }
 
@@ -81,7 +81,7 @@ namespace jobs {
 
         public override string getJobName()
         {
-            return "Farmer";
+            return Constants.farmer_job_name;
         }
     }
 
@@ -105,7 +105,7 @@ namespace jobs {
 
         public override string getJobName()
         {
-            return "Builder";
+            return Constants.builder_job_name;
         }
     }
 
@@ -128,7 +128,7 @@ namespace jobs {
         
         public override string getJobName()
         {
-            return "Cleric";
+            return Constants.cleric_job_name;
         }
     }
 
@@ -151,7 +151,7 @@ namespace jobs {
 
         public override string getJobName()
         {
-            return "Bard";
+            return Constants.bard_job_name;
         }
     }
 
@@ -174,7 +174,7 @@ namespace jobs {
 
         public override string getJobName()
         {
-            return "King";
+            return Constants.king_job_name;
         }
     }
 }

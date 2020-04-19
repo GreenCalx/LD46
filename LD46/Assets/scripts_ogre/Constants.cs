@@ -33,12 +33,12 @@ public class Constants
     public const string villager_panel_level_field  = "level_field";
     public const string villager_panel_name  = "VillagerPanel";
     public const string villager_panel_sex_ico  = "sex_ico";
-
     public const string ui_panel_name           = "UI";
     public const string close_panel_name        = "ClosePanel";
     public const string assign_panel_name        = "AssignPanel";
     public const string sacrifice_btn_name      = "sacrifice_btn";
     public const string assign_btn_name        = "assign_btn";
+
     // job assignement buttons
     public const string assign_farmer_btn_name    = "farmer_btn";
     public const string assign_builder_btn_name   = "builder_btn";
@@ -46,7 +46,7 @@ public class Constants
     public const string assign_bard_btn_name      = "bard_btn";
     public const string assign_king_btn_name      = "king_btn";
 
-
+    // UI Bars
     public const string ogre_moral_bar  = "ogre_moral_bar";
     public const string ogre_food_bar   = "ogre_food_bar";
     public const string village_moral_bar  = "village_moral_bar";
@@ -80,11 +80,19 @@ public class Constants
     // Colors
     public const string UI_red     = "#CA1C18";
     public const string UI_orange  = "#CB8D18";
-    public const string UI_green   = "#1EA427"; 
+    public const string UI_green   = "#1EA427";
+
+    // Jobs names
+    public const string beggar_job_name = "Beggar";
+    public const string farmer_job_name = "Farmer";
+    public const string builder_job_name = "Builder";
+    public const string cleric_job_name = "Cleric";
+    public const string bard_job_name = "Bard";
+    public const string king_job_name = "King";
 
     // Animator vars
     public const string villager_change_job = "change_job";
-    
+
     public const int Villager_food = 30;
             public const int Ogre_Food_Tick_Loss = 10;
             public const int Ogre_Food_Tick_Time = 1;
