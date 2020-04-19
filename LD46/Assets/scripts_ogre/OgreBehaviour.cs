@@ -31,6 +31,8 @@ public class OgreBehaviour : MonoBehaviour
     public enum States { EATING, REST, GETTING_TARGET, ANGRY, HUNGRY, RAMPAGE }
     public States currentState = States.REST;
 
+    private Villager currentCommand;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -59,9 +61,8 @@ public class OgreBehaviour : MonoBehaviour
         rightHand.transform.position = rightHandRestingPosition.transform.position;
         leftHand.transform.position = leftHandRestingPosition.transform.position;
 
-            GetComponent<SpriteRenderer>().enabled = false;
-            foreach (SpriteRenderer sr in GetComponentsInChildren<SpriteRenderer>()) sr.enabled = false;
-
+            GetComponent<SpriteRenderer>().enabled = true;
+            foreach (SpriteRenderer sr in GetComponentsInChildren<SpriteRenderer>()) sr.enabled = true;
     }
 
     jobs.Job getJob(int job)
@@ -78,6 +79,12 @@ public class OgreBehaviour : MonoBehaviour
         }
     }
 
+    public void AddFood( int food)
+    {
+        this.food += food;
+        this.food = Mathf.Clamp(this.food, 0, 100);
+    }
+
     void DisplayNeededFood(int level, int job, int sex)
     {
         Debug.Log("NEED FOOD :" + level + " " + job + " " + sex);
@@ -85,11 +92,11 @@ public class OgreBehaviour : MonoBehaviour
         if (ui) ui.enabled = true;
         var icon = GetComponentInChildren<Image>();
 
-        Villager v = new Villager();
-        v.sex = (Villager.SEX)sex;
-        v.job = getJob(job);
-        v.level = level;
-        icon.sprite = v.job.getJobSprite(v.sex);
+        currentCommand = new Villager();
+        currentCommand.sex = (Villager.SEX)sex;
+        currentCommand.job = getJob(job);
+        currentCommand.level = level;
+        icon.sprite = currentCommand.job.getJobSprite(currentCommand.sex);
     }
 
     void AskFood()
@@ -108,8 +115,7 @@ public class OgreBehaviour : MonoBehaviour
         // here is the animation process if needed
         CurrentAnimationTime = EatingAnimationDuration;
         needEat = false;
-
-        food = Mathf.Min( food + Constants.Villager_food, 100);
+        AddFood(Constants.Villager_food);
     }
     void EatingAnimationStop()
     {
@@ -132,7 +138,7 @@ public class OgreBehaviour : MonoBehaviour
         CurrentFoodTick -= Time.deltaTime;
         if (CurrentFoodTick <= 0)
         {
-            food = Mathf.Min(0, food - Constants.Ogre_Food_Tick_Loss);
+            AddFood(Constants.Ogre_Food_Tick_Loss);
             CurrentFoodTick = Constants.Ogre_Food_Tick_Time;
         }
     }
@@ -178,6 +184,15 @@ public class OgreBehaviour : MonoBehaviour
         }
     }
 
+    int GetMoralFromCommand(Villager v)
+    {
+        int Result = 0;
+        if (v.level < currentCommand.level) Result -= 10;
+        if (v.level > currentCommand.level) Result += 10;
+        if (v.sex != currentCommand.sex) Result -= 10;
+        if (v.job != currentCommand.job) Result -= 30;
+        return Result;
+    }
     // Update is called once per frame
     void Update()
     {
@@ -207,6 +222,14 @@ public class OgreBehaviour : MonoBehaviour
                 if (Physics2D.IsTouching(rightHand.GetComponent<BoxCollider2D>(), mouth.GetComponent<BoxCollider2D>()))
                 {
                     currentState = States.EATING;
+                    var v =currentTarget.GetComponent<Villager>();
+                    if (v)
+                    {
+                        moral += GetMoralFromCommand(v);
+                        moral = Mathf.Clamp(moral, 0, 100);
+                        v.Kill();
+                    } 
+
                     currentTarget.GetComponent<Villager>().Kill();
                     EatingAnimationStart();
                 }
