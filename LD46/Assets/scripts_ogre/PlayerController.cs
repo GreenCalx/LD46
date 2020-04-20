@@ -22,12 +22,19 @@ public class PlayerController : MonoBehaviour
     // Icons
     private Sprite male_ico;
     private Sprite female_ico;
+    public GameObject audio_manager_ref;
 
     // Panels
     public Image assignPanel;
 
     public string tooltip_to_display = "";
-
+        public void refreshAudioManager()
+    {
+        if (audio_manager_ref==null)
+        {
+            audio_manager_ref = GameObject.Find(Constants.AUDIO_MANAGER_GO_NAME);
+        }
+    }
     public void spawnVillagerPanel(Villager v)
     {
         if (UI_go == null)
@@ -286,6 +293,14 @@ public class PlayerController : MonoBehaviour
         {
             ui_stats.village_go = this.village_go.gameObject;
             ui_stats.ogre_go = this.ogre_go.gameObject;
+        }
+
+        refreshAudioManager();
+        if (!!audio_manager_ref)
+        {
+            AudioManager am = audio_manager_ref.GetComponent<AudioManager>();
+            string sound_name_to_play = Constants.MAIN_THEME_BGM;
+            am.Play(sound_name_to_play);
         }
 
     }
