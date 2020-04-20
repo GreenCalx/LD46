@@ -221,16 +221,10 @@ public class PlayerController : MonoBehaviour
             return;
 
         // check kings
-        int king_needed = Constants.WIN_COND_N_KING;
-        foreach( GameObject v_go in village.villagers )
-        {
-            Villager v = v_go.GetComponent<Villager>();
-            if (!!v)
-            {
-                string.Equals( v.job_str, Constants.king_job_name);
-            }
-        }
-        if ( king_needed > 0 )
+        if ( village.countMaleKings() < Constants.WIN_COND_N_MALE_KING )
+            return;
+        
+        if ( village.countFemaleKings() < Constants.WIN_COND_N_FEMALE_KING )
             return;
         
         // All is met, go to end game
