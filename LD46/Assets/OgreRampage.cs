@@ -38,6 +38,8 @@ public class OgreRampage : MonoBehaviour
                    Random.Range(bounds.min.y, bounds.max.y),
                    Random.Range(bounds.min.z, bounds.max.z));
         }
+
+        AudioManager.Instance.Play(Constants.FRESH_MEAT);
     }
 
 

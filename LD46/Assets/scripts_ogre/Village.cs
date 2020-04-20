@@ -336,12 +336,15 @@ public class Village : MonoBehaviour
             {
                 List<GameObject> eligible_v_to_kill   = filterVillagerOnBelt(villagers);
                 eligible_v_to_kill  = filterVillagerGoToBelt(eligible_v_to_kill);
-                int to_kill_index = Random.Range(0, eligible_v_to_kill.Count);
-                GameObject selected_to_kill_go = eligible_v_to_kill[to_kill_index];
+                if (eligible_v_to_kill.Count != 0)
+                {
+                    int to_kill_index = Random.Range(0, eligible_v_to_kill.Count);
+                    GameObject selected_to_kill_go = eligible_v_to_kill[to_kill_index];
 
-                Villager selected_to_kill = selected_to_kill_go.GetComponent<Villager>();
-                if (!!selected_to_kill)
-                    selected_to_kill.Kill();
+                    Villager selected_to_kill = selected_to_kill_go.GetComponent<Villager>();
+                    if (!!selected_to_kill)
+                        selected_to_kill.Kill();
+                }
             }
 
             last_time_villagers_ate = Time.time;

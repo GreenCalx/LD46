@@ -185,4 +185,6 @@ public class Constants
     public const string OH_NO_VOICE = "oh_no";
     public const string MY_LIFE_FOR_SCHNIBBLE_VOICE = "my_life_for_the_schnibble";
     public const string ALRIGHT_LETS_GO_VOICE = "alright_lets_go";
+    public const string FRESH_MEAT = "ogre_rampage";
+    public const string EATING = "ogre_eat";
 }

@@ -150,12 +150,14 @@ public class OgreBehaviour : MonoBehaviour
 
 
         // randomize food type
-        int food_level = (int) (Random.value * max_lvl_in_village);
+        int food_level = Random.Range(0, max_lvl_in_village+1);
+        if (food_level > max_lvl_in_village) Debug.Log("BAD FOOD LEVEL");
         
         int n_available_jobs = jobs.Job.availableJobsForLevel( food_level ); // available job for selected level
-        int food_job = (int)(Random.value * n_available_jobs);
+        int food_job = Random.Range(0, n_available_jobs);
+        if (food_job > n_available_jobs) Debug.Log("BAD FOOD JOB");
 
-        int food_sex = (int)(Random.value * 2);
+        int food_sex = Random.Range(0, 2);
 
         DisplayNeededFood(food_level, food_job, food_sex);
         needAskFood = false;
@@ -166,7 +168,14 @@ public class OgreBehaviour : MonoBehaviour
         // here is the animation process if needed
         CurrentAnimationTime = EatingAnimationDuration;
         needEat = false;
+        needAskFood = false;
+
         AddFood(Constants.Villager_food);
+        
+        var ui = GetComponentInChildren<Canvas>();
+        if (ui) ui.enabled = false;
+
+        AudioManager.Instance.Play( Constants.EATING );
 
         GetComponent<Animator>().SetBool("isEating", true);
     }
@@ -376,7 +385,10 @@ public class OgreBehaviour : MonoBehaviour
                 currentState = States.HUNGRY;
                 needAskFood = true;
             }
+        }
 
+        if (currentState == States.REST || currentState == States.HUNGRY)
+        {
             // if we are not in the resting position, let s reset the position
             if (rightHand.transform.position != rightHandRestingPosition.transform.position)
             {
