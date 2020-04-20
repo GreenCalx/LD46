@@ -38,6 +38,7 @@ public class Villager : MonoBehaviour
     public bool is_on_belt;
     public bool go_to_belt;
     public bool changing_job;
+    public bool trying_to_mate;
     public Transform destination;
 
     public void stop_movement()
@@ -269,6 +270,7 @@ public class Villager : MonoBehaviour
        this.is_on_belt = false;
        this.go_to_belt = false;
        this.changing_job = false;
+       this.trying_to_mate = false;
 
         // init animator and deactivate it to prevent sprite overloading
         Animator animator = GetComponent<Animator>();
@@ -299,6 +301,9 @@ public class Villager : MonoBehaviour
                 {}
             else if (go_to_belt && destination)
                 this.moveToDestination();
+
+            else if ( trying_to_mate && destination )
+                this.moveToDestination();
             else
                 this.moveRandom();
 
@@ -306,4 +311,35 @@ public class Villager : MonoBehaviour
             this.updateExperience();
         }
     } //! Update
+
+    void OnTriggerEnter2D( Collider2D other) 
+    {
+         // self wants mate
+        if (!trying_to_mate)
+            return;
+
+        Villager v = other.GetComponent<Villager>();
+        if (!!v) 
+        {
+            // other wants mate
+            if (!v.trying_to_mate)
+                return;
+            
+            // go mate and prevent double firing by reset trying_to_mate
+            trying_to_mate = false;
+            v.trying_to_mate = false;
+            refreshVillageRef();
+            if (village_go)
+            {
+                Village village = village_go.GetComponent<Village>();
+                if (!!village)
+                {
+                    Vector2 birth_location = Vector2.zero;
+                    birth_location = Vector2.Lerp( this.transform.position, other.transform.position, 0.5f);
+                    village.birth(birth_location);
+                }
+            }
+        }
+    }
+
 }

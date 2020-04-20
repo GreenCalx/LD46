@@ -63,6 +63,7 @@ public class Constants
     // Time
     public const float job_time_step = 5f; // time between doJob in village  
     public const float village_moral_time_step = 5f; // time between moral update
+    public const float village_mate_time_step = 5f; // time between try to mate in village
     public const float move_time_step = 0.5f; // .5 seconds    
     public const float belt_time_step = 1f;
     public const float villager_exp_gain_time_step = 5f; // 5 Seconds
@@ -107,6 +108,11 @@ public class Constants
     public const int VILLAGE_FAMINE_TRH = 50;
     public const int VILLAGE_FAMINE_MORAL_LOSS = 5;
     public const int VILLAGE_SACRIFICE_MORAL_LOSS = 6;
+    public const int VILLAGE_MORAL_REQ_TO_MATE = 40;
+
+    // MATE PROBA
+    // Values of Log(y+1) func to 
+    public static readonly double[] villager_mate_proba = { 0.298865,  0.477503, 0.606137, 0.699430, 0.779444, 0.845592};
 
 
     // Colors
