@@ -53,7 +53,41 @@ public class PlayerController : MonoBehaviour
             }
         }
 
+        // grey out unavailable job
+        disableUnavailableJobs(v.level);
+
     }
+
+    public void disableUnavailableJobs( int villager_lvl)
+    {
+        initAssignPanelRef(); // just in case
+
+        Button[] btns = assignPanel.gameObject.GetComponentsInChildren<Button>();
+        foreach (Button b in btns)
+        {
+            if (b.name == Constants.assign_farmer_btn_name)
+            {
+                b.interactable = (villager_lvl >= 1);
+            }
+            else if (b.name == Constants.assign_builder_btn_name)
+            {
+                b.interactable = (villager_lvl >= 1);
+            }
+            else if (b.name == Constants.assign_cleric_btn_name)
+            {
+                b.interactable = (villager_lvl >= 2);
+            }
+            else if (b.name == Constants.assign_bard_btn_name)
+            {
+                b.interactable = (villager_lvl >= 2);
+            }
+            else if (b.name == Constants.assign_king_btn_name)
+            {
+                b.interactable = (villager_lvl >= 3);
+            }
+        }//! foreach
+    }
+
 
     // Refresh panel for selected villager
     public void refreshVillagerPanel()
