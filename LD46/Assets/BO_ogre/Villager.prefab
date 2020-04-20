@@ -258,10 +258,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   BloodSplash: {fileID: 651482850530681166, guid: 4e6a5c2fe9365174faba29d28e68fe06,
     type: 3}
+  audio_manager_ref: {fileID: 0}
   level: 0
   sex: 0
   exp: 0
-  name: '""'
+  surname: 
   job_str: '""'
   is_on_belt: 0
   go_to_belt: 0

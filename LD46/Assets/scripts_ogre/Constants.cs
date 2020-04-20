@@ -56,12 +56,20 @@ public class Constants
     public const string assign_cleric_btn_name    = "cleric_btn";
     public const string assign_bard_btn_name      = "bard_btn";
     public const string assign_king_btn_name      = "king_btn";
+    public const string jobassign_tooltip_field = "jobassign_tooltip_field";
 
     // UI Bars
     public const string ogre_moral_bar  = "ogre_moral_bar";
     public const string ogre_food_bar   = "ogre_food_bar";
     public const string village_moral_bar  = "village_moral_bar";
     public const string village_food_bar   = "village_food_bar";
+
+    // UI tooltips
+    public const string FARMER_JOB_TOOLTIP = "harvest food";
+    public const string BUILDER_JOB_TOOLTIP = "repair buildings";
+    public const string CLERIC_JOB_TOOLTIP = "boost ogre moral";
+    public const string BARD_JOB_TOOLTIP = "boost village moral";
+    public const string KING_JOB_TOOLTIP = "boost village production";
 
     // UI Win cond
     public const string win_cond_panel = "win_cond_panel";

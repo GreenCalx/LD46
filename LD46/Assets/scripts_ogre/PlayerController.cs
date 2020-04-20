@@ -6,6 +6,8 @@ using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using jobs;
 
+
+
 public class PlayerController : MonoBehaviour
 {
     // GameObjects
@@ -23,6 +25,8 @@ public class PlayerController : MonoBehaviour
 
     // Panels
     public Image assignPanel;
+
+    public string tooltip_to_display = "";
 
     public void spawnVillagerPanel(Villager v)
     {
@@ -160,6 +164,17 @@ public class PlayerController : MonoBehaviour
         assignPanel.gameObject.SetActive(!assignPanel.gameObject.activeInHierarchy);
     }
 
+    public void updateTooltip(string iTooltip)
+    {
+        initAssignPanelRef(); // just in case
+        Text[] texts = assignPanel.gameObject.GetComponentsInChildren<Text>();
+        foreach(Text t in texts)
+        {
+            if (t.name == Constants.jobassign_tooltip_field)
+            { t.text = iTooltip; }
+        }
+    }
+
     void initJobAssignementListener()
     {
         initAssignPanelRef(); // just in case
@@ -170,11 +185,13 @@ public class PlayerController : MonoBehaviour
             {
                 //b.onClick.AddListener(tryAssignSelectedToFarm);
                 b.onClick.AddListener(delegate { tryAssignToJob(new Farmer()); });
+
             }
             else if (b.name == Constants.assign_builder_btn_name)
             {
                 //b.onClick.AddListener(tryAssignSelectedToBuild);
                 b.onClick.AddListener(delegate { tryAssignToJob(new Builder()); });
+
             }
             else if (b.name == Constants.assign_cleric_btn_name)
             {
@@ -185,11 +202,13 @@ public class PlayerController : MonoBehaviour
             {
                 //b.onClick.AddListener(tryAssignSelectedToBard);
                 b.onClick.AddListener(delegate { tryAssignToJob(new Bard()); });
+
             }
             else if (b.name == Constants.assign_king_btn_name)
             {
                 //b.onClick.AddListener(tryAssignSelectedToKing);
                 b.onClick.AddListener(delegate { tryAssignToJob(new King()); });
+
             }
         }
     }
