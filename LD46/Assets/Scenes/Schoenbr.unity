@@ -205,56 +205,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5680811519971493907, guid: 8f031beb06ff7ea4a920b28e966e7082,
-        type: 3}
-      propertyPath: Sounds.Array.data[4].Clip
-      value: 
-      objectReference: {fileID: 8300000, guid: 4dad85a375fe6bb42bccdee63b77e939, type: 3}
-    - target: {fileID: 5680811519971493907, guid: 8f031beb06ff7ea4a920b28e966e7082,
-        type: 3}
-      propertyPath: Sounds.Array.data[4].Volume
-      value: 0.1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5680811519971493907, guid: 8f031beb06ff7ea4a920b28e966e7082,
-        type: 3}
-      propertyPath: Sounds.Array.data[4].Pitch
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5680811519971493907, guid: 8f031beb06ff7ea4a920b28e966e7082,
-        type: 3}
-      propertyPath: Sounds.Array.data[4].Name
-      value: ogre_misc
-      objectReference: {fileID: 0}
-    - target: {fileID: 5680811519971493907, guid: 8f031beb06ff7ea4a920b28e966e7082,
-        type: 3}
-      propertyPath: Sounds.Array.data[5].Clip
-      value: 
-      objectReference: {fileID: 8300000, guid: 32185cb45293f6443bf994515b9c02ca, type: 3}
-    - target: {fileID: 5680811519971493907, guid: 8f031beb06ff7ea4a920b28e966e7082,
-        type: 3}
-      propertyPath: Sounds.Array.data[5].Volume
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5680811519971493907, guid: 8f031beb06ff7ea4a920b28e966e7082,
-        type: 3}
-      propertyPath: Sounds.Array.data[5].Pitch
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5680811519971493907, guid: 8f031beb06ff7ea4a920b28e966e7082,
-        type: 3}
-      propertyPath: Sounds.Array.data[5].Name
-      value: ogre_eating
-      objectReference: {fileID: 0}
-    - target: {fileID: 5680811519971493907, guid: 8f031beb06ff7ea4a920b28e966e7082,
-        type: 3}
-      propertyPath: Sounds.Array.data[6].Clip
-      value: 
-      objectReference: {fileID: 8300000, guid: 6de9b22960cbadb40ab2288237f6987a, type: 3}
-    - target: {fileID: 5680811519971493907, guid: 8f031beb06ff7ea4a920b28e966e7082,
-        type: 3}
-      propertyPath: Sounds.Array.data[6].Name
-      value: ogre_rampage
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8f031beb06ff7ea4a920b28e966e7082, type: 3}
 --- !u!1 &1801296466 stripped
