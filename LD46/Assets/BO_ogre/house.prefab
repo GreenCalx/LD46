@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 4730777633404300484}
   - component: {fileID: 8433036464340043793}
   - component: {fileID: 1697404453}
+  - component: {fileID: 4184989130984020383}
   m_Layer: 0
   m_Name: house
   m_TagString: Untagged
@@ -111,7 +112,7 @@ PolygonCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7895185821852927637}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Density: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 0
@@ -156,3 +157,19 @@ MonoBehaviour:
   Life: 2
   sr: {fileID: 0}
   state: 0
+--- !u!58 &4184989130984020383
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7895185821852927637}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: -0.035505474}
+  serializedVersion: 2
+  m_Radius: 0.12373918

@@ -57,7 +57,7 @@ public class OgreRampage : MonoBehaviour
                 currentState = States.GET_TARGET;
             } else
             {
-                transform.position += (currentTarget.transform.position - transform.position).normalized * speed * Time.fixedDeltaTime;
+                transform.position = Vector3.MoveTowards(transform.position, currentTarget.transform.position, speed * Time.fixedDeltaTime);
             }
 
             List<Collider2D> result = new List<Collider2D>();
