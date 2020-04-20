@@ -317,10 +317,10 @@ public class OgreBehaviour : MonoBehaviour
                 if (!!audio_manager_ref)
                 {
                     AudioManager am = audio_manager_ref.GetComponent<AudioManager>();
-                    string sound_name_to_play = Constants.OH_NO_VOICE;
+                    string sound_name_to_play = Constants.MAIN_THEME_BGM;
                     am.Play(sound_name_to_play);
                 }
-                
+
                 rightHand.GetComponent<SpriteRenderer>().sprite = HandSprite[2];
 
                 // we have something to eat, let s go to the mouth position
