@@ -61,12 +61,14 @@ public class Constants
     public const string village_food_bar   = "village_food_bar";
 
     // Time
-    public const float job_time_step = 5f; // 10 seconds    
+    public const float job_time_step = 5f; // time between doJob in village  
+    public const float village_moral_time_step = 5f; // time between moral update
     public const float move_time_step = 0.5f; // .5 seconds    
     public const float belt_time_step = 1f;
     public const float villager_exp_gain_time_step = 5f; // 5 Seconds
     public const float villager_change_job_time = 3f; // 3 Seconds
     public const float villagers_hungry_time_step = 5f;
+    
 
 
     // Speeds
@@ -93,13 +95,15 @@ public class Constants
     public const float KING_VILLAGE_BUFF_COEF = 1.5f; // general buff to village moral & food
     public const int HOUSE_MAX_HP = 50;
     public const int HOUSE_DAMAGED_THR = HOUSE_MAX_HP / 2;
+    public const int MORAL_LOSS_HALF_BROKEN_HOUSE = 3; // moral loss when house is broko
+    public const int MORAL_LOSS_BROKEN_HOUSE = 6; // moral loss when house is broko
     public const int OGRE_ANGER_THR = 50;
     public const int OGRE_GET_CALM_THR = 80;
     public const int OGRE_MORAL_GAIN_IN_ANGER = 10;
-
     public const int OGRE_WRONG_LVL_COMMAND_PENALTY = 5;
     public const int OGRE_WRONG_JOB_COMMAND_PENALTY = 15;
     public const int OGRE_WRONG_SEX_COMMAND_PENALTY = 20;
+    public const int OGRE_DAMAGE_TO_HOUSE = 5;
 
 
     // Colors

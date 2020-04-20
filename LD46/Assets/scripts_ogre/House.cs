@@ -4,6 +4,12 @@ using UnityEngine;
 
 public class House : MonoBehaviour
 {
+    public enum HOUSE_STATE {
+        FULL = 0,
+        HALF_DAMAGED = 1,
+        DESTROYED = 2
+    }
+
     public Sprite FullLife;
     public Sprite HalfDamaged;
     public Sprite Damaged;
@@ -12,9 +18,11 @@ public class House : MonoBehaviour
 
     public SpriteRenderer sr;
 
+    public HOUSE_STATE state;
+
     public void Damage()
     {
-        Life -= 1;
+        Life -= Constants.OGRE_DAMAGE_TO_HOUSE;
     }
     // Start is called before the first frame update
     void Start()
@@ -24,12 +32,25 @@ public class House : MonoBehaviour
         this.Life = Constants.HOUSE_MAX_HP;
     }
 
+    void update_sprite()
+    {
+        if (state == HOUSE_STATE.FULL)
+            sr.sprite = FullLife;
+        if (state == HOUSE_STATE.DESTROYED)
+            sr.sprite = Damaged;
+        else if (state == HOUSE_STATE.HALF_DAMAGED)
+            sr.sprite = HalfDamaged;
+    }
+
     // Update is called once per frame
     void Update()
     {
-        if (Life == 0) 
-            sr.sprite = Damaged;
+        if (Life == 0)
+            state = HOUSE_STATE.DESTROYED;
         else if ( this.Life <= Constants.HOUSE_DAMAGED_THR ) 
-            sr.sprite = HalfDamaged;
+            state = HOUSE_STATE.HALF_DAMAGED;
+        else
+            state = HOUSE_STATE.FULL;
+        update_sprite();
     }
 }

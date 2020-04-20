@@ -19,6 +19,8 @@ public class Village : MonoBehaviour
     // TIME MGT
     private float last_job_update;
     private float last_time_villagers_ate;
+    private float last_time_moral_updated;
+
     
     public void spawnVillager()
     {
@@ -74,6 +76,28 @@ public class Village : MonoBehaviour
             if (script) script.Damage();
         }
     }
+
+    public void updateVillageMoral()
+    {
+        int moral_update = 0;
+
+        // broko house
+        foreach(GameObject house_go in houses)
+        {
+            House h = house_go.GetComponent<House>();
+            if (!!h)
+            {
+                if (h.state == House.HOUSE_STATE.HALF_DAMAGED)
+                    moral_update -= Constants.MORAL_LOSS_HALF_BROKEN_HOUSE;
+                else if (h.state == House.HOUSE_STATE.DESTROYED)
+                    moral_update -= Constants.MORAL_LOSS_BROKEN_HOUSE;
+            }
+        }//! foreach house
+
+        // famine
+
+    }
+
     // Start is called before the first frame update
     void Start()
     {   
@@ -98,6 +122,7 @@ public class Village : MonoBehaviour
         }
         last_job_update = Time.time;
         last_time_villagers_ate = Time.time;
+        last_time_moral_updated = Time.time;
     }
 
     // Update is called once per frame
@@ -124,6 +149,14 @@ public class Village : MonoBehaviour
             this.food = (int) Mathf.Max( this.food - food_to_consume, 0);
 
             last_time_villagers_ate = Time.time;
+        }
+
+        // Update village moral
+        if (Time.time - last_time_moral_updated >= Constants.village_moral_time_step)
+        {
+            Debug.Log("UPDATE VILLAGE MORAL");
+            updateVillageMoral();
+            last_time_moral_updated = Time.time;
         }
 
         // check if player is game over
