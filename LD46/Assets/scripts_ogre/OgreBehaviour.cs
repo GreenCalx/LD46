@@ -65,7 +65,7 @@ public class OgreBehaviour : MonoBehaviour
         // first find collider
         if ( currentState != States.GETTING_TARGET)
         {
-            if (collision.gameObject.name != "conveyor_belt")
+            if (collision.gameObject.name != Constants.BELT)
             {
                 currentTarget = collision.gameObject;
                 currentState = States.GETTING_TARGET;

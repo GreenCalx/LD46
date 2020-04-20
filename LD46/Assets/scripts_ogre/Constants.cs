@@ -17,6 +17,7 @@ public class Constants
     public const string OGRE_GO_NAME = "ogre";
     public const string AUDIO_MANAGER_GO_NAME = "AudioManager";
     public const string PLAYER_CONTROLLER_GO_NAME = "PLAYER";
+    public const string BELT = "conveyor_belt";
 
 
     // Graphx
@@ -93,6 +94,7 @@ public class Constants
     public const float belt_speed = 3f; // 1 seconds   
 
     public const float HandSpeed = 3;
+    public const float LittleOgreSpeed = 2;
 
 
     // Tweak consts
@@ -130,6 +132,11 @@ public class Constants
     public const float LEVEL_UP_INDICATOR_DURATION = 1f; // 1sec
     public const float VILLAGER_COLLISION_REPULSE_FACTOR = -0.5f;
 
+    public const float ogre_rampage_threshold_stop = 90;
+    public const int Villager_food = 30;
+    public const int Ogre_Food_Tick_Loss = -5;
+    public const int Ogre_Food_Tick_Time = 3;
+
     // win condition
     public const int WIN_COND_POP = 25;
     public const int WIN_COND_N_MALE_KING = 1;
@@ -161,9 +168,6 @@ public class Constants
     public const string villager_change_job_lvl3 = "change_job_lvl3";
 
 
-    public const int Villager_food = 30;
-    public const int Ogre_Food_Tick_Loss = -5;
-    public const int Ogre_Food_Tick_Time = 3;
     public const int BloodTiming = 2;
 
     // SFX

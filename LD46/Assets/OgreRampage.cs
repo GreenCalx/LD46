@@ -4,64 +4,95 @@ using UnityEngine;
 
 public class OgreRampage : MonoBehaviour
 {
-
-    GameObject currentTarget;
+    // state machine
     public enum States { GET_TARGET, EAT_TARGET, DEACTIVATED };
     public States currentState = States.DEACTIVATED;
+    // target
+    private GameObject currentTarget;
+    // refs
+    private OgreBehaviour BigOgre;
+    private Village Village;
+    private SpriteRenderer SR;
+    private BoxCollider2D BC;
 
-    public float speed = 2;
-
-    GameObject BigOgre;
-
-    int UnblockFrameCount = 240; // environ 4s
-    int CurrentBlockFrameCount = 0;
-    public int DisableColliderTime = 1;
+    // debug if blocked vars
+    private int UnblockFrameCount = 240; // environ 4s
+    private int CurrentBlockFrameCount = 0;
+    private int DisableColliderTime = 1;
     private float CurrentDisabledTime = 0;
+
+
 
     public void Activate()
     {
-        GetComponent<SpriteRenderer>().enabled = true;
+        // enable the sprite renderer
+        SR.enabled = true;
+        // update state
         currentState = States.GET_TARGET;
-        var village = GameObject.Find("Village");
-        if(village)
+        // make it pop inside the village to go RAMPAGE
+        if(Village)
         {
-            var bounds = village.GetComponent<BoxCollider2D>().bounds;
-
-            transform.position = new Vector3(Random.Range(bounds.min.x, bounds.max.x),
+            var bounds = Village.GetComponent<BoxCollider2D>().bounds;
+            transform.position = new Vector3(
+                   Random.Range(bounds.min.x, bounds.max.x),
                    Random.Range(bounds.min.y, bounds.max.y),
                    Random.Range(bounds.min.z, bounds.max.z));
         }
     }
 
+
     public void DeActivate() {
-        GetComponent<SpriteRenderer>().enabled = false;
+        // disable sprite
+        // should we disable/enable the whole object to avoid physics bugs or something
+        SR.enabled = false;
+        // update state
         currentState = States.DEACTIVATED;
     }
-    // Start is called before the first frame update
+
     void Start()
     {
-        BigOgre = GameObject.Find("ogre"); 
-        GetComponent<SpriteRenderer>().enabled = false;
+        // init state
+        var ogre_go = GameObject.Find("ogre");
+        if (ogre_go) BigOgre = ogre_go.GetComponent<OgreBehaviour>();
+        SR = GetComponent<SpriteRenderer>();
+        if(SR) SR.enabled = false;
         currentState = States.DEACTIVATED;
+        var village_go = GameObject.Find(Constants.VILLAGE_GO_NAME);
+        if (village_go) Village = village_go.GetComponent<Village>();
+        BC = GetComponent<BoxCollider2D>();
+    }
+
+    private void GetTarget()
+    {
+        // pick random villager
+        if (Village)
+        {
+                if (Village.villagers.Count != 0)
+                {
+                    currentTarget = Village.villagers[Random.Range(0, Village.villagers.Count)];//using int on random.range is exclusive on bounds
+                }
+        }
     }
 
     private void FixedUpdate()
     {
-        if (currentState == States.EAT_TARGET)
+        if (currentState == States.EAT_TARGET && currentTarget)
         {
             // move until reaching current target
-            if (Physics2D.IsTouching(GetComponent<BoxCollider2D>(), currentTarget.GetComponent<BoxCollider2D>() ))
+            if (Physics2D.IsTouching(BC, currentTarget.GetComponent<BoxCollider2D>() ))
             {
                 currentTarget.GetComponent<Villager>().Kill();
-                BigOgre.GetComponent<OgreBehaviour>().AddFood(Constants.Villager_food);
+                BigOgre.AddFood(Constants.Villager_food);
                 currentState = States.GET_TARGET;
             } else
             {
-                transform.position = Vector3.MoveTowards(transform.position, currentTarget.transform.position, speed * Time.fixedDeltaTime);
+                    transform.position = Vector3.MoveTowards(transform.position, currentTarget.transform.position, Constants.LittleOgreSpeed * Time.fixedDeltaTime);
             }
 
+            // this is a hack to avoid letting the ogre getting stuck for too long in a house
+            // to avoid this the correct solution would be something like a A*
             List<Collider2D> result = new List<Collider2D>();
-            Physics2D.OverlapCollider(GetComponent<BoxCollider2D>(), new ContactFilter2D(), result);
+            Physics2D.OverlapCollider(BC, new ContactFilter2D(), result);
             bool FoundHouseCollider = false;
             foreach(Collider2D c in result)
             {
@@ -97,8 +128,7 @@ public class OgreRampage : MonoBehaviour
                   CurrentDisabledTime = DisableColliderTime;
                 }
             }
-
-        }
+        } // END EAT_TARGET
     }
 
     // Update is called once per frame
@@ -108,34 +138,19 @@ public class OgreRampage : MonoBehaviour
         {
             if (BigOgre)
             {
-                var script = BigOgre.GetComponent<OgreBehaviour>();
-                if (script)
-                {
-                    if (script.food > 90)
+                    if (BigOgre.food > Constants.ogre_rampage_threshold_stop)
                     {
                         DeActivate();
-                        script.ResetBehavior();
+                        BigOgre.ResetBehavior(); // this will make the ogre come back to its window
                     }
-                }
             }
 
-            // pick random villager
             if (currentState == States.GET_TARGET)
             {
-                var village = GameObject.Find("Village");
-                if (village)
-                {
-                    var script = village.GetComponent<Village>();
-                    if (script)
-                    {
-                        if (script.villagers.Count != 0)
-                        {
-                            currentTarget = script.villagers[Random.Range(0, script.villagers.Count)];
-                            if (currentTarget) currentState = States.EAT_TARGET;
-                        }
-                    }
-                }
+                GetTarget();
+                if (currentTarget) currentState = States.EAT_TARGET;
             }
+
         }
     }
 }
