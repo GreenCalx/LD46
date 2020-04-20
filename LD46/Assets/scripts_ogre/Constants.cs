@@ -141,6 +141,8 @@ public class Constants
     public const float VILLAGER_COLLISION_REPULSE_FACTOR = -0.5f;
 
     public const float ogre_rampage_threshold_stop = 90;
+    public const float ogre_rampage_threshold_start = 25;
+    public const float ogre_hungry_threshold_start = 75;
     public const int Villager_food = 30;
     public const int Ogre_Food_Tick_Loss = -5;
     public const int Ogre_Food_Tick_Time = 3;
