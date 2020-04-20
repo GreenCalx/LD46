@@ -19,7 +19,7 @@ public class OgreBehaviour : MonoBehaviour
 
     public Sprite[] HandSprite;
 
-    public Sprite[] Bones;
+    public GameObject[] Bones;
 
     public GameObject mouth;
     private GameObject currentTarget;
@@ -163,11 +163,31 @@ public class OgreBehaviour : MonoBehaviour
         }
 
         // randomly instanciate sprites for fun and profit
-        var go = Instantiate(Bones[Random.Range(0, Bones.Length)], mouth.transform.position, Quaternion.Euler(new Vector3(
-                                                                                   UnityEngine.Random.Range(0,360),
-                                                                                   UnityEngine.Random.Range(0,360),
-                                                                                   UnityEngine.Random.Range(0,360))));
-        Destroy(go, 2);
+        Debug.Log("A" + CurrentAnimationTime % 0.5f);
+        Debug.Log("B" +(CurrentAnimationTime + Time.fixedDeltaTime));
+        if (CurrentAnimationTime % 0.5f > (CurrentAnimationTime+Time.fixedDeltaTime) % 0.5)
+        {
+            var go = Instantiate(Bones[Random.Range(1, Bones.Length)], mouth.transform.position, Quaternion.Euler(new Vector3(
+                                                                                       0,
+                                                                                       0,
+                                                                                       UnityEngine.Random.Range(0, 360))));
+            Destroy(go, 2);
+            go.GetComponent<Rigidbody2D>().AddForce(new Vector3(1, 1, 0));
+
+            //also spawn blood randomly next to mouth positoin
+             var bounds = mouth.GetComponent<BoxCollider2D>().bounds;
+        Vector3 spawnPosition = new Vector3(
+               Random.Range(bounds.min.x, bounds.max.x),
+               Random.Range(bounds.min.y, bounds.max.y),
+               Random.Range(bounds.min.z, bounds.max.z)
+           );
+
+            var go2 = Instantiate(Bones[0],  spawnPosition, Quaternion.Euler(new Vector3(
+                                                                                       0,
+                                                                                       0,
+                                                                                       UnityEngine.Random.Range(0, 360))));
+            Destroy(go2, 0.5f);
+        }
 
     }
 
