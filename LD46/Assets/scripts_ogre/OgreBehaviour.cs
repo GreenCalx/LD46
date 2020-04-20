@@ -16,10 +16,11 @@ public class OgreBehaviour : MonoBehaviour
     public bool goUp = false;
     public bool goDown = false;
 
-
     public Sprite[] HandSprite;
 
     public GameObject[] Bones;
+
+    public GameObject[] Puff;
 
     public GameObject mouth;
     private GameObject currentTarget;
@@ -141,14 +142,14 @@ public class OgreBehaviour : MonoBehaviour
         needEat = false;
         AddFood(Constants.Villager_food);
 
-        rightHand.GetComponent<SpriteRenderer>().sprite = HandSprite[0];
-
         GetComponent<Animator>().SetBool("isEating", true);
     }
     void EatingAnimationStop()
     {
         // here is the animation stopping proicess if needed
         GetComponent<Animator>().SetBool("isEating", false);
+
+        rightHand.GetComponent<SpriteRenderer>().sprite = HandSprite[0];
     }
     void EatingAnimation()
     {
@@ -163,8 +164,6 @@ public class OgreBehaviour : MonoBehaviour
         }
 
         // randomly instanciate sprites for fun and profit
-        Debug.Log("A" + CurrentAnimationTime % 0.5f);
-        Debug.Log("B" +(CurrentAnimationTime + Time.fixedDeltaTime));
         if (CurrentAnimationTime % 0.5f > (CurrentAnimationTime+Time.fixedDeltaTime) % 0.5)
         {
             var go = Instantiate(Bones[Random.Range(1, Bones.Length)], mouth.transform.position, Quaternion.Euler(new Vector3(
@@ -205,6 +204,10 @@ public class OgreBehaviour : MonoBehaviour
     {
         goUp = true;
         goDown = false;
+
+
+        rightHand.GetComponent<SpriteRenderer>().sprite = HandSprite[2];
+        leftHand.GetComponent<SpriteRenderer>().sprite = HandSprite[3];
     }
 
     void AngryAnimation()
@@ -221,7 +224,13 @@ public class OgreBehaviour : MonoBehaviour
             {
                 var script = go.GetComponent<Village>();
                 script.DamageHouses();
-                this.moral = (int) Mathf.Min( this.moral + Constants.OGRE_MORAL_GAIN_IN_ANGER, Constants.MAX_MORAL);
+                this.moral = (int)Mathf.Min(this.moral + Constants.OGRE_MORAL_GAIN_IN_ANGER, Constants.MAX_MORAL);
+
+                // spawn puff cloud
+                Instantiate(Puff[0], rightHand.transform.position + Puff[0].GetComponent<SpriteRenderer>().sprite.bounds.extents, Quaternion.identity);
+               Instantiate(Puff[1], rightHand.transform.position+ Puff[0].GetComponent<SpriteRenderer>().sprite.bounds.extents, Quaternion.identity);
+               Instantiate(Puff[0], leftHand.transform.position+ Puff[0].GetComponent<SpriteRenderer>().sprite.bounds.extents, Quaternion.identity);
+               Instantiate(Puff[1], leftHand.transform.position+ Puff[0].GetComponent<SpriteRenderer>().sprite.bounds.extents, Quaternion.identity);
             }
         }
         if ( goUp && Vector3.Distance(rightHand.transform.position, rightHandAngryTopTarget.transform.position) < threshold)
@@ -232,14 +241,14 @@ public class OgreBehaviour : MonoBehaviour
 
         if (goUp)
         {
-           rightHand.transform.position =  Vector3.Lerp(rightHand.transform.position, rightHandAngryTopTarget.transform.position, Time.deltaTime);
-           leftHand.transform.position =  Vector3.Lerp(leftHand.transform.position, leftHandAngryTopTarget.transform.position, Time.deltaTime);
+           rightHand.transform.position =  Vector3.MoveTowards(rightHand.transform.position, rightHandAngryTopTarget.transform.position, Constants.HandSpeed *  Time.deltaTime);
+           leftHand.transform.position =  Vector3.MoveTowards(leftHand.transform.position, leftHandAngryTopTarget.transform.position, Constants.HandSpeed * Time.deltaTime);
         }
 
         if (goDown)
         {
-           rightHand.transform.position = Vector3.Lerp(rightHand.transform.position, rightHandRestingPosition.transform.position, Time.deltaTime);
-           leftHand.transform.position =  Vector3.Lerp(leftHand.transform.position, leftHandRestingPosition.transform.position, Time.deltaTime);
+           rightHand.transform.position = Vector3.MoveTowards(rightHand.transform.position, rightHandRestingPosition.transform.position, Constants.HandSpeed * Time.deltaTime);
+           leftHand.transform.position =  Vector3.MoveTowards(leftHand.transform.position, leftHandRestingPosition.transform.position, Constants.HandSpeed * Time.deltaTime);
         }
     }
 
@@ -279,8 +288,8 @@ public class OgreBehaviour : MonoBehaviour
 
             rightHand.GetComponent<SpriteRenderer>().sprite = HandSprite[1];
 
-            rightHand.transform.position = Vector3.Lerp(rightHand.transform.position, currentTarget.transform.position, Time.deltaTime);
-            if (Physics2D.IsTouching(rightHand.GetComponent<BoxCollider2D>(), currentTarget.GetComponent<BoxCollider2D>()))
+            rightHand.transform.position = Vector3.MoveTowards(rightHand.transform.position, currentTarget.transform.position, Constants.HandSpeed * Time.deltaTime);
+            if (!needEat && Physics2D.IsTouching(rightHand.GetComponent<BoxCollider2D>(), currentTarget.GetComponent<BoxCollider2D>()))
             {
                 // remove from conmveyor belt
                 var conveyor = GameObject.Find("conveyor_belt");
@@ -298,7 +307,7 @@ public class OgreBehaviour : MonoBehaviour
                 rightHand.GetComponent<SpriteRenderer>().sprite = HandSprite[2];
 
                 // we have something to eat, let s go to the mouth position
-                rightHand.transform.position = Vector3.Lerp(rightHand.transform.position, mouth.transform.position, Time.deltaTime);
+                rightHand.transform.position = Vector3.MoveTowards(rightHand.transform.position, mouth.transform.position, Constants.HandSpeed * Time.deltaTime);
                 if (Physics2D.IsTouching(rightHand.GetComponent<BoxCollider2D>(), mouth.GetComponent<BoxCollider2D>()))
                 {
                     currentState = States.EATING;
@@ -337,7 +346,7 @@ public class OgreBehaviour : MonoBehaviour
             // if we are not in the resting position, let s reset the position
             if (rightHand.transform.position != rightHandRestingPosition.transform.position)
             {
-                rightHand.transform.position = Vector3.Lerp(rightHand.transform.position, rightHandRestingPosition.transform.position, Time.deltaTime);
+                rightHand.transform.position = Vector3.MoveTowards(rightHand.transform.position, rightHandRestingPosition.transform.position,Constants.HandSpeed*Time.deltaTime);
                 if (Vector3.Distance(rightHand.transform.position, rightHandRestingPosition.transform.position) < 0.1f)
                 {
                     // close enough we reset the position
@@ -368,8 +377,12 @@ public class OgreBehaviour : MonoBehaviour
         {
             // destroy village buildings
             AngryAnimation();
-            if ( this.moral >= Constants.OGRE_GET_CALM_THR )
+            if (this.moral >= Constants.OGRE_GET_CALM_THR)
+            {
                 currentState = States.REST;
+                rightHand.GetComponent<SpriteRenderer>().sprite = HandSprite[0];
+                leftHand.GetComponent<SpriteRenderer>().sprite = HandSprite[0];
+            }
                 
         }
 

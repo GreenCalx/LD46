@@ -79,7 +79,9 @@ public class Constants
 
     // Speeds
     public const float villager_speed = 2f; // 1 seconds    
-    public const float belt_speed = 2f; // 1 seconds   
+    public const float belt_speed = 3f; // 1 seconds   
+
+    public const float HandSpeed = 3;
 
 
     // Tweak consts
