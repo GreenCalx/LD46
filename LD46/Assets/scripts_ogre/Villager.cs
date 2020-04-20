@@ -221,20 +221,31 @@ public class Villager : MonoBehaviour
         if (Time.time - last_exp_update >= Constants.villager_exp_gain_time_step)
         {
             this.exp += Constants.VILLAGER_EXP_GAIN;
-
+            bool leveled_up = false;
             if ( this.exp > Constants.VILLAGER_EXP_REQ_LEVEL3  && (level == 3) )
             { /* level 3 is last level, no more to do */}
             if ( (this.exp >= Constants.VILLAGER_EXP_REQ_LEVEL3) && (level==2) )
             {
                 this.level = 3;
+                leveled_up = true;
             }
             else if ( (this.exp >= Constants.VILLAGER_EXP_REQ_LEVEL2) && (level==1) )
             {
                 this.level = 2;
+                leveled_up = true;
             }
             else if ( (this.exp >= Constants.VILLAGER_EXP_REQ_LEVEL1) && (level==0) )
             {
                 this.level = 1;
+                leveled_up = true;
+            }
+            if (leveled_up)
+            {
+                LevelUpIndicator lui = GetComponentInChildren<LevelUpIndicator>();
+                if (!!lui)
+                {
+                    lui.start_show = true;
+                }
             }
 
             last_exp_update = Time.time;
