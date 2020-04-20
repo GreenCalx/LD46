@@ -8,7 +8,7 @@ public class Constants
     public const string MAIN_GAME_SCENE = "Schoenbr";
     public const string TITLE_SCENE     = "TitleScreen";
     public const string GAME_OVER_SCENE = "GameOver";
-
+    public const string WIN_GAME_SCENE = "GGScene";
 
     // Game object names
     public const string BELT_LOADING_POINT      = "belt_loading_point";
@@ -118,6 +118,10 @@ public class Constants
     public const int VILLAGE_MORAL_REQ_TO_MATE = 40;
     public const float LEVEL_UP_INDICATOR_DURATION = 1f; // 1sec
     public const float VILLAGER_COLLISION_REPULSE_FACTOR = -0.5f;
+
+    // win condition
+    public const int WIN_COND_POP = 25;
+    public const int WIN_COND_N_KING = 1;
 
     // MATE PROBA
     // Values of Log(y+1) func to 

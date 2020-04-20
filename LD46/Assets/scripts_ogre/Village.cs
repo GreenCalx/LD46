@@ -181,10 +181,14 @@ public class Village : MonoBehaviour
         // > Select 2 villagers ( M + F )
         List<GameObject> males_only   = getMalesInVillage();
         List<GameObject> females_only = getFemalesInVillage(); // could do substract instead..
-        males_only  = filterVillagerOnBelt(males_only);
-        females_only = filterVillagerOnBelt(females_only);
-        males_only  = filterVillagerGoToBelt(males_only);
-        females_only = filterVillagerGoToBelt(females_only);
+        males_only      = filterVillagerOnBelt(males_only);
+        females_only    = filterVillagerOnBelt(females_only);
+        males_only      = filterVillagerGoToBelt(males_only);
+        females_only    = filterVillagerGoToBelt(females_only);
+        males_only      = filterVillagerNotChangingJob(males_only);
+        females_only    = filterVillagerNotChangingJob(females_only);
+        males_only      = filterVillagerNotAlreadyMating(males_only);
+        females_only    = filterVillagerNotAlreadyMating(females_only);
 
         if ( (males_only.Count == 0) || (females_only.Count == 0) )
             return;
@@ -226,6 +230,14 @@ public class Village : MonoBehaviour
     public List<GameObject> filterVillagerGoToBelt( List<GameObject> iListToFilter )
     {
         return iListToFilter.Where( e => (e.GetComponent<Villager>().go_to_belt == false) ).ToList();
+    }
+    public List<GameObject> filterVillagerNotChangingJob( List<GameObject> iListToFilter )
+    {
+        return iListToFilter.Where( e => (e.GetComponent<Villager>().changing_job == false) ).ToList();
+    }
+    public List<GameObject> filterVillagerNotAlreadyMating( List<GameObject> iListToFilter )
+    {
+        return iListToFilter.Where( e => (e.GetComponent<Villager>().trying_to_mate == false) ).ToList();
     }
 
     // Start is called before the first frame update

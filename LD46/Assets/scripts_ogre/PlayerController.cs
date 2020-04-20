@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 using jobs;
 
 public class PlayerController : MonoBehaviour
@@ -53,7 +54,41 @@ public class PlayerController : MonoBehaviour
             }
         }
 
+        // grey out unavailable job
+        disableUnavailableJobs(v.level);
+
     }
+
+    public void disableUnavailableJobs( int villager_lvl)
+    {
+        initAssignPanelRef(); // just in case
+
+        Button[] btns = assignPanel.gameObject.GetComponentsInChildren<Button>();
+        foreach (Button b in btns)
+        {
+            if (b.name == Constants.assign_farmer_btn_name)
+            {
+                b.interactable = (villager_lvl >= 1);
+            }
+            else if (b.name == Constants.assign_builder_btn_name)
+            {
+                b.interactable = (villager_lvl >= 1);
+            }
+            else if (b.name == Constants.assign_cleric_btn_name)
+            {
+                b.interactable = (villager_lvl >= 2);
+            }
+            else if (b.name == Constants.assign_bard_btn_name)
+            {
+                b.interactable = (villager_lvl >= 2);
+            }
+            else if (b.name == Constants.assign_king_btn_name)
+            {
+                b.interactable = (villager_lvl >= 3);
+            }
+        }//! foreach
+    }
+
 
     // Refresh panel for selected villager
     public void refreshVillagerPanel()
@@ -174,6 +209,34 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    public void checkWinCondition()
+    {
+
+        Village village = this.village_go.GetComponent<Village>();
+        if (!village)
+            return;
+
+        // need Constants.WIN_COND_POP pop
+        if ( village.villagers.Count < Constants.WIN_COND_POP)
+            return;
+
+        // check kings
+        int king_needed = Constants.WIN_COND_N_KING;
+        foreach( GameObject v_go in village.villagers )
+        {
+            Villager v = v_go.GetComponent<Villager>();
+            if (!!v)
+            {
+                string.Equals( v.job_str, Constants.king_job_name);
+            }
+        }
+        if ( king_needed > 0 )
+            return;
+        
+        // All is met, go to end game
+        SceneManager.LoadScene(Constants.WIN_GAME_SCENE, LoadSceneMode.Single);
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -239,7 +302,8 @@ public class PlayerController : MonoBehaviour
                 }
 
             }
-
         }
+
+        checkWinCondition();
     }
 }
