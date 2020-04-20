@@ -11,6 +11,7 @@ public class Village : MonoBehaviour
     public GameObject conveyor_belt;
     public GameObject house_ref;
     public GameObject audio_manager_ref;
+
     // STATE
     public int food;
     public int moral;
@@ -190,6 +191,9 @@ public class Village : MonoBehaviour
         males_only      = filterVillagerNotAlreadyMating(males_only);
         females_only    = filterVillagerNotAlreadyMating(females_only);
 
+        males_only      = filterSelectedVillager(males_only);
+        females_only    = filterSelectedVillager(females_only);
+
         if ( (males_only.Count == 0) || (females_only.Count == 0) )
             return;
 
@@ -238,6 +242,28 @@ public class Village : MonoBehaviour
     public List<GameObject> filterVillagerNotAlreadyMating( List<GameObject> iListToFilter )
     {
         return iListToFilter.Where( e => (e.GetComponent<Villager>().trying_to_mate == false) ).ToList();
+    }
+    public List<GameObject> filterSelectedVillager( List<GameObject> iListToFilter )
+    {
+        GameObject pc_go = GameObject.Find(Constants.PLAYER_CONTROLLER_GO_NAME);
+        if (!pc_go)
+            return iListToFilter;
+
+        PlayerController pc = pc_go.GetComponent<PlayerController>();
+        if (!pc)
+            return iListToFilter;
+
+        GameObject v_go = pc.selected_villager;
+        if (!v_go)
+            return iListToFilter;
+
+        Villager selected_villager = v_go.GetComponent<Villager>();
+        if (!selected_villager)
+            return iListToFilter;
+
+        if (selected_villager == null)
+            return iListToFilter;
+        return iListToFilter.Where( e => !string.Equals(e.GetComponent<Villager>().surname, selected_villager.surname) ).ToList();
     }
 
     public int countMaleKings()

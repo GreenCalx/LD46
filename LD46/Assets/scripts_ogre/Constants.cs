@@ -16,6 +16,7 @@ public class Constants
     public const string VILLAGE_GO_NAME = "Village";
     public const string OGRE_GO_NAME = "ogre";
     public const string AUDIO_MANAGER_GO_NAME = "AudioManager";
+    public const string PLAYER_CONTROLLER_GO_NAME = "PLAYER";
 
 
     // Graphx

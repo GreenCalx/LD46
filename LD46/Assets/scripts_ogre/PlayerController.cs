@@ -13,7 +13,7 @@ public class PlayerController : MonoBehaviour
     public GameObject ogre_go;
     public GameObject UI_ref;
     private GameObject UI_go;
-    private GameObject selected_villager;
+    public GameObject selected_villager;
     public GameObject UIStats_ref;
     private GameObject UIStats_go;
 
@@ -30,7 +30,7 @@ public class PlayerController : MonoBehaviour
             return;
         UI_go.gameObject.SetActive(true);
 
-        string name = v.name;
+        string name = v.surname;
         string job_name = v.job_str;
         string level = "" + v.level;
 
@@ -297,6 +297,7 @@ public class PlayerController : MonoBehaviour
 
             }
         }
+
 
         checkWinCondition();
     }

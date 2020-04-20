@@ -8,6 +8,7 @@ public class OgreBehaviour : MonoBehaviour
     public int food;
     public int moral;
     public GameObject village_go_ref;
+    public GameObject audio_manager_ref;
 
     public GameObject rightHand;
     public GameObject rightHandRestingPosition;
@@ -40,6 +41,14 @@ public class OgreBehaviour : MonoBehaviour
 
     private Villager currentCommand;
     private bool has_a_command = false;
+
+    public void refreshAudioManager()
+    {
+        if (audio_manager_ref==null)
+        {
+            audio_manager_ref = GameObject.Find(Constants.AUDIO_MANAGER_GO_NAME);
+        }
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -285,7 +294,6 @@ public class OgreBehaviour : MonoBehaviour
 
         if (currentState == States.GETTING_TARGET)
         {
-
             rightHand.GetComponent<SpriteRenderer>().sprite = HandSprite[1];
 
             rightHand.transform.position = Vector3.MoveTowards(rightHand.transform.position, currentTarget.transform.position, Constants.HandSpeed * Time.deltaTime);
@@ -304,6 +312,15 @@ public class OgreBehaviour : MonoBehaviour
 
             if (needEat)
             {
+                // SFX play Oh nooooo...
+                refreshAudioManager();
+                if (!!audio_manager_ref)
+                {
+                    AudioManager am = audio_manager_ref.GetComponent<AudioManager>();
+                    string sound_name_to_play = Constants.OH_NO_VOICE;
+                    am.Play(sound_name_to_play);
+                }
+                
                 rightHand.GetComponent<SpriteRenderer>().sprite = HandSprite[2];
 
                 // we have something to eat, let s go to the mouth position
