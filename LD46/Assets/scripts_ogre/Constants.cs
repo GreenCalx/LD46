@@ -70,7 +70,7 @@ public class Constants
 
 
     // Speeds
-    public const float villager_speed = 0.5f; // 1 seconds    
+    public const float villager_speed = 2f; // 1 seconds    
     public const float belt_speed = 1f; // 1 seconds   
 
 

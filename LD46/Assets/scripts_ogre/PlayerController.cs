@@ -13,12 +13,12 @@ public class PlayerController : MonoBehaviour
     public GameObject UI_ref;
     private GameObject UI_go;
     private GameObject selected_villager;
-    public GameObject  UIStats_ref;
+    public GameObject UIStats_ref;
     private GameObject UIStats_go;
 
     // Icons
-    private Sprite male_ico     ;
-    private Sprite female_ico   ;
+    private Sprite male_ico;
+    private Sprite female_ico;
 
     // Panels
     public Image assignPanel;
@@ -29,26 +29,26 @@ public class PlayerController : MonoBehaviour
             return;
         UI_go.gameObject.SetActive(true);
 
-        string name     = v.name;
+        string name = v.name;
         string job_name = v.job_str;
-        string level    = "" + v.level;
+        string level = "" + v.level;
 
         Text[] text_fields = UI_go.GetComponentsInChildren<Text>();
         foreach (Text t in text_fields)
         {
-            if(t.name == Constants.villager_panel_name_field)
+            if (t.name == Constants.villager_panel_name_field)
             { t.text = name; }
-            else if(t.name == Constants.villager_panel_job_field)
+            else if (t.name == Constants.villager_panel_job_field)
             { t.text = job_name; }
-            else if(t.name == Constants.villager_panel_level_field)
+            else if (t.name == Constants.villager_panel_level_field)
             { t.text = level; }
         }
 
         Image[] images = UI_go.GetComponentsInChildren<Image>();
         foreach (Image image in images)
         {
-            if( image.name == Constants.villager_panel_sex_ico )
-            { 
+            if (image.name == Constants.villager_panel_sex_ico)
+            {
                 image.sprite = (v.sex == Villager.SEX.Female) ? female_ico : male_ico;
             }
         }
@@ -58,13 +58,13 @@ public class PlayerController : MonoBehaviour
     // Refresh panel for selected villager
     public void refreshVillagerPanel()
     {
-        if ( (UI_go == null) || (selected_villager == null))
+        if ((UI_go == null) || (selected_villager == null))
             return;
 
         Villager v = selected_villager.GetComponent<Villager>();
         if (v == null)
             return;
-        
+
         string name = v.name;
         string job_name = v.job_str;
         string level = "" + v.level;
@@ -95,8 +95,8 @@ public class PlayerController : MonoBehaviour
         if (selected_villager == null)
             return;
 
-        Village  village    = village_go.GetComponent<Village>();
-        Villager villager   = selected_villager.GetComponent<Villager>();
+        Village village = village_go.GetComponent<Village>();
+        Villager villager = selected_villager.GetComponent<Villager>();
 
         if (!!village)
         {
@@ -131,42 +131,42 @@ public class PlayerController : MonoBehaviour
         Button[] btns = assignPanel.gameObject.GetComponentsInChildren<Button>();
         foreach (Button b in btns)
         {
-            if ( b.name == Constants.assign_farmer_btn_name)
+            if (b.name == Constants.assign_farmer_btn_name)
             {
                 //b.onClick.AddListener(tryAssignSelectedToFarm);
-                b.onClick.AddListener( delegate{tryAssignToJob(new Farmer());} );
+                b.onClick.AddListener(delegate { tryAssignToJob(new Farmer()); });
             }
-            else if ( b.name == Constants.assign_builder_btn_name)
+            else if (b.name == Constants.assign_builder_btn_name)
             {
                 //b.onClick.AddListener(tryAssignSelectedToBuild);
-                b.onClick.AddListener( delegate{tryAssignToJob(new Builder());} );
+                b.onClick.AddListener(delegate { tryAssignToJob(new Builder()); });
             }
-            else if ( b.name == Constants.assign_cleric_btn_name)
+            else if (b.name == Constants.assign_cleric_btn_name)
             {
                 //b.onClick.AddListener(tryAssignSelectedToCleric);
-                b.onClick.AddListener( delegate{tryAssignToJob(new Cleric());} );
+                b.onClick.AddListener(delegate { tryAssignToJob(new Cleric()); });
             }
-            else if ( b.name == Constants.assign_bard_btn_name)
+            else if (b.name == Constants.assign_bard_btn_name)
             {
                 //b.onClick.AddListener(tryAssignSelectedToBard);
-                b.onClick.AddListener( delegate{tryAssignToJob(new Bard());} );
+                b.onClick.AddListener(delegate { tryAssignToJob(new Bard()); });
             }
-            else if ( b.name == Constants.assign_king_btn_name)
+            else if (b.name == Constants.assign_king_btn_name)
             {
                 //b.onClick.AddListener(tryAssignSelectedToKing);
-                b.onClick.AddListener( delegate{tryAssignToJob(new King());} );
+                b.onClick.AddListener(delegate { tryAssignToJob(new King()); });
             }
         }
     }
 
-    public void tryAssignToJob( Job iJob )
+    public void tryAssignToJob(Job iJob)
     {
         if (selected_villager == null)
             return;
         Villager v = selected_villager.GetComponent<Villager>();
         if (!!v)
         {
-            if( iJob.canApplyToJob(v) )
+            if (iJob.canApplyToJob(v))
             {
                 v.assignJob(iJob);
                 refreshVillagerPanel();
@@ -178,15 +178,15 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         // load resources
-        this.male_ico     = Resources.Load<Sprite>(Constants.male_ico);
-        this.female_ico   = Resources.Load<Sprite>(Constants.female_ico);
+        this.male_ico = Resources.Load<Sprite>(Constants.male_ico);
+        this.female_ico = Resources.Load<Sprite>(Constants.female_ico);
 
         // Villager Panel UI
         UI_go = Instantiate(UI_ref);
 
         // Set listeners on buttons
         Button[] buttons = UI_go.GetComponentsInChildren<Button>();
-        foreach ( Button b in buttons )
+        foreach (Button b in buttons)
         {
             if (b.gameObject.name == Constants.sacrifice_btn_name)
             {
@@ -195,7 +195,7 @@ public class PlayerController : MonoBehaviour
             if (b.gameObject.name == Constants.assign_btn_name)
             {
                 toggleAssignPanel(); // deactivate panel at start
-                b.onClick.AddListener( toggleAssignPanel );
+                b.onClick.AddListener(toggleAssignPanel);
             }
         }
         initJobAssignementListener();
@@ -208,8 +208,8 @@ public class PlayerController : MonoBehaviour
         StatsUI ui_stats = UIStats_go.GetComponent<StatsUI>();
         if (!!ui_stats)
         {
-            ui_stats.village_go   = this.village_go.gameObject;
-            ui_stats.ogre_go      = this.ogre_go.gameObject;
+            ui_stats.village_go = this.village_go.gameObject;
+            ui_stats.ogre_go = this.ogre_go.gameObject;
         }
 
     }
@@ -219,22 +219,27 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         // Open villager panel on click
-        if ( Input.GetMouseButtonDown(0) ) 
-        {  
+        if (Input.GetMouseButtonDown(0))
+        {
             Vector3 mouse_position = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            Vector2 mouse_position_2d = new Vector2( mouse_position.x, mouse_position.y);
+            Vector2 mouse_position_2d = new Vector2(mouse_position.x, mouse_position.y);
 
-            RaycastHit2D hit = Physics2D.Raycast( mouse_position_2d, Vector2.zero);
-            Collider2D collider = hit.collider;
-            if( !!collider )
+            RaycastHit2D[] hit = Physics2D.RaycastAll(mouse_position_2d, Vector2.zero);
+            foreach (RaycastHit2D h in hit)
             {
-                Villager v      = collider.GetComponent<Villager>();
-                if ( !!v && !v.is_on_belt )
+                Collider2D collider = h.collider;
+                if (!!collider)
                 {
-                    spawnVillagerPanel( v );
-                    selected_villager = v.gameObject;
+                    Villager v = collider.GetComponent<Villager>();
+                    if (!!v && !v.is_on_belt)
+                    {
+                        spawnVillagerPanel(v);
+                        selected_villager = v.gameObject;
+                    }
                 }
+
             }
+
         }
     }
 }
