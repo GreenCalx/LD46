@@ -330,7 +330,8 @@ public class Villager : MonoBehaviour
         }
     } //! Update
 
-    void OnCollisionEnter2D( Collision2D other) 
+
+    public void checkMatingCollision( Collision2D other )
     {
          // self wants mate
         if (!trying_to_mate)
@@ -359,6 +360,16 @@ public class Villager : MonoBehaviour
                 }
             }
         }
+    }
+
+    void OnCollisionEnter2D( Collision2D other) 
+    {
+        checkMatingCollision(other);
+    }
+
+    void OnCollisionStay2D( Collision2D other) 
+    {
+        checkMatingCollision(other);
     }
 
 }
