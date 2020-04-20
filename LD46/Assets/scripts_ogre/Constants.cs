@@ -4,6 +4,12 @@ using UnityEngine;
 
 public class Constants
 {
+    //  Scenes names
+    public const string MAIN_GAME_SCENE = "Schoenbr";
+    public const string TITLE_SCENE     = "TitleScreen";
+    public const string GAME_OVER_SCENE = "GameOver";
+
+
     // Game object names
     public const string BELT_LOADING_POINT      = "belt_loading_point";
     public const string BELT_DISCHARGE_POINT    = "belt_discharge_point";
@@ -93,7 +99,7 @@ public class Constants
 
     public const int OGRE_WRONG_LVL_COMMAND_PENALTY = 5;
     public const int OGRE_WRONG_JOB_COMMAND_PENALTY = 15;
-    public const int OGRE_WRONG_SEX_COMMAND_PENALTY = 10;
+    public const int OGRE_WRONG_SEX_COMMAND_PENALTY = 20;
 
 
     // Colors
@@ -112,6 +118,9 @@ public class Constants
 
     // Animator vars
     public const string villager_change_job = "change_job";
+    public const string villager_change_job_lvl2 = "change_job_lvl2";
+    public const string villager_change_job_lvl3 = "change_job_lvl3";
+
 
     public const int Villager_food = 30;
     public const int Ogre_Food_Tick_Loss = -5;

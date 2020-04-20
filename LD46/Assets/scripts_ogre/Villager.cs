@@ -83,6 +83,27 @@ public class Villager : MonoBehaviour
         assignJob( new jobs.Beggar() ); // starts beggar regardless of level
     }
 
+    public string getJobChangeAnimationParam( int iJobLevel )
+    {
+        string anim_trig_parm = "";
+        switch (iJobLevel)
+        {
+            case 1:
+                anim_trig_parm = Constants.villager_change_job;
+                break;
+            case 2:
+                anim_trig_parm = Constants.villager_change_job_lvl2;
+                break;
+            case 3:
+                anim_trig_parm = Constants.villager_change_job_lvl3;
+                break;
+            default:
+                anim_trig_parm = Constants.villager_change_job;
+                break;
+        }
+        return anim_trig_parm;
+    }
+
     public void assignJob( jobs.Job iJob )
     {
         if (iJob.canApplyToJob(this))
@@ -105,7 +126,8 @@ public class Villager : MonoBehaviour
                 Animator animator = GetComponent<Animator>();
                 if (!!animator)
                 {
-                    animator.SetBool( Constants.villager_change_job, true);
+                    int job_level = iJob.getLevelRequired();
+                    animator.SetBool( getJobChangeAnimationParam(job_level), true);
                     animator.enabled = true;
                 }
             }//! job change animation
@@ -227,7 +249,8 @@ public class Villager : MonoBehaviour
             Animator animator = GetComponent<Animator>();
             if (!!animator)
             {
-                animator.SetBool( Constants.villager_change_job, false);
+                int job_level = this.job.getLevelRequired();
+                animator.SetBool(getJobChangeAnimationParam(job_level), false);
                 animator.enabled = false;
             }
             this.changing_job = false;
@@ -252,6 +275,9 @@ public class Villager : MonoBehaviour
         if (!!animator)
         {
             animator.SetBool( Constants.villager_change_job, false);
+            animator.SetBool(Constants.villager_change_job_lvl2, false);
+            animator.SetBool(Constants.villager_change_job_lvl3, false);
+
             animator.enabled = false;
         }
 

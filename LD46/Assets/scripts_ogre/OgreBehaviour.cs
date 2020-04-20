@@ -221,10 +221,10 @@ public class OgreBehaviour : MonoBehaviour
         Result += delta_level * Constants.OGRE_WRONG_LVL_COMMAND_PENALTY;
 
         int delta_sex = System.Convert.ToInt32(v.sex != currentCommand.sex );
-        Result += delta_sex * Constants.OGRE_WRONG_SEX_COMMAND_PENALTY;
+        Result -= delta_sex * Constants.OGRE_WRONG_SEX_COMMAND_PENALTY;
 
         int delta_job = System.Convert.ToInt32(v.job != currentCommand.job );
-        Result += delta_job * Constants.OGRE_WRONG_JOB_COMMAND_PENALTY;
+        Result -= delta_job * Constants.OGRE_WRONG_JOB_COMMAND_PENALTY;
 
         return Result;
     }
