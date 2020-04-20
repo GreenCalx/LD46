@@ -18,7 +18,7 @@ public class Villager : MonoBehaviour
 
     // Held GO references
     private GameObject village_go = null;
-
+    public GameObject BloodSplash;
     // villager strong attributes
     public int level;
     public Job job;
@@ -212,8 +212,15 @@ public class Villager : MonoBehaviour
 
             script.removeVillager(this.gameObject);
 
+            var go = Instantiate( BloodSplash, this.transform.position, Quaternion.Euler(new Vector3(
+                                                                                   UnityEngine.Random.Range(0,360),
+                                                                                   UnityEngine.Random.Range(0,360),
+                                                                                   UnityEngine.Random.Range(0,360))) );
+            Destroy(go, Constants.BloodTiming);
+
             GameObject.Destroy(this.gameObject);
         }
+        
     }
 
     public void updateExperience()

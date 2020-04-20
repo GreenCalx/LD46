@@ -138,4 +138,5 @@ public class Constants
     public const int Villager_food = 30;
     public const int Ogre_Food_Tick_Loss = -5;
     public const int Ogre_Food_Tick_Time = 3;
+    public const int BloodTiming = 2;
 }
