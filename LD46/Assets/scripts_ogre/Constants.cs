@@ -185,11 +185,9 @@ public class Constants
     public const string OH_NO_VOICE = "oh_no";
     public const string MY_LIFE_FOR_SCHNIBBLE_VOICE = "my_life_for_the_schnibble";
     public const string ALRIGHT_LETS_GO_VOICE = "alright_lets_go";
-<<<<<<< HEAD
     public const string FRESH_MEAT = "ogre_rampage";
     public const string EATING = "ogre_eat";
-=======
     public const string MAIN_THEME_BGM = "main_theme";
     public const string TITLE_THEME_BGM = "title_theme";
->>>>>>> e6f28a37843ecbb5605620a76ce54d6bbfdab8d9
+
 }
