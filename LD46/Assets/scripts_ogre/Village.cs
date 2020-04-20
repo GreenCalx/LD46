@@ -50,9 +50,9 @@ public class Village : MonoBehaviour
     {
         var bounds = GetComponent<BoxCollider2D>().bounds;
         Vector3 spawnPosition = new Vector3(
-               Random.Range(bounds.min.x, bounds.max.x),
-               Random.Range(bounds.min.y, bounds.max.y),
-               Random.Range(bounds.min.z, bounds.max.z)
+               Random.Range(bounds.min.x + 0.1f, bounds.max.x - 0.1f),
+               Random.Range(bounds.min.y + 0.1f, bounds.max.y - 0.1f),
+               Random.Range(bounds.min.z + 0.1f, bounds.max.z - 0.1f)
            );
         GameObject new_house = Instantiate(house_ref, spawnPosition, Quaternion.identity) as GameObject;
         houses.Add(new_house);
