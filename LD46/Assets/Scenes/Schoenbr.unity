@@ -232,75 +232,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a35533ddedbdecb4c8f6b8ded75f9971, type: 3}
---- !u!1001 &651482850070070665
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 651482850530681166, guid: 4e6a5c2fe9365174faba29d28e68fe06,
-        type: 3}
-      propertyPath: m_Name
-      value: BloodSplash
-      objectReference: {fileID: 0}
-    - target: {fileID: 651482850530681152, guid: 4e6a5c2fe9365174faba29d28e68fe06,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 5.953071
-      objectReference: {fileID: 0}
-    - target: {fileID: 651482850530681152, guid: 4e6a5c2fe9365174faba29d28e68fe06,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0.88294995
-      objectReference: {fileID: 0}
-    - target: {fileID: 651482850530681152, guid: 4e6a5c2fe9365174faba29d28e68fe06,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -878.74335
-      objectReference: {fileID: 0}
-    - target: {fileID: 651482850530681152, guid: 4e6a5c2fe9365174faba29d28e68fe06,
-        type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 651482850530681152, guid: 4e6a5c2fe9365174faba29d28e68fe06,
-        type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 651482850530681152, guid: 4e6a5c2fe9365174faba29d28e68fe06,
-        type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 651482850530681152, guid: 4e6a5c2fe9365174faba29d28e68fe06,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 651482850530681152, guid: 4e6a5c2fe9365174faba29d28e68fe06,
-        type: 3}
-      propertyPath: m_RootOrder
-      value: 9
-      objectReference: {fileID: 0}
-    - target: {fileID: 651482850530681152, guid: 4e6a5c2fe9365174faba29d28e68fe06,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 651482850530681152, guid: 4e6a5c2fe9365174faba29d28e68fe06,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 651482850530681152, guid: 4e6a5c2fe9365174faba29d28e68fe06,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 4e6a5c2fe9365174faba29d28e68fe06, type: 3}
 --- !u!1001 &1568342808070017687
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -415,19 +346,19 @@ PrefabInstance:
         type: 3}
       propertyPath: Bones.Array.data[0]
       value: 
-      objectReference: {fileID: 21300000, guid: 88c0a42f5d818a74a85bcc9b27d322df,
+      objectReference: {fileID: 8211418856526427758, guid: 6c37e4da4e473444ca3cd11297159897,
         type: 3}
     - target: {fileID: -8144209133977273766, guid: 1a2540033f8fa314284ada34252e8024,
         type: 3}
       propertyPath: Bones.Array.data[1]
       value: 
-      objectReference: {fileID: 21300000, guid: 0dd9ead2ad12325409959b2370a01dd2,
+      objectReference: {fileID: 1659731186664125620, guid: 3605707d7e4013b44a21c79a410f071a,
         type: 3}
     - target: {fileID: -8144209133977273766, guid: 1a2540033f8fa314284ada34252e8024,
         type: 3}
       propertyPath: Bones.Array.data[2]
       value: 
-      objectReference: {fileID: 21300000, guid: 5f1b772d8c5bf904a840350312eb778b,
+      objectReference: {fileID: 4235461146131530433, guid: 9208fa311fa397240bced26be577c076,
         type: 3}
     - target: {fileID: 97281105, guid: 1a2540033f8fa314284ada34252e8024, type: 3}
       propertyPath: m_BodyType

@@ -213,8 +213,8 @@ public class Villager : MonoBehaviour
             script.removeVillager(this.gameObject);
 
             var go = Instantiate( BloodSplash, this.transform.position, Quaternion.Euler(new Vector3(
-                                                                                   UnityEngine.Random.Range(0,360),
-                                                                                   UnityEngine.Random.Range(0,360),
+                                                                                   0,
+                                                                                   0,
                                                                                    UnityEngine.Random.Range(0,360))) );
             Destroy(go, Constants.BloodTiming);
 
