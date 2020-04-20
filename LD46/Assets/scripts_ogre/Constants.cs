@@ -68,6 +68,9 @@ public class Constants
     public const float belt_time_step = 1f;
     public const float villager_exp_gain_time_step = 5f; // 5 Seconds
     public const float villager_change_job_time = 3f; // 3 Seconds
+    public const float villager_change_job_time_lvl2 = 4f; // 4 Seconds
+    public const float villager_change_job_time_lvl3 = 5f; // 5 Seconds
+
     public const float villagers_hungry_time_step = 5f;
     
 
