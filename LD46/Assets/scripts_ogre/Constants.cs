@@ -78,7 +78,7 @@ public class Constants
 
     // Tweak consts
     public const int START_POP  = 6;
-    public const int START_HOUSE = 5;
+    public const int START_HOUSE = 4;
     public const int MAX_FOOD   = 100;
     public const int MAX_MORAL  = 100;
     public const float villager_move_step = 0.5f;
@@ -104,6 +104,9 @@ public class Constants
     public const int OGRE_WRONG_JOB_COMMAND_PENALTY = 15;
     public const int OGRE_WRONG_SEX_COMMAND_PENALTY = 20;
     public const int OGRE_DAMAGE_TO_HOUSE = 5;
+    public const int VILLAGE_FAMINE_TRH = 50;
+    public const int VILLAGE_FAMINE_MORAL_LOSS = 5;
+    public const int VILLAGE_SACRIFICE_MORAL_LOSS = 6;
 
 
     // Colors

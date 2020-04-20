@@ -44,6 +44,7 @@ public class Village : MonoBehaviour
     public void removeVillager(GameObject iGo)
     {
         villagers.Remove(iGo);
+        this.moral = Mathf.Max( this.moral - Constants.VILLAGE_SACRIFICE_MORAL_LOSS, 0);
     }
 
     public void sendVillagerToBelt(Villager v)
@@ -95,7 +96,13 @@ public class Village : MonoBehaviour
         }//! foreach house
 
         // famine
-
+        if ( this.food < Constants.VILLAGE_FAMINE_TRH )
+        {
+            moral_update -= Constants.VILLAGE_FAMINE_MORAL_LOSS;
+        } else {
+            moral_update += Constants.VILLAGE_FAMINE_MORAL_LOSS;
+        }
+        this.moral = Mathf.Min( this.moral + moral_update, Constants.MAX_MORAL);
     }
 
     // Start is called before the first frame update
