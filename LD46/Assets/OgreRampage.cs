@@ -30,7 +30,7 @@ public class OgreRampage : MonoBehaviour
         // update state
         currentState = States.GET_TARGET;
         // make it pop inside the village to go RAMPAGE
-        if(Village)
+        if (Village)
         {
             var bounds = Village.GetComponent<BoxCollider2D>().bounds;
             transform.position = new Vector3(
@@ -41,7 +41,8 @@ public class OgreRampage : MonoBehaviour
     }
 
 
-    public void DeActivate() {
+    public void DeActivate()
+    {
         // disable sprite
         // should we disable/enable the whole object to avoid physics bugs or something
         SR.enabled = false;
@@ -55,7 +56,7 @@ public class OgreRampage : MonoBehaviour
         var ogre_go = GameObject.Find("ogre");
         if (ogre_go) BigOgre = ogre_go.GetComponent<OgreBehaviour>();
         SR = GetComponent<SpriteRenderer>();
-        if(SR) SR.enabled = false;
+        if (SR) SR.enabled = false;
         currentState = States.DEACTIVATED;
         var village_go = GameObject.Find(Constants.VILLAGE_GO_NAME);
         if (village_go) Village = village_go.GetComponent<Village>();
@@ -67,10 +68,10 @@ public class OgreRampage : MonoBehaviour
         // pick random villager
         if (Village)
         {
-                if (Village.villagers.Count != 0)
-                {
-                    currentTarget = Village.villagers[Random.Range(0, Village.villagers.Count)];//using int on random.range is exclusive on bounds
-                }
+            if (Village.villagers.Count != 0)
+            {
+                currentTarget = Village.villagers[Random.Range(0, Village.villagers.Count)];//using int on random.range is exclusive on bounds
+            }
         }
     }
 
@@ -79,14 +80,24 @@ public class OgreRampage : MonoBehaviour
         if (currentState == States.EAT_TARGET && currentTarget)
         {
             // move until reaching current target
-            if (Physics2D.IsTouching(BC, currentTarget.GetComponent<BoxCollider2D>() ))
+            if (Physics2D.IsTouching(BC, currentTarget.GetComponent<BoxCollider2D>()))
             {
                 currentTarget.GetComponent<Villager>().Kill();
                 BigOgre.AddFood(Constants.Villager_food);
+                if (BigOgre)
+                    {
+                        if (BigOgre.food > Constants.ogre_rampage_threshold_stop)
+                        {
+                            DeActivate();
+                            BigOgre.ResetBehavior(); // this will make the ogre come back to its window
+                        }
+                    }
+
                 currentState = States.GET_TARGET;
-            } else
+            }
+            else
             {
-                    transform.position = Vector3.MoveTowards(transform.position, currentTarget.transform.position, Constants.LittleOgreSpeed * Time.fixedDeltaTime);
+                transform.position = Vector3.MoveTowards(transform.position, currentTarget.transform.position, Constants.LittleOgreSpeed * Time.fixedDeltaTime);
             }
 
             // this is a hack to avoid letting the ogre getting stuck for too long in a house
@@ -94,38 +105,52 @@ public class OgreRampage : MonoBehaviour
             List<Collider2D> result = new List<Collider2D>();
             Physics2D.OverlapCollider(BC, new ContactFilter2D(), result);
             bool FoundHouseCollider = false;
-            foreach(Collider2D c in result)
+            foreach (Collider2D c in result)
             {
+                // is this a villager that we might wanna kill anyway?
+                if (c.GetComponent<Villager>())
+                {
+                    c.GetComponent<Villager>().Kill();
+                    BigOgre.AddFood(Constants.Villager_food);
+                    if (BigOgre)
+                    {
+                        if (BigOgre.food > Constants.ogre_rampage_threshold_stop)
+                        {
+                            DeActivate();
+                            BigOgre.ResetBehavior(); // this will make the ogre come back to its window
+                            break;
+                        }
+                    }
+                }
+
                 // are we blocked by a fucking house?
                 if (c.GetComponent<House>())
                 {
                     CurrentBlockFrameCount += 1;
                     FoundHouseCollider = true;
-                    break;
-                }
-            }
+                    if (CurrentBlockFrameCount >= UnblockFrameCount)
+                    {
+                        GetComponent<BoxCollider2D>().enabled = false;
+                    }
 
-            if (CurrentBlockFrameCount >= UnblockFrameCount)
-            {
-                GetComponent<BoxCollider2D>().enabled = false; 
-            }
+                    if (GetComponent<BoxCollider2D>().enabled == false)
+                    {
+                        CurrentDisabledTime -= Time.fixedDeltaTime;
+                        if (CurrentDisabledTime <= 0)
+                        {
+                            CurrentDisabledTime = DisableColliderTime;
+                            GetComponent<BoxCollider2D>().enabled = true;
+                        }
+                    }
 
-            if (GetComponent<BoxCollider2D>().enabled == false)
-            {
-                CurrentDisabledTime -= Time.fixedDeltaTime;
-                if (CurrentDisabledTime <= 0)
-                {
-                    CurrentDisabledTime = DisableColliderTime;
-                    GetComponent<BoxCollider2D>().enabled = true; 
-                }
-            }
-
-            if (GetComponent<BoxCollider2D>().enabled)
-            {
-                if (!FoundHouseCollider)
-                {
-                  CurrentBlockFrameCount = 0;
-                  CurrentDisabledTime = DisableColliderTime;
+                    if (GetComponent<BoxCollider2D>().enabled)
+                    {
+                        if (!FoundHouseCollider)
+                        {
+                            CurrentBlockFrameCount = 0;
+                            CurrentDisabledTime = DisableColliderTime;
+                        }
+                    }
                 }
             }
         } // END EAT_TARGET
@@ -138,11 +163,11 @@ public class OgreRampage : MonoBehaviour
         {
             if (BigOgre)
             {
-                    if (BigOgre.food > Constants.ogre_rampage_threshold_stop)
-                    {
-                        DeActivate();
-                        BigOgre.ResetBehavior(); // this will make the ogre come back to its window
-                    }
+                if (BigOgre.food > Constants.ogre_rampage_threshold_stop)
+                {
+                    DeActivate();
+                    BigOgre.ResetBehavior(); // this will make the ogre come back to its window
+                }
             }
 
             if (currentState == States.GET_TARGET)
