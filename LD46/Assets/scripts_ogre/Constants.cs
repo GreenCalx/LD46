@@ -113,6 +113,7 @@ public class Constants
     public const int VILLAGE_SACRIFICE_MORAL_LOSS = 6;
     public const int VILLAGE_MORAL_REQ_TO_MATE = 40;
     public const float LEVEL_UP_INDICATOR_DURATION = 1f; // 1sec
+    public const float VILLAGER_COLLISION_REPULSE_FACTOR = -0.5f;
 
     // MATE PROBA
     // Values of Log(y+1) func to 

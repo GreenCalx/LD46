@@ -348,6 +348,17 @@ public class Villager : MonoBehaviour
     } //! Update
 
 
+    public void repulse( Collision2D other )
+    {
+        Rigidbody2D rb2d_this = GetComponent<Rigidbody2D>();
+        Rigidbody2D rb2d_other = other.gameObject.GetComponent<Rigidbody2D>();
+        if ( !!rb2d_this && !!rb2d_other )
+        {
+            rb2d_this.velocity  *= Constants.VILLAGER_COLLISION_REPULSE_FACTOR;
+            rb2d_other.velocity *= Constants.VILLAGER_COLLISION_REPULSE_FACTOR;
+        }
+    }
+
     public void checkMatingCollision( Collision2D other )
     {
          // self wants mate
@@ -361,6 +372,9 @@ public class Villager : MonoBehaviour
             if (!v.trying_to_mate)
                 return;
             
+            // repulse to prevent bbox overlap at hi speed
+            this.repulse(other);
+
             // go mate and prevent double firing by reset trying_to_mate
             trying_to_mate = false;
             v.trying_to_mate = false;

@@ -161,6 +161,14 @@ public class Village : MonoBehaviour
         // > Select 2 villagers ( M + F )
         List<GameObject> males_only   = getMalesInVillage();
         List<GameObject> females_only = getFemalesInVillage(); // could do substract instead..
+        males_only  = filterVillagerOnBelt(males_only);
+        females_only = filterVillagerOnBelt(females_only);
+        males_only  = filterVillagerGoToBelt(males_only);
+        females_only = filterVillagerGoToBelt(females_only);
+
+        if ( (males_only.Count == 0) || (females_only.Count == 0) )
+            return;
+
         int male_to_select = Random.Range(0, males_only.Count);
         int female_to_select = Random.Range(0, females_only.Count);
         
@@ -181,7 +189,6 @@ public class Village : MonoBehaviour
 
         // >> When 2 villagers collider in 'mate' state they produce a child ( random villager )
         // >> When they collide we pop new villager at collide location
-
     }
 
     public List<GameObject> getMalesInVillage()
@@ -191,6 +198,14 @@ public class Village : MonoBehaviour
     public List<GameObject> getFemalesInVillage()
     {
         return villagers.Where( e => (e.GetComponent<Villager>().sex == Villager.SEX.Female) ).ToList();
+    }
+    public List<GameObject> filterVillagerOnBelt( List<GameObject> iListToFilter )
+    {
+        return iListToFilter.Where( e => (e.GetComponent<Villager>().is_on_belt == false) ).ToList();
+    }
+    public List<GameObject> filterVillagerGoToBelt( List<GameObject> iListToFilter )
+    {
+        return iListToFilter.Where( e => (e.GetComponent<Villager>().go_to_belt == false) ).ToList();
     }
 
     // Start is called before the first frame update
