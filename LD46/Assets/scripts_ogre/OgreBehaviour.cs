@@ -5,6 +5,9 @@ using UnityEngine.UI;
 
 public class OgreBehaviour : MonoBehaviour
 {
+    private BeltConveyor Belt;
+
+
     public int food;
     public int moral;
     public GameObject village_go_ref;
@@ -53,6 +56,10 @@ public class OgreBehaviour : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        var belt_go = GameObject.Find("conveyor_belt");
+        Belt = belt_go ? belt_go.GetComponent<BeltConveyor>() : null;
+
+
         this.food = Constants.MAX_FOOD;
         this.moral = Constants.MAX_MORAL;
 
@@ -73,6 +80,17 @@ public class OgreBehaviour : MonoBehaviour
         }
     }
 
+    public void DisableAllSR()
+    {
+        GetComponent<SpriteRenderer>().enabled = false;
+        foreach (SpriteRenderer sr in GetComponentsInChildren<SpriteRenderer>()) sr.enabled = false;
+    }
+    public void EnableAllSR()
+    {
+        GetComponent<SpriteRenderer>().enabled = true;
+            foreach (SpriteRenderer sr in GetComponentsInChildren<SpriteRenderer>()) sr.enabled = true;
+    }
+
     public void ResetBehavior()
     {
         this.moral = Constants.MAX_MORAL;
@@ -83,8 +101,7 @@ public class OgreBehaviour : MonoBehaviour
         rightHand.transform.position = rightHandRestingPosition.transform.position;
         leftHand.transform.position = leftHandRestingPosition.transform.position;
 
-            GetComponent<SpriteRenderer>().enabled = true;
-            foreach (SpriteRenderer sr in GetComponentsInChildren<SpriteRenderer>()) sr.enabled = true;
+        EnableAllSR();
     }
 
     jobs.Job getJob(int job)
@@ -288,21 +305,21 @@ public class OgreBehaviour : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // always tick food unless we are in rampage mode
         if (currentState != States.RAMPAGE)
             // food update
             FoodTick();
 
-        if (currentState == States.GETTING_TARGET)
+        if (currentState == States.GETTING_TARGET && currentTarget)
         {
             rightHand.GetComponent<SpriteRenderer>().sprite = HandSprite[1];
 
+            // move right hand towards the incoming food
             rightHand.transform.position = Vector3.MoveTowards(rightHand.transform.position, currentTarget.transform.position, Constants.HandSpeed * Time.deltaTime);
             if (!needEat && Physics2D.IsTouching(rightHand.GetComponent<BoxCollider2D>(), currentTarget.GetComponent<BoxCollider2D>()))
             {
                 // remove from conmveyor belt
-                var conveyor = GameObject.Find("conveyor_belt");
-                var conveyor_script = conveyor ? conveyor.GetComponent<BeltConveyor>() : null;
-                if (conveyor_script) conveyor_script.removeOnBelt(currentTarget);
+                if (Belt) Belt.removeOnBelt(currentTarget);
 
                 currentTarget.transform.position = rightHand.transform.position + new Vector3( 0, 0.5f );
                 currentTarget.transform.parent = rightHand.transform;
@@ -346,7 +363,7 @@ public class OgreBehaviour : MonoBehaviour
             }
 
             
-        }
+        } // END GETTING TARGET
 
 
         if (currentState == States.EATING) EatingAnimation();
@@ -354,7 +371,7 @@ public class OgreBehaviour : MonoBehaviour
         if (currentState == States.REST)
         {
             // from state rest to hungry
-            if (food < 75)
+            if (food < Constants.ogre_hungry_threshold_start)
             {
                 currentState = States.HUNGRY;
                 needAskFood = true;
@@ -384,7 +401,7 @@ public class OgreBehaviour : MonoBehaviour
             // ask for food
             if(needAskFood) AskFood(); // to do only once
 
-            if (food < 25)
+            if (food < Constants.ogre_rampage_threshold_start)
             {
                 currentState = States.RAMPAGE;
             }
