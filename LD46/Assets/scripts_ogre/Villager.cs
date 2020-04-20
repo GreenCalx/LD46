@@ -28,7 +28,7 @@ public class Villager : MonoBehaviour
     public int exp;
 
     // villager weak attributes
-    public string name;
+    public string surname;
     public string job_str;
 
     // time
@@ -89,7 +89,7 @@ public class Villager : MonoBehaviour
 
     public void randomize()
     {
-        this.name  = this.generateName();
+        this.surname  = this.generateName();
         this.sex   = this.generateSex();
         this.level = this.generateLevel();
         assignJob( new jobs.Beggar() ); // starts beggar regardless of level
