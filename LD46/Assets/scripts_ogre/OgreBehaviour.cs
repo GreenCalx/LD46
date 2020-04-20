@@ -70,7 +70,7 @@ public class OgreBehaviour : MonoBehaviour
     {
         // this merans something on the bgelt is copming, start to go towards it to take it
         // first find collider
-        if ( currentState != States.GETTING_TARGET)
+        if ( currentState == States.REST)
         {
             if (collision.gameObject.name != Constants.BELT)
             {
@@ -429,6 +429,10 @@ public class OgreBehaviour : MonoBehaviour
             if (this.moral >= Constants.OGRE_GET_CALM_THR)
             {
                 currentState = States.REST;
+
+
+                GetComponent<Animator>().SetBool("isEating", false);
+
                 rightHand.GetComponent<SpriteRenderer>().sprite = HandSprite[0];
                 leftHand.GetComponent<SpriteRenderer>().sprite = HandSprite[0];
             }
