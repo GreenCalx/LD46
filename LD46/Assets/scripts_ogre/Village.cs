@@ -172,6 +172,8 @@ public class Village : MonoBehaviour
         Villager selected_female_v = selected_female.GetComponent<Villager>();
         selected_male_v.trying_to_mate   = true;
         selected_female_v.trying_to_mate = true;
+        selected_male_v.destination = selected_female.transform;
+        selected_female_v.destination = selected_male.transform;
 
         // > reset proba and exit method
         this.tried_to_mate_n_times = 0;

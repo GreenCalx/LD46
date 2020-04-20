@@ -312,13 +312,13 @@ public class Villager : MonoBehaviour
         }
     } //! Update
 
-    void OnTriggerEnter2D( Collider2D other) 
+    void OnCollisionEnter2D( Collision2D other) 
     {
          // self wants mate
         if (!trying_to_mate)
             return;
 
-        Villager v = other.GetComponent<Villager>();
+        Villager v = other.gameObject.GetComponent<Villager>();
         if (!!v) 
         {
             // other wants mate
@@ -328,6 +328,7 @@ public class Villager : MonoBehaviour
             // go mate and prevent double firing by reset trying_to_mate
             trying_to_mate = false;
             v.trying_to_mate = false;
+            this.destination = null;
             refreshVillageRef();
             if (village_go)
             {
