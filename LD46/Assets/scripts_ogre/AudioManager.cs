@@ -54,10 +54,22 @@ public class AudioManager : MonoBehaviour
         S.Source.Play();
     }
 
+    public void Stop(string SoundName)
+    {
+        SoundAsset S = Array.Find(Sounds, Sound => Sound.Name == SoundName);
+        S.Source.Stop();
+    }
+
     public void SetVolume(string SoundName, float Volume)
     {
         SoundAsset S = Array.Find(Sounds, Sound => Sound.Name == SoundName);
         if (S == null) Debug.LogError("Sound " + SoundName + " not found!");
         S.Source.volume = Mathf.Lerp(S.Source.volume, Volume, Time.deltaTime);
+    }
+
+    public void SetPaning(string SoundName, float Panning)
+    {
+        SoundAsset S = Array.Find(Sounds, Sound => Sound.Name == SoundName);
+        S.Source.panStereo = (Panning);
     }
 }

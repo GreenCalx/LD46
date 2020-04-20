@@ -185,6 +185,9 @@ public class OgreBehaviour : MonoBehaviour
         GetComponent<Animator>().SetBool("isEating", false);
 
         rightHand.GetComponent<SpriteRenderer>().sprite = HandSprite[0];
+
+
+        AudioManager.Instance.Stop( Constants.EATING );
     }
     void EatingAnimation()
     {
