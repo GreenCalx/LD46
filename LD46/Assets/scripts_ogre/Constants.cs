@@ -118,6 +118,9 @@ public class Constants
 
     // Animator vars
     public const string villager_change_job = "change_job";
+    public const string villager_change_job_lvl2 = "change_job_lvl2";
+    public const string villager_change_job_lvl3 = "change_job_lvl3";
+
 
     public const int Villager_food = 30;
     public const int Ogre_Food_Tick_Loss = -5;

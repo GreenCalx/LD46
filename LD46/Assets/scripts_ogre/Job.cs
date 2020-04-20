@@ -16,6 +16,8 @@ namespace jobs {
 
         protected int level_condition;
 
+        public int getLevelRequired() { return level_condition; }
+
         public virtual void applyJobEffect( Village iVillage ) {}
 
         public virtual Sprite getJobSprite( Villager.SEX iSex )
