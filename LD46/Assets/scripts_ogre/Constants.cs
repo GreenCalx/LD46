@@ -68,6 +68,9 @@ public class Constants
     public const float belt_time_step = 1f;
     public const float villager_exp_gain_time_step = 5f; // 5 Seconds
     public const float villager_change_job_time = 3f; // 3 Seconds
+    public const float villager_change_job_time_lvl2 = 4f; // 4 Seconds
+    public const float villager_change_job_time_lvl3 = 5f; // 5 Seconds
+
     public const float villagers_hungry_time_step = 5f;
     
 
@@ -110,6 +113,7 @@ public class Constants
     public const int VILLAGE_SACRIFICE_MORAL_LOSS = 6;
     public const int VILLAGE_MORAL_REQ_TO_MATE = 40;
     public const float LEVEL_UP_INDICATOR_DURATION = 1f; // 1sec
+    public const float VILLAGER_COLLISION_REPULSE_FACTOR = -0.5f;
 
     // MATE PROBA
     // Values of Log(y+1) func to 

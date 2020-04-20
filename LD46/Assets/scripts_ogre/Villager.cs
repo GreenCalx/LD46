@@ -261,14 +261,31 @@ public class Villager : MonoBehaviour
 
     public void isChangeJobDone()
     {
-        if (Time.time - last_changejob_update >= Constants.villager_change_job_time)
+        bool job_change_done = false;
+        int job_level = this.job.getLevelRequired();
+        switch(job_level)
+        {
+            case 1:
+                job_change_done = (Time.time - last_changejob_update >= Constants.villager_change_job_time);
+                break;
+            case 2:
+                job_change_done = (Time.time - last_changejob_update >= Constants.villager_change_job_time_lvl2);
+                break;
+            case 3:
+                job_change_done = (Time.time - last_changejob_update >= Constants.villager_change_job_time_lvl3);
+                break;
+            default:
+                job_change_done = (Time.time - last_changejob_update >= Constants.villager_change_job_time);
+                break;
+        }//! swi
+
+        if (job_change_done)
         {
             // done changing job
             //  > Start changing job animation
             Animator animator = GetComponent<Animator>();
             if (!!animator)
             {
-                int job_level = this.job.getLevelRequired();
                 animator.SetBool(getJobChangeAnimationParam(job_level), false);
                 animator.enabled = false;
             }
@@ -331,6 +348,17 @@ public class Villager : MonoBehaviour
     } //! Update
 
 
+    public void repulse( Collision2D other )
+    {
+        Rigidbody2D rb2d_this = GetComponent<Rigidbody2D>();
+        Rigidbody2D rb2d_other = other.gameObject.GetComponent<Rigidbody2D>();
+        if ( !!rb2d_this && !!rb2d_other )
+        {
+            rb2d_this.velocity  *= Constants.VILLAGER_COLLISION_REPULSE_FACTOR;
+            rb2d_other.velocity *= Constants.VILLAGER_COLLISION_REPULSE_FACTOR;
+        }
+    }
+
     public void checkMatingCollision( Collision2D other )
     {
          // self wants mate
@@ -344,6 +372,9 @@ public class Villager : MonoBehaviour
             if (!v.trying_to_mate)
                 return;
             
+            // repulse to prevent bbox overlap at hi speed
+            this.repulse(other);
+
             // go mate and prevent double firing by reset trying_to_mate
             trying_to_mate = false;
             v.trying_to_mate = false;
