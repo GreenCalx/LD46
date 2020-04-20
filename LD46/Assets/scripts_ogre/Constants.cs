@@ -62,6 +62,16 @@ public class Constants
     public const string village_moral_bar  = "village_moral_bar";
     public const string village_food_bar   = "village_food_bar";
 
+    // UI Win cond
+    public const string win_cond_panel = "win_cond_panel";
+    public const string cur_pop_count_win_cond_field  = "cur_pop_count_win_cond_field";
+    public const string n_pop_win_cond_field   = "n_pop_win_cond_field";
+    public const string cur_male_king_pop_count_win_cond_field  = "cur_male_king_pop_count_win_cond_field";
+    public const string king_pop_count_win_cond_field   = "king_pop_count_win_cond_field";
+    public const string cur_female_king_pop_count_win_cond_field  = "cur_female_king_pop_count_win_cond_field";
+    public const string female_king_pop_count_win_cond_field   = "female_king_pop_count_win_cond_field";
+
+
     // Time
     public const float job_time_step = 5f; // time between doJob in village  
     public const float village_moral_time_step = 5f; // time between moral update
@@ -119,7 +129,9 @@ public class Constants
 
     // win condition
     public const int WIN_COND_POP = 25;
-    public const int WIN_COND_N_KING = 1;
+    public const int WIN_COND_N_MALE_KING = 1;
+    public const int WIN_COND_N_FEMALE_KING = 1;
+
 
     // MATE PROBA
     // Values of Log(y+1) func to 

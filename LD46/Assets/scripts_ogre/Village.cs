@@ -240,6 +240,17 @@ public class Village : MonoBehaviour
         return iListToFilter.Where( e => (e.GetComponent<Villager>().trying_to_mate == false) ).ToList();
     }
 
+    public int countMaleKings()
+    {
+        List<GameObject> males = getMalesInVillage();
+        return males.Where( e => string.Equals(e.GetComponent<Villager>().job_str, Constants.king_job_name) ).ToList().Count;
+    }
+    public int countFemaleKings()
+    {
+        List<GameObject> females = getFemalesInVillage();
+        return females.Where( e => string.Equals(e.GetComponent<Villager>().job_str, Constants.king_job_name) ).ToList().Count;
+    }
+
     // Start is called before the first frame update
     void Start()
     {   

@@ -70,6 +70,32 @@ public class StatsUI : MonoBehaviour
         iBar.color = new_color;
     }
 
+    private void updateWinCondFields()
+    {
+        if (village_go==null)
+            return;
+        Village v = village_go.GetComponent<Village>();
+        if (v==null)
+            return;
+
+        Text[] txts = GetComponentsInChildren<Text>();
+        foreach (Text t in txts)
+        {
+            if (t.name == Constants.cur_pop_count_win_cond_field)
+                t.text = "" + v.villagers.Count;
+            if (t.name == Constants.n_pop_win_cond_field)
+                t.text = "" + Constants.WIN_COND_POP;
+            if (t.name == Constants.cur_male_king_pop_count_win_cond_field)
+                t.text = "" + v.countMaleKings();
+            if (t.name == Constants.king_pop_count_win_cond_field)
+                t.text = "" + Constants.WIN_COND_N_MALE_KING;
+            if (t.name == Constants.cur_female_king_pop_count_win_cond_field)
+                t.text = "" + v.countFemaleKings();
+            if (t.name == Constants.female_king_pop_count_win_cond_field)
+                t.text = "" + Constants.WIN_COND_N_FEMALE_KING;
+        }
+    }
+
     // Update is called once per frame
     void Update()
     {
@@ -114,5 +140,9 @@ public class StatsUI : MonoBehaviour
                 this.updateBarColor( this.ogre_moral_bar, moral_ratio_percentage);
             }
         }
+
+        // Update win cond
+        updateWinCondFields();
+
     }
 }
