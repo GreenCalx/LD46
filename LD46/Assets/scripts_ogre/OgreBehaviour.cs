@@ -16,6 +16,11 @@ public class OgreBehaviour : MonoBehaviour
     public bool goUp = false;
     public bool goDown = false;
 
+
+    public Sprite[] HandSprite;
+
+    public Sprite[] Bones;
+
     public GameObject mouth;
     private GameObject currentTarget;
     public bool needEat = false;
@@ -135,10 +140,15 @@ public class OgreBehaviour : MonoBehaviour
         CurrentAnimationTime = EatingAnimationDuration;
         needEat = false;
         AddFood(Constants.Villager_food);
+
+        rightHand.GetComponent<SpriteRenderer>().sprite = HandSprite[0];
+
+        GetComponent<Animator>().SetBool("isEating", true);
     }
     void EatingAnimationStop()
     {
         // here is the animation stopping proicess if needed
+        GetComponent<Animator>().SetBool("isEating", false);
     }
     void EatingAnimation()
     {
@@ -149,7 +159,16 @@ public class OgreBehaviour : MonoBehaviour
         {
             currentState = States.REST;
             CurrentAnimationTime = 0;
+            EatingAnimationStop();
         }
+
+        // randomly instanciate sprites for fun and profit
+        var go = Instantiate(Bones[Random.Range(0, Bones.Length)], mouth.transform.position, Quaternion.Euler(new Vector3(
+                                                                                   UnityEngine.Random.Range(0,360),
+                                                                                   UnityEngine.Random.Range(0,360),
+                                                                                   UnityEngine.Random.Range(0,360))));
+        Destroy(go, 2);
+
     }
 
     void FoodTick()
@@ -237,6 +256,9 @@ public class OgreBehaviour : MonoBehaviour
 
         if (currentState == States.GETTING_TARGET)
         {
+
+            rightHand.GetComponent<SpriteRenderer>().sprite = HandSprite[1];
+
             rightHand.transform.position = Vector3.Lerp(rightHand.transform.position, currentTarget.transform.position, Time.deltaTime);
             if (Physics2D.IsTouching(rightHand.GetComponent<BoxCollider2D>(), currentTarget.GetComponent<BoxCollider2D>()))
             {
@@ -245,6 +267,7 @@ public class OgreBehaviour : MonoBehaviour
                 var conveyor_script = conveyor ? conveyor.GetComponent<BeltConveyor>() : null;
                 if (conveyor_script) conveyor_script.removeOnBelt(currentTarget);
 
+                currentTarget.transform.position = rightHand.transform.position + new Vector3( 0, 0.5f );
                 currentTarget.transform.parent = rightHand.transform;
                 needEat = true;
             }
@@ -252,6 +275,8 @@ public class OgreBehaviour : MonoBehaviour
 
             if (needEat)
             {
+                rightHand.GetComponent<SpriteRenderer>().sprite = HandSprite[2];
+
                 // we have something to eat, let s go to the mouth position
                 rightHand.transform.position = Vector3.Lerp(rightHand.transform.position, mouth.transform.position, Time.deltaTime);
                 if (Physics2D.IsTouching(rightHand.GetComponent<BoxCollider2D>(), mouth.GetComponent<BoxCollider2D>()))
@@ -293,7 +318,7 @@ public class OgreBehaviour : MonoBehaviour
             if (rightHand.transform.position != rightHandRestingPosition.transform.position)
             {
                 rightHand.transform.position = Vector3.Lerp(rightHand.transform.position, rightHandRestingPosition.transform.position, Time.deltaTime);
-                if (Vector3.Dot(rightHand.transform.position, rightHandRestingPosition.transform.position) >= 0.9f)
+                if (Vector3.Distance(rightHand.transform.position, rightHandRestingPosition.transform.position) < 0.1f)
                 {
                     // close enough we reset the position
                     rightHand.transform.position = rightHandRestingPosition.transform.position;
