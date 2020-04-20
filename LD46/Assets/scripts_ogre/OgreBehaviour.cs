@@ -227,10 +227,10 @@ public class OgreBehaviour : MonoBehaviour
                 this.moral = (int)Mathf.Min(this.moral + Constants.OGRE_MORAL_GAIN_IN_ANGER, Constants.MAX_MORAL);
 
                 // spawn puff cloud
-                Instantiate(Puff[0], rightHand.transform.position + Puff[0].GetComponent<SpriteRenderer>().sprite.bounds.extents, Quaternion.identity);
-               Instantiate(Puff[1], rightHand.transform.position+ Puff[0].GetComponent<SpriteRenderer>().sprite.bounds.extents, Quaternion.identity);
-               Instantiate(Puff[0], leftHand.transform.position+ Puff[0].GetComponent<SpriteRenderer>().sprite.bounds.extents, Quaternion.identity);
-               Instantiate(Puff[1], leftHand.transform.position+ Puff[0].GetComponent<SpriteRenderer>().sprite.bounds.extents, Quaternion.identity);
+                Instantiate(Puff[0], rightHand.transform.position - new Vector3( Puff[0].GetComponent<SpriteRenderer>().sprite.bounds.extents.x,0), Quaternion.identity);
+               Instantiate(Puff[1], rightHand.transform.position + new Vector3(Puff[0].GetComponent<SpriteRenderer>().sprite.bounds.extents.x,0), Quaternion.identity);
+               Instantiate(Puff[0], leftHand.transform.position - new Vector3(Puff[0].GetComponent<SpriteRenderer>().sprite.bounds.extents.x,0), Quaternion.identity);
+               Instantiate(Puff[1], leftHand.transform.position + new Vector3(Puff[0].GetComponent<SpriteRenderer>().sprite.bounds.extents.x,0), Quaternion.identity);
             }
         }
         if ( goUp && Vector3.Distance(rightHand.transform.position, rightHandAngryTopTarget.transform.position) < threshold)
