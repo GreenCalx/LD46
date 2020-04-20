@@ -130,7 +130,7 @@ public class OgreRampage : MonoBehaviour
                     {
                         if (script.villagers.Count != 0)
                         {
-                            currentTarget = script.villagers[Random.Range(0, script.villagers.Count - 1)];
+                            currentTarget = script.villagers[Random.Range(0, script.villagers.Count)];
                             if (currentTarget) currentState = States.EAT_TARGET;
                         }
                     }
