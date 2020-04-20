@@ -15,6 +15,8 @@ public class Constants
     public const string BELT_DISCHARGE_POINT    = "belt_discharge_point";
     public const string VILLAGE_GO_NAME = "Village";
     public const string OGRE_GO_NAME = "ogre";
+    public const string AUDIO_MANAGER_GO_NAME = "AudioManager";
+
 
     // Graphx
     public const string villager_template_sprite = "res_ogre/villager_template";
@@ -144,4 +146,10 @@ public class Constants
     public const int Ogre_Food_Tick_Loss = -5;
     public const int Ogre_Food_Tick_Time = 3;
     public const int BloodTiming = 2;
+
+    // SFX
+    public const string WHY_ME_VOICE = "why_me";
+    public const string OH_NO_VOICE = "oh_no";
+    public const string MY_LIFE_FOR_SCHNIBBLE_VOICE = "my_life_for_the_schnibble";
+    public const string ALRIGHT_LETS_GO_VOICE = "alright_lets_go";
 }

@@ -1,0 +1,106 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &5680811519971493906
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5680811519971493904}
+  - component: {fileID: 5680811519971493907}
+  m_Layer: 0
+  m_Name: AudioManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5680811519971493904
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5680811519971493906}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 12.839959, y: 5.281224, z: -6.873045}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5680811519971493907
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5680811519971493906}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7949155ed80070b40be25473580b3afb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Sounds:
+  - Source: {fileID: 0}
+    Clip: {fileID: 8300000, guid: 40b773c114fdd9e469795e2733258571, type: 3}
+    Volume: 0.1
+    Pitch: 1
+    Loop: 0
+    Name: alright_lets_go
+  - Source: {fileID: 0}
+    Clip: {fileID: 8300000, guid: 7027da5680f5cfb42afeda32d2925a34, type: 3}
+    Volume: 0.1
+    Pitch: 1
+    Loop: 0
+    Name: my_life_for_the_schnibble
+  - Source: {fileID: 0}
+    Clip: {fileID: 8300000, guid: 88273e07fa89b1c4695f4ffd6c1a6815, type: 3}
+    Volume: 0.1
+    Pitch: 1
+    Loop: 0
+    Name: oh_no
+  - Source: {fileID: 0}
+    Clip: {fileID: 8300000, guid: 6761decc875a38d4d868391108a07e27, type: 3}
+    Volume: 0.1
+    Pitch: 1
+    Loop: 0
+    Name: why_me
+  - Source: {fileID: 0}
+    Clip: {fileID: 0}
+    Volume: 0
+    Pitch: 0
+    Loop: 0
+    Name: 
+  - Source: {fileID: 0}
+    Clip: {fileID: 0}
+    Volume: 0
+    Pitch: 0
+    Loop: 0
+    Name: 
+  - Source: {fileID: 0}
+    Clip: {fileID: 0}
+    Volume: 0
+    Pitch: 0
+    Loop: 0
+    Name: 
+  - Source: {fileID: 0}
+    Clip: {fileID: 0}
+    Volume: 0
+    Pitch: 0
+    Loop: 0
+    Name: 
+  - Source: {fileID: 0}
+    Clip: {fileID: 0}
+    Volume: 0
+    Pitch: 0
+    Loop: 0
+    Name: 
+  - Source: {fileID: 0}
+    Clip: {fileID: 0}
+    Volume: 0
+    Pitch: 0
+    Loop: 0
+    Name: 

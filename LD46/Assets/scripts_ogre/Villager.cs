@@ -19,6 +19,8 @@ public class Villager : MonoBehaviour
     // Held GO references
     private GameObject village_go = null;
     public GameObject BloodSplash;
+    public GameObject audio_manager_ref;
+
     // villager strong attributes
     public int level;
     public Job job;
@@ -40,6 +42,15 @@ public class Villager : MonoBehaviour
     public bool changing_job;
     public bool trying_to_mate;
     public Transform destination;
+
+
+    public void refreshAudioManager()
+    {
+        if (audio_manager_ref==null)
+        {
+            audio_manager_ref = GameObject.Find(Constants.AUDIO_MANAGER_GO_NAME);
+        }
+    }
 
     public void stop_movement()
     {

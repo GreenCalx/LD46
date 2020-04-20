@@ -10,6 +10,7 @@ public class Village : MonoBehaviour
     public GameObject village_center;
     public GameObject conveyor_belt;
     public GameObject house_ref;
+    public GameObject audio_manager_ref;
     // STATE
     public int food;
     public int moral;
@@ -23,7 +24,14 @@ public class Village : MonoBehaviour
     private float last_time_moral_updated;
     private float last_time_tried_mate;
 
-    
+    public void refreshAudioManager()
+    {
+        if (audio_manager_ref==null)
+        {
+            audio_manager_ref = GameObject.Find(Constants.AUDIO_MANAGER_GO_NAME);
+        }
+    }
+
     public void spawnVillager()
     {
         GameObject new_villager = Instantiate(villager_ref) as GameObject;
@@ -62,6 +70,18 @@ public class Village : MonoBehaviour
         if(!!bc){
             v.destination   = bc.getLoadingPoint();
             v.go_to_belt    = true;
+        }
+
+        // SFX
+        refreshAudioManager();
+        if (!!audio_manager_ref)
+        {
+            AudioManager am = audio_manager_ref.GetComponent<AudioManager>();
+            int selected_sound = Random.Range( 0, 2);
+            string sound_name_to_play = 
+                (selected_sound == 0) ? Constants.WHY_ME_VOICE : Constants.ALRIGHT_LETS_GO_VOICE;
+
+            am.Play( sound_name_to_play );
         }
     }
 
@@ -118,7 +138,7 @@ public class Village : MonoBehaviour
     public void birth( Vector2 iBirthLocation )
     {
         spawnVillager(iBirthLocation);
-        // SFX ?
+        // SFX?
     }
     public bool mateHappens()
     {
@@ -211,6 +231,8 @@ public class Village : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {   
+        refreshAudioManager();
+
         this.food    = Constants.MAX_FOOD;
         this.moral   = Constants.MAX_MORAL;
         this.tried_to_mate_n_times = 0;
