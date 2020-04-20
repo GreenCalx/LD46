@@ -205,6 +205,41 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5680811519971493907, guid: 8f031beb06ff7ea4a920b28e966e7082,
+        type: 3}
+      propertyPath: Sounds.Array.data[6].Volume
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5680811519971493907, guid: 8f031beb06ff7ea4a920b28e966e7082,
+        type: 3}
+      propertyPath: Sounds.Array.data[6].Pitch
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5680811519971493907, guid: 8f031beb06ff7ea4a920b28e966e7082,
+        type: 3}
+      propertyPath: Sounds.Array.data[5].Name
+      value: ogre_eat
+      objectReference: {fileID: 0}
+    - target: {fileID: 5680811519971493907, guid: 8f031beb06ff7ea4a920b28e966e7082,
+        type: 3}
+      propertyPath: Sounds.Array.data[5].Loop
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5680811519971493907, guid: 8f031beb06ff7ea4a920b28e966e7082,
+        type: 3}
+      propertyPath: Sounds.Array.data[4].Loop
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5680811519971493907, guid: 8f031beb06ff7ea4a920b28e966e7082,
+        type: 3}
+      propertyPath: Sounds.Array.data[4].Volume
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5680811519971493907, guid: 8f031beb06ff7ea4a920b28e966e7082,
+        type: 3}
+      propertyPath: Sounds.Array.data[5].Volume
+      value: 0.1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8f031beb06ff7ea4a920b28e966e7082, type: 3}
 --- !u!1 &1801296466 stripped
