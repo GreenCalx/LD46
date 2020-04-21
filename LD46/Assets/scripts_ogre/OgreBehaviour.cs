@@ -37,6 +37,7 @@ public class OgreBehaviour : MonoBehaviour
     public float EatingAnimationDuration = 2; // 2 seconds animation
     public float CurrentAnimationTime = 0;
 
+    public float last_time_rampage =0f;
     public float CurrentFoodTick = 0;
 
     public enum States { EATING, REST, GETTING_TARGET, ANGRY, HUNGRY, RAMPAGE }
@@ -426,6 +427,7 @@ public class OgreBehaviour : MonoBehaviour
             if (food < Constants.ogre_rampage_threshold_start)
             {
                 currentState = States.RAMPAGE;
+                last_time_rampage = Time.time;
             }
         }
 
@@ -461,6 +463,12 @@ public class OgreBehaviour : MonoBehaviour
                 var script = go.GetComponent<OgreRampage>();
                 if (script.currentState == OgreRampage.States.DEACTIVATED) script.Activate();
             }
+            if (Time.time - last_time_rampage >= Constants.max_time_in_rampage )
+             {
+                // Exit rampage, its too long
+                currentState = States.REST;
+                last_time_rampage = 0f;
+             }
         }
     }
 }
