@@ -70,7 +70,7 @@ public class OgreBehaviour : MonoBehaviour
     {
         // this merans something on the bgelt is copming, start to go towards it to take it
         // first find collider
-        if ( currentState == States.REST)
+        if ( currentState == States.REST || currentState == States.HUNGRY)
         {
             if (collision.gameObject.name != Constants.BELT)
             {
@@ -317,6 +317,13 @@ public class OgreBehaviour : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (food < Constants.ogre_hungry_threshold_start)
+        {
+
+            var ui = GetComponentInChildren<Canvas>();
+            if (ui) ui.enabled = false;
+        }
+
         // always tick food unless we are in rampage mode
         if (currentState != States.RAMPAGE)
             // food update
