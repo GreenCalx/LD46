@@ -317,7 +317,7 @@ public class OgreBehaviour : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (food < Constants.ogre_hungry_threshold_start)
+        if (food > Constants.ogre_hungry_threshold_start)
         {
 
             var ui = GetComponentInChildren<Canvas>();

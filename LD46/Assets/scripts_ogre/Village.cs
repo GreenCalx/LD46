@@ -294,6 +294,8 @@ public class Village : MonoBehaviour
             //GameObject new_villager = Instantiate(villager_ref) as GameObject;
             //this.villagers.Add( new_villager );
             this.spawnVillager();
+            if (i == 0) villagers[i].GetComponent<Villager>().sex = Villager.SEX.Male;
+            if (i == 1) villagers[i].GetComponent<Villager>().sex = Villager.SEX.Female;
         }
 
         for (int i=0; i<Constants.START_HOUSE; i++)
