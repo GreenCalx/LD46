@@ -585,9 +585,7 @@ public class OgreBehaviour : MonoBehaviour
                                 refreshAudioManager();
                                 if (!!audio_manager_ref)
                                 {
-                                    AudioManager am = audio_manager_ref.GetComponent<AudioManager>();
-                                    string sound_name_to_play = Constants.MAIN_THEME_BGM;
-                                    am.Play(sound_name_to_play);
+                                    AudioManager.Instance.Play( Constants.OH_NO_VOICE );
                                 }
                             }
 
