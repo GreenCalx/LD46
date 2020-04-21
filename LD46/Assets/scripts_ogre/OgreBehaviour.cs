@@ -77,7 +77,7 @@ public class OgreBehaviour : MonoBehaviour
         Mathf.Clamp(moral, 0, Constants.MAX_MORAL);
     }
 
-   public void AddFood(int f)
+    public void AddFood(int f)
     {
         // clamp value
         food += f;
@@ -146,7 +146,7 @@ public class OgreBehaviour : MonoBehaviour
         }
     }
 
- 
+
     void DisplayNeededFood(int level, int job, int sex)
     {
         Debug.Log("NEED FOOD :" + level + " " + job + " " + sex);
@@ -352,7 +352,7 @@ public class OgreBehaviour : MonoBehaviour
                             needEat = false;
                         }
                         break;
-                     case States.ANGRY:
+                    case States.ANGRY:
                         {
                             AngryAnimationStart();
                         }
@@ -441,7 +441,8 @@ public class OgreBehaviour : MonoBehaviour
                     case States.GETTING_TARGET:
                         {
                             needEat = false;
-                        }break;
+                        }
+                        break;
                     case States.ANGRY:
                         {
                             AngryAnimationStart();
@@ -526,18 +527,21 @@ public class OgreBehaviour : MonoBehaviour
     // TODO move everything linked to physics in fixedUpdate!!!!!
     void Update()
     {
-        // logic that apply to all states first
-        // general case
+        // FROM ANY STATES
         if (food > Constants.ogre_hungry_threshold_start)
         {
             var ui = GetComponentInChildren<Canvas>();
             if (ui) ui.enabled = false;
         }
-
         if (moral < Constants.OGRE_ANGER_THR)
         {
             UpdateState(States.ANGRY);
         }
+        if (food < Constants.ogre_rampage_threshold_start)
+        {
+            UpdateState(States.RAMPAGE);
+        }
+
         // apply logic and update state accordingly
         switch (currentState)
         {
@@ -585,7 +589,7 @@ public class OgreBehaviour : MonoBehaviour
                                 refreshAudioManager();
                                 if (!!audio_manager_ref)
                                 {
-                                    AudioManager.Instance.Play( Constants.OH_NO_VOICE );
+                                    AudioManager.Instance.Play(Constants.OH_NO_VOICE);
                                 }
                             }
 
@@ -632,14 +636,6 @@ public class OgreBehaviour : MonoBehaviour
                     }
                     // ask for food
                     if (needAskFood) AskFood(); // to do only once
-
-                    if (food < Constants.ogre_rampage_threshold_start)
-                    {
-                        currentState = States.RAMPAGE;
-                    }
-
-
-
                 }
                 break;
             case States.RAMPAGE:
