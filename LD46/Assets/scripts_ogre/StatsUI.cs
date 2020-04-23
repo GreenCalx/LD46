@@ -127,14 +127,14 @@ public class StatsUI : MonoBehaviour
             if (!!ogre)
             {
                 this.updateBarWidth( this.ogre_food_bar, 
-                                     new Vector2( ((ogre.food * this.bar_max_width) / Constants.MAX_FOOD), this.bar_max_height), 
+                                     new Vector2( ((ogre.Food * this.bar_max_width) / Constants.MAX_FOOD), this.bar_max_height), 
                                      true );
                 this.updateBarWidth( this.ogre_moral_bar, 
-                                     new Vector2( ((ogre.moral * this.bar_max_width) / Constants.MAX_MORAL), this.bar_max_height), 
+                                     new Vector2( ((ogre.Moral * this.bar_max_width) / Constants.MAX_MORAL), this.bar_max_height), 
                                      true );
 
-                decimal food_ratio_percentage  = ( (decimal)ogre.food / Constants.MAX_FOOD) * 100m;
-                decimal moral_ratio_percentage = ( (decimal)ogre.moral / Constants.MAX_MORAL) * 100m;
+                decimal food_ratio_percentage  = ( (decimal)ogre.Food / Constants.MAX_FOOD) * 100m;
+                decimal moral_ratio_percentage = ( (decimal)ogre.Moral / Constants.MAX_MORAL) * 100m;
 
                 this.updateBarColor( this.ogre_food_bar , food_ratio_percentage);
                 this.updateBarColor( this.ogre_moral_bar, moral_ratio_percentage);

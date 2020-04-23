@@ -7,8 +7,6 @@ using UnityEngine.EventSystems;
 
 public class UIController : MonoBehaviour
 {
-    private const bool ui_debug = false;
-
      private GraphicRaycaster raycaster;
 
     // Start is called before the first frame update
@@ -16,7 +14,6 @@ public class UIController : MonoBehaviour
     {
         this.raycaster = GetComponent<GraphicRaycaster>();
         this.gameObject.name = Constants.ui_panel_name;
-
     }
 
     // Update is called once per frame
@@ -36,9 +33,6 @@ public class UIController : MonoBehaviour
             bool hits_assign_panel      = false;
             foreach (RaycastResult result in results)
             {
-                if (ui_debug)
-                    Debug.Log("Hit " + result.gameObject.name);
-
                 if ( result.gameObject.name == Constants.villager_panel_name )
                 {
                     hits_villager_panel = true;

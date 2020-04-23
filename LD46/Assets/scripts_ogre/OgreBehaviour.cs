@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+[RequireComponent(typeof(Animator))]
 public class OgreBehaviour : MonoBehaviour
 {
 
@@ -12,60 +13,103 @@ public class OgreBehaviour : MonoBehaviour
     //  - make default state machine assert or at least log that form => to does not exist
     //  - log state machine states, from, to, etc
 
+    // start refactoring
+    public enum eHand { RIGHT, LEFT };
+    [System.Serializable]
+    public class OgreHand
+    {
+        public enum eSprite { REST, GET_TARGET, ANGRY }
+        public Transform RestPosition;
+        public Transform AngryUpPosition;
+        public Sprite[] Sprites;
+        public GameObject GO;
+    }
+    public List<OgreHand> Hands;
 
-    private BeltConveyor Belt;
+    public int Food; // public until littleOgre cleanup
+    public int Moral;
 
+    // state machine
+    public enum eStates { EATING, REST, GETTING_TARGET, ANGRY, HUNGRY, RAMPAGE, COUNT }
+    public eStates CurrentState = eStates.REST;
+    private class StateFunction
+    {
+        public delegate void Start();
+        public delegate void Tick();
+        public delegate void End();
 
-    public int food;
-    public int moral;
-    public GameObject village_go_ref;
-    public GameObject audio_manager_ref;
-
-    public GameObject rightHand;
-    public GameObject rightHandRestingPosition;
-    public GameObject leftHand;
-    public GameObject leftHandRestingPosition;
-    public bool goUp = true;
-    public bool goDown = false;
-
-    public Sprite[] HandSprite;
+        public Start FStart;
+        public Tick FTick;
+        public End FEnd;
+    }
+    private StateFunction[] StatesLogic = new StateFunction[(int)eStates.COUNT];
 
     public GameObject[] Bones;
-
     public GameObject[] Puff;
 
-    public GameObject mouth;
-    private GameObject currentTarget;
+    public GameObject Mouth;
     public bool needEat = false;
     public bool needAskFood = false;
+    public bool goUp = false;
+    public bool goDown = false;
 
-    public GameObject rightHandAngryTopTarget;
-    public GameObject leftHandAngryTopTarget;
+    [System.Serializable]
+    public class TimedTick
+    {
+        public float Time;
+        public float CurrentTime = 0;
+        public bool Done = false;
+        public float Tick(float time)
+        {
+            CurrentTime += time;
+            if (CurrentTime > Time)
+            {
+                Done = true;
+            }
+            return CurrentTime;
+        }
+    }
+    private TimedTick EatingAnimationTick = new TimedTick();
+    private TimedTick LastRampage = new TimedTick();
+    private TimedTick FoodTickTimer = new TimedTick();
+    private Villager CurrentCommand;
 
-    public float EatingAnimationDuration = 2; // 2 seconds animation
-    public float CurrentAnimationTime = 0;
-
-    public float last_time_rampage = 0f;
-    public float CurrentFoodTick = 0;
-
-    public enum States { EATING, REST, GETTING_TARGET, ANGRY, HUNGRY, RAMPAGE }
-    public States currentState = States.REST;
-
-    private Villager currentCommand;
-    private bool has_a_command = false;
-
-
+    private BeltConveyor Belt;
+    private Village Village;
+    private GameObject CurrentTarget;
+    private Animator Animator;
     // Start is called before the first frame update
     void Start()
     {
-        var belt_go = GameObject.Find("conveyor_belt");
-        Belt = belt_go ? belt_go.GetComponent<BeltConveyor>() : null;
+        // States definition
+        for (int i = 0; i < (int)eStates.COUNT; ++i) StatesLogic[i] = new StateFunction();
+        StatesLogic[(int)eStates.EATING].FStart = EatingAnimationStart;
+        StatesLogic[(int)eStates.EATING].FTick = EatingAnimation;
+        StatesLogic[(int)eStates.EATING].FEnd = EatingAnimationStop;
+        StatesLogic[(int)eStates.ANGRY].FStart = AngryAnimationStart;
+        StatesLogic[(int)eStates.ANGRY].FTick = AngryAnimation;
+        // reference initialization
+        var Belt_go = GameObject.Find("conveyor_belt");
+        Belt = Belt_go ? Belt_go.GetComponent<BeltConveyor>() : null;
+        var Village_go = GameObject.Find(Constants.VILLAGE_GO_NAME);
+        Village = Village_go ? Village_go.GetComponent<Village>() : null;
+        Animator = GetComponent<Animator>();
+        // Ticks
+        EatingAnimationTick.Time = 2;
+        LastRampage.Time = 5;
+        FoodTickTimer.Time = Constants.Ogre_Food_Tick_Time;
 
+        Init();
+    }
 
-        food = Constants.MAX_FOOD;
-        moral = Constants.MAX_MORAL;
+    // Can be called from outside to reset state
+    public void Init()
+    {
+        Food = Constants.MAX_FOOD;
+        Moral = Constants.MAX_MORAL;
 
-        village_go_ref = GameObject.Find(Constants.VILLAGE_GO_NAME);
+        Hands[(int)eHand.RIGHT].GO.transform.position = Hands[(int)eHand.RIGHT].RestPosition.position;
+        Hands[(int)eHand.LEFT].GO.transform.position = Hands[(int)eHand.LEFT].RestPosition.position;
     }
 
     // internal state mutators
@@ -73,15 +117,15 @@ public class OgreBehaviour : MonoBehaviour
     public void AddMoral(int m)
     {
         // clamp value
-        moral += m;
-        Mathf.Clamp(moral, 0, Constants.MAX_MORAL);
+        Moral += m;
+        Mathf.Clamp(Moral, 0, Constants.MAX_MORAL);
     }
 
     public void AddFood(int f)
     {
         // clamp value
-        food += f;
-        food = Mathf.Clamp(food, 0, Constants.MAX_FOOD);
+        Food += f;
+        Food = Mathf.Clamp(Food, 0, Constants.MAX_FOOD);
     }
 
     // This is used to update state when something is on the belt
@@ -90,26 +134,15 @@ public class OgreBehaviour : MonoBehaviour
     {
         // this merans something on the bgelt is copming, start to go towards it to take it
         // first find collider
-        if (currentState == States.REST || currentState == States.HUNGRY)
+        if (CurrentState == eStates.REST || CurrentState == eStates.HUNGRY)
         {
             if (collision.gameObject.name != Constants.BELT)
             {
-                currentTarget = collision.gameObject;
-                UpdateState(States.GETTING_TARGET);
+                CurrentTarget = collision.gameObject;
+                UpdateState(eStates.GETTING_TARGET);
             }
         }
     }
-
-
-    // do we need this???????
-    public void refreshAudioManager()
-    {
-        if (audio_manager_ref == null)
-        {
-            audio_manager_ref = GameObject.Find(Constants.AUDIO_MANAGER_GO_NAME);
-        }
-    }
-
 
     // quick and dirty way to enable/disable all ogre sprites visualisations
     // TODO : should we use directly gameObject instead of only the SR of each object??
@@ -122,14 +155,6 @@ public class OgreBehaviour : MonoBehaviour
     {
         GetComponent<SpriteRenderer>().enabled = true;
         foreach (SpriteRenderer sr in GetComponentsInChildren<SpriteRenderer>()) sr.enabled = true;
-    }
-
-    // used by little ogre
-    // better way to do this would be with event
-    // NOTE : probably not needed anymore with new state machine, little ogre can simply call UpdateState
-    public void ResetBehavior()
-    {
-        UpdateState(States.REST);
     }
 
     jobs.Job getJob(int job)
@@ -146,96 +171,61 @@ public class OgreBehaviour : MonoBehaviour
         }
     }
 
-
-    void DisplayNeededFood(int level, int job, int sex)
+    void DisplayCommand(int level, int job, int sex)
     {
-        Debug.Log("NEED FOOD :" + level + " " + job + " " + sex);
         var ui = GetComponentInChildren<Canvas>();
         if (ui) ui.enabled = true;
         var icon = GetComponentInChildren<Image>();
 
-        currentCommand = new Villager();
-        currentCommand.sex = (Villager.SEX)sex;
-        currentCommand.job = getJob(job);
-        currentCommand.level = level;
-        icon.sprite = currentCommand.job.getJobSprite(currentCommand.sex);
-
-        has_a_command = true;
+        CurrentCommand = new Villager();
+        CurrentCommand.sex = (Villager.SEX)sex;
+        CurrentCommand.job = getJob(job);
+        CurrentCommand.level = level;
+        icon.sprite = CurrentCommand.job.getJobSprite(CurrentCommand.sex);
     }
 
     void AskFood()
     {
-        // Get constraints ( villager max level, and thus associated job )
-        if (this.village_go_ref == null)
-            this.village_go_ref = GameObject.Find(Constants.VILLAGE_GO_NAME);
-        Village village = this.village_go_ref.GetComponent<Village>();
-        int max_lvl_in_village = village.getMaxLevelVillager();
+        int maxLvl = Village.getMaxLevelVillager();
+        int commandLvl = Random.Range(0, maxLvl + 1);
+        int maxJob = jobs.Job.availableJobsForLevel(maxLvl); // available job for selected level
+        int commandJob = Random.Range(0, maxJob);
+        int commandSex = Random.Range(0, 2);
 
-
-        // randomize food type
-        int food_level = Random.Range(0, max_lvl_in_village + 1);
-        if (food_level > max_lvl_in_village) Debug.Log("BAD FOOD LEVEL");
-
-        int n_available_jobs = jobs.Job.availableJobsForLevel(food_level); // available job for selected level
-        int food_job = Random.Range(0, n_available_jobs);
-        if (food_job > n_available_jobs) Debug.Log("BAD FOOD JOB");
-
-        int food_sex = Random.Range(0, 2);
-
-        DisplayNeededFood(food_level, food_job, food_sex);
+        DisplayCommand(commandLvl, commandJob, commandSex);
         needAskFood = false;
     }
 
     void EatingAnimationStart()
     {
-        // here is the animation process if needed
-        CurrentAnimationTime = EatingAnimationDuration;
+        EatingAnimationTick.CurrentTime = 0;
+        Animator.SetBool("isEating", true);
+        AudioManager.Instance.Play(Constants.EATING);
+        // to move into state logic
         needEat = false;
         needAskFood = false;
-
         AddFood(Constants.Villager_food);
-
         var ui = GetComponentInChildren<Canvas>();
         if (ui) ui.enabled = false;
-
-        AudioManager.Instance.Play(Constants.EATING);
-
-        GetComponent<Animator>().SetBool("isEating", true);
     }
     void EatingAnimationStop()
     {
-        // here is the animation stopping proicess if needed
-        GetComponent<Animator>().SetBool("isEating", false);
-
-        rightHand.GetComponent<SpriteRenderer>().sprite = HandSprite[0];
-
-
+        Animator.SetBool("isEating", false);
         AudioManager.Instance.Stop(Constants.EATING);
     }
     void EatingAnimation()
     {
-        // here is during eatig animation process if needed
-        Debug.Log("NOM NOM NOM");
-        CurrentAnimationTime -= Time.deltaTime;
-        if (CurrentAnimationTime <= 0)
+        if (EatingAnimationTick.CurrentTime % 0.5f > EatingAnimationTick.Tick(Time.deltaTime) % 0.5)
         {
-            currentState = States.REST;
-            CurrentAnimationTime = 0;
-            EatingAnimationStop();
-        }
-
-        // randomly instanciate sprites for fun and profit
-        if (CurrentAnimationTime % 0.5f > (CurrentAnimationTime + Time.fixedDeltaTime) % 0.5)
-        {
-            var go = Instantiate(Bones[Random.Range(1, Bones.Length)], mouth.transform.position, Quaternion.Euler(new Vector3(
+            var go = Instantiate(Bones[Random.Range(1, Bones.Length)], Mouth.transform.position, Quaternion.Euler(new Vector3(
                                                                                        0,
                                                                                        0,
                                                                                        UnityEngine.Random.Range(0, 360))));
             Destroy(go, 2);
             go.GetComponent<Rigidbody2D>().AddForce(new Vector3(1, 1, 0));
 
-            //also spawn blood randomly next to mouth positoin
-            var bounds = mouth.GetComponent<BoxCollider2D>().bounds;
+            //also spawn blood randomly next to Mouth positoin
+            var bounds = Mouth.GetComponent<BoxCollider2D>().bounds;
             Vector3 spawnPosition = new Vector3(
                    Random.Range(bounds.min.x, bounds.max.x),
                    Random.Range(bounds.min.y, bounds.max.y),
@@ -249,15 +239,20 @@ public class OgreBehaviour : MonoBehaviour
             Destroy(go2, 0.5f);
         }
 
+        if (EatingAnimationTick.Done)
+        {
+            UpdateState(eStates.REST);
+        }
     }
 
+    //Should be directly inside the timer to execute functions
     void FoodTick()
     {
-        CurrentFoodTick -= Time.deltaTime;
-        if (CurrentFoodTick <= 0)
+        FoodTickTimer.Tick(Time.deltaTime);
+        if (FoodTickTimer.Done)
         {
             AddFood(Constants.Ogre_Food_Tick_Loss);
-            CurrentFoodTick = Constants.Ogre_Food_Tick_Time;
+            FoodTickTimer.CurrentTime = 0;
         }
     }
 
@@ -266,9 +261,6 @@ public class OgreBehaviour : MonoBehaviour
         goUp = true;
         goDown = false;
 
-
-        rightHand.GetComponent<SpriteRenderer>().sprite = HandSprite[2];
-        leftHand.GetComponent<SpriteRenderer>().sprite = HandSprite[3];
     }
 
     void AngryAnimation()
@@ -276,7 +268,7 @@ public class OgreBehaviour : MonoBehaviour
         // toggle between top and rest hand positions
         // each time at rest position destroy village
         float threshold = 0.1f;
-        if (goDown && Vector3.Distance(rightHand.transform.position, rightHandRestingPosition.transform.position) < threshold)
+        if (goDown && Vector3.Distance(Hands[(int)eHand.RIGHT].GO.transform.position, Hands[(int)eHand.RIGHT].RestPosition.transform.position) < threshold)
         {
             goUp = true;
             goDown = false;
@@ -285,237 +277,257 @@ public class OgreBehaviour : MonoBehaviour
             {
                 var script = go.GetComponent<Village>();
                 script.DamageHouses();
-                this.moral = (int)Mathf.Min(this.moral + Constants.OGRE_MORAL_GAIN_IN_ANGER, Constants.MAX_MORAL);
+                AddMoral(Constants.OGRE_MORAL_GAIN_IN_ANGER);
 
                 // spawn puff cloud
-                Instantiate(Puff[0], rightHand.transform.position - new Vector3(Puff[0].GetComponent<SpriteRenderer>().sprite.bounds.extents.x, 0), Quaternion.identity);
-                Instantiate(Puff[1], rightHand.transform.position + new Vector3(Puff[0].GetComponent<SpriteRenderer>().sprite.bounds.extents.x, 0), Quaternion.identity);
-                Instantiate(Puff[0], leftHand.transform.position - new Vector3(Puff[0].GetComponent<SpriteRenderer>().sprite.bounds.extents.x, 0), Quaternion.identity);
-                Instantiate(Puff[1], leftHand.transform.position + new Vector3(Puff[0].GetComponent<SpriteRenderer>().sprite.bounds.extents.x, 0), Quaternion.identity);
+                Instantiate(Puff[0], Hands[(int)eHand.RIGHT].GO.transform.position - new Vector3(Puff[0].GetComponent<SpriteRenderer>().sprite.bounds.extents.x, 0), Quaternion.identity);
+                Instantiate(Puff[1], Hands[(int)eHand.RIGHT].GO.transform.position + new Vector3(Puff[0].GetComponent<SpriteRenderer>().sprite.bounds.extents.x, 0), Quaternion.identity);
+                Instantiate(Puff[0], Hands[(int)eHand.LEFT].GO.transform.position - new Vector3(Puff[0].GetComponent<SpriteRenderer>().sprite.bounds.extents.x, 0), Quaternion.identity);
+                Instantiate(Puff[1], Hands[(int)eHand.LEFT].GO.transform.position + new Vector3(Puff[0].GetComponent<SpriteRenderer>().sprite.bounds.extents.x, 0), Quaternion.identity);
             }
         }
-        if (goUp && Vector3.Distance(rightHand.transform.position, rightHandAngryTopTarget.transform.position) < threshold)
+        if (goUp && Vector3.Distance(Hands[(int)eHand.RIGHT].GO.transform.position, Hands[(int)eHand.RIGHT].AngryUpPosition.transform.position) < threshold)
         {
             goDown = true;
             goUp = false;
         }
 
-        if (goUp)
-        {
-            rightHand.transform.position = Vector3.MoveTowards(rightHand.transform.position, rightHandAngryTopTarget.transform.position, Constants.HandSpeed * Time.deltaTime);
-            leftHand.transform.position = Vector3.MoveTowards(leftHand.transform.position, leftHandAngryTopTarget.transform.position, Constants.HandSpeed * Time.deltaTime);
-        }
-
-        if (goDown)
-        {
-            rightHand.transform.position = Vector3.MoveTowards(rightHand.transform.position, rightHandRestingPosition.transform.position, Constants.HandSpeed * Time.deltaTime);
-            leftHand.transform.position = Vector3.MoveTowards(leftHand.transform.position, leftHandRestingPosition.transform.position, Constants.HandSpeed * Time.deltaTime);
-        }
     }
 
     int GetMoralFromCommand(Villager v)
     {
-        int Result = 0;
+        int result = 0;
 
-        if (has_a_command == false)
-            return Result;
+        int deltaLevel = (v.level - CurrentCommand.level);
+        result += deltaLevel * Constants.OGRE_WRONG_LVL_COMMAND_PENALTY;
+        int deltaSex = System.Convert.ToInt32(v.sex != CurrentCommand.sex);
+        result -= deltaSex * Constants.OGRE_WRONG_SEX_COMMAND_PENALTY;
+        int deltaJob = System.Convert.ToInt32(v.job != CurrentCommand.job);
+        result -= deltaJob * Constants.OGRE_WRONG_JOB_COMMAND_PENALTY;
 
-        /*
-                if (v.level < currentCommand.level) Result -= 10;
-                if (v.level > currentCommand.level) Result += 10;
-                if (v.sex != currentCommand.sex) Result -= 10;
-                if (v.job != currentCommand.job) Result -= 30;
-        */
-        int delta_level = (v.level - currentCommand.level);
-        Result += delta_level * Constants.OGRE_WRONG_LVL_COMMAND_PENALTY;
-
-        int delta_sex = System.Convert.ToInt32(v.sex != currentCommand.sex);
-        Result -= delta_sex * Constants.OGRE_WRONG_SEX_COMMAND_PENALTY;
-
-        int delta_job = System.Convert.ToInt32(v.job != currentCommand.job);
-        Result -= delta_job * Constants.OGRE_WRONG_JOB_COMMAND_PENALTY;
-
-        return Result;
+        return result;
     }
 
 
-    public void UpdateState(States newState)
+    public void UpdateState(eStates newState)
     {
         // state machine transition
-        switch (currentState)
+        switch (CurrentState)
         {
-            case States.REST:
+            case eStates.REST:
                 switch (newState)
                 {
-                    case States.GETTING_TARGET:
+                    case eStates.GETTING_TARGET:
                         {
                             needEat = false;
                         }
                         break;
-                    case States.ANGRY:
+                    case eStates.ANGRY:
                         {
                             AngryAnimationStart();
                         }
                         break;
-                    case States.HUNGRY:
+                    case eStates.HUNGRY:
                         {
                             needAskFood = true;
                         }
                         break;
-                    case States.RAMPAGE:
-                        last_time_rampage = Time.time;
+                    case eStates.RAMPAGE:
+                        LastRampage.CurrentTime = 0;
                         break;
                     default:
                         break;
                 }
 
                 break;
-            case States.GETTING_TARGET:
+            case eStates.GETTING_TARGET:
                 switch (newState)
                 {
-                    case States.EATING:
+                    case eStates.EATING:
                         {
-                            var v = currentTarget.GetComponent<Villager>();
-                            if (v)
+                            if (CurrentTarget)
                             {
-                                moral += GetMoralFromCommand(v);
-                                moral = Mathf.Clamp(moral, 0, 100);
-                                v.Kill();
-
-                                // no more command
-                                currentCommand = null;
-                                has_a_command = false;
+                                var villager = CurrentTarget.GetComponent<Villager>();
+                                if (villager)
+                                {
+                                    AddMoral(GetMoralFromCommand(villager));
+                                    villager.Kill();
+                                    CurrentCommand = null;
+                                }
                             }
-
-                            currentTarget.GetComponent<Villager>().Kill();
                             EatingAnimationStart();
                         }
                         break;
-                    case States.ANGRY:
+                    case eStates.ANGRY:
                         {
                             AngryAnimationStart();
                         }
                         break;
-                    case States.RAMPAGE:
-                        last_time_rampage = Time.time;
+                    case eStates.RAMPAGE:
+                        LastRampage.CurrentTime = 0;
                         break;
                     default: break;
                 }
 
                 break;
-            case States.EATING:
+            case eStates.EATING:
                 switch (newState)
                 {
-                    case States.ANGRY:
+                    case eStates.ANGRY:
                         {
                             AngryAnimationStart();
                         }
                         break;
-                    case States.RAMPAGE:
-                        last_time_rampage = Time.time;
+                    case eStates.RAMPAGE:
+                        LastRampage.CurrentTime = 0;
                         break;
                     default: break;
                 }
                 break;
-            case States.ANGRY:
+            case eStates.ANGRY:
                 switch (newState)
                 {
-                    case States.REST:
+                    case eStates.REST:
                         {
                             GetComponent<Animator>().SetBool("isEating", false);
-
-                            rightHand.GetComponent<SpriteRenderer>().sprite = HandSprite[0];
-                            leftHand.GetComponent<SpriteRenderer>().sprite = HandSprite[0];
-
                         }
                         break;
-                    case States.RAMPAGE:
-                        last_time_rampage = Time.time;
+                    case eStates.RAMPAGE:
+                        LastRampage.CurrentTime = 0;
                         break;
                     default: break;
                 }
                 break;
-            case States.HUNGRY:
+            case eStates.HUNGRY:
                 switch (newState)
                 {
-                    case States.GETTING_TARGET:
+                    case eStates.GETTING_TARGET:
                         {
                             needEat = false;
                         }
                         break;
-                    case States.ANGRY:
+                    case eStates.ANGRY:
                         {
                             AngryAnimationStart();
                         }
                         break;
-                    case States.RAMPAGE:
-                        last_time_rampage = Time.time;
+                    case eStates.RAMPAGE:
+                        LastRampage.CurrentTime = 0;
                         break;
                     default: break;
                 }
                 break;
-            case States.RAMPAGE:
-                last_time_rampage = 0f;
+            case eStates.RAMPAGE:
                 switch (newState)
                 {
-                    case States.REST:
+                    case eStates.REST:
                         {
-                            moral = Constants.MAX_MORAL;
-                            food = Constants.MAX_FOOD;
-
-                            rightHand.transform.position = rightHandRestingPosition.transform.position;
-                            leftHand.transform.position = leftHandRestingPosition.transform.position;
-
+                            // probably wanna call Init() here
+                            Moral = Constants.MAX_MORAL;
+                            Food = Constants.MAX_FOOD;
                             EnableAllSR();
-
                         }
                         break;
-                    case States.ANGRY:
+                    case eStates.ANGRY:
                         {
                             AngryAnimationStart();
                         }
-                        break;
-                    case States.RAMPAGE:
-                        last_time_rampage = Time.time;
                         break;
                     default: break;
                 }
                 break;
         }
-        currentState = newState;
+        CurrentState = newState;
     }
 
     private void UpdateSprites()
     {
-        switch (currentState)
+        switch (CurrentState)
         {
-            case States.GETTING_TARGET:
+            case eStates.REST:
                 {
-                    if (!needEat)
-                        rightHand.GetComponent<SpriteRenderer>().sprite = HandSprite[1];
-                    else
-                        rightHand.GetComponent<SpriteRenderer>().sprite = HandSprite[2];
+                    Hands[(int)eHand.RIGHT].GO.GetComponent<SpriteRenderer>().sprite = Hands[(int)eHand.RIGHT].Sprites[(int)OgreHand.eSprite.REST];
+                    Hands[(int)eHand.LEFT].GO.GetComponent<SpriteRenderer>().sprite = Hands[(int)eHand.LEFT].Sprites[(int)OgreHand.eSprite.REST];
                 }
                 break;
-            default: break;
+            case eStates.GETTING_TARGET:
+                {
+                    if (!needEat)
+                        Hands[(int)eHand.RIGHT].GO.GetComponent<SpriteRenderer>().sprite = Hands[(int)eHand.RIGHT].Sprites[(int)OgreHand.eSprite.GET_TARGET];
+                    else
+                        Hands[(int)eHand.RIGHT].GO.GetComponent<SpriteRenderer>().sprite = Hands[(int)eHand.RIGHT].Sprites[(int)OgreHand.eSprite.ANGRY];
+                }
+                break;
+            case eStates.ANGRY:
+                {
+                    Hands[(int)eHand.RIGHT].GO.GetComponent<SpriteRenderer>().sprite = Hands[(int)eHand.RIGHT].Sprites[(int)OgreHand.eSprite.ANGRY];
+                    Hands[(int)eHand.LEFT].GO.GetComponent<SpriteRenderer>().sprite = Hands[(int)eHand.LEFT].Sprites[(int)OgreHand.eSprite.ANGRY];
+                }
+                break;
+            default:
+                {
+                    Hands[(int)eHand.RIGHT].GO.GetComponent<SpriteRenderer>().sprite = Hands[(int)eHand.RIGHT].Sprites[(int)OgreHand.eSprite.REST];
+                    Hands[(int)eHand.LEFT].GO.GetComponent<SpriteRenderer>().sprite = Hands[(int)eHand.LEFT].Sprites[(int)OgreHand.eSprite.REST];
+                }
+                break;
         }
     }
 
     private void UpdatePositions()
     {
-        switch (currentState)
+        switch (CurrentState)
         {
-            case States.GETTING_TARGET:
+            case eStates.GETTING_TARGET:
                 {
                     if (!needEat)
                     {
                         // move right hand towards the incoming food
-                        rightHand.transform.position = Vector3.MoveTowards(rightHand.transform.position, currentTarget.transform.position, Constants.HandSpeed * Time.deltaTime);
-                    }  // we have something to eat, let s go to the mouth position
+                        Hands[(int)eHand.RIGHT].GO.transform.position =
+                            Vector3.MoveTowards(Hands[(int)eHand.RIGHT].GO.transform.position
+                                               , Hands[(int)eHand.RIGHT].RestPosition.position
+                                               , Constants.HandSpeed * Time.deltaTime);
+                    }  // we have something to eat, let s go to the Mouth position
                     else
                     {
-                        rightHand.transform.position = Vector3.MoveTowards(rightHand.transform.position, mouth.transform.position, Constants.HandSpeed * Time.deltaTime);
+                        Hands[(int)eHand.RIGHT].GO.transform.position =
+                            Vector3.MoveTowards(Hands[(int)eHand.RIGHT].GO.transform.position
+                                               , Mouth.transform.position
+                                               , Constants.HandSpeed * Time.deltaTime);
                     }
+                }
+                break;
+            case eStates.REST:
+                {
+                    Hands[(int)eHand.RIGHT].GO.transform.position = Vector3.MoveTowards(Hands[(int)eHand.RIGHT].GO.transform.position
+                                               , Hands[(int)eHand.RIGHT].RestPosition.position
+                                               , Constants.HandSpeed * Time.deltaTime);
+                    Hands[(int)eHand.LEFT].GO.transform.position = Vector3.MoveTowards(Hands[(int)eHand.LEFT].GO.transform.position
+                                               , Hands[(int)eHand.LEFT].RestPosition.position
+                                               , Constants.HandSpeed * Time.deltaTime);
+                }
+                break;
+            case eStates.ANGRY:
+                {
+                    if (goUp)
+                    {
+                        Hands[(int)eHand.RIGHT].GO.transform.position = Vector3.MoveTowards(Hands[(int)eHand.RIGHT].GO.transform.position
+                               , Hands[(int)eHand.RIGHT].AngryUpPosition.position
+                               , Constants.HandSpeed * Time.deltaTime);
+                        Hands[(int)eHand.LEFT].GO.transform.position = Vector3.MoveTowards(Hands[(int)eHand.LEFT].GO.transform.position
+                                                   , Hands[(int)eHand.LEFT].AngryUpPosition.position
+                                                   , Constants.HandSpeed * Time.deltaTime);
+                    }
+
+                    if (goDown)
+                    {
+                        Hands[(int)eHand.RIGHT].GO.transform.position = Vector3.MoveTowards(Hands[(int)eHand.RIGHT].GO.transform.position
+                           , Hands[(int)eHand.RIGHT].RestPosition.position
+                           , Constants.HandSpeed * Time.deltaTime);
+                        Hands[(int)eHand.LEFT].GO.transform.position = Vector3.MoveTowards(Hands[(int)eHand.LEFT].GO.transform.position
+                                                   , Hands[(int)eHand.LEFT].RestPosition.position
+                                                   , Constants.HandSpeed * Time.deltaTime);
+                    }
+
                 }
                 break;
             default: break;
@@ -528,117 +540,102 @@ public class OgreBehaviour : MonoBehaviour
     void Update()
     {
         // FROM ANY STATES
-        if (food > Constants.ogre_hungry_threshold_start)
+        // NOTe : this is bugged because you can then start a rampage while food is coming
+        // you can also get stuck in eating state, etc...
+        if (Food > Constants.ogre_hungry_threshold_start)
         {
             var ui = GetComponentInChildren<Canvas>();
             if (ui) ui.enabled = false;
         }
-        if (moral < Constants.OGRE_ANGER_THR)
+        if (Moral < Constants.OGRE_ANGER_THR)
         {
-            UpdateState(States.ANGRY);
+            UpdateState(eStates.ANGRY);
         }
-        if (food < Constants.ogre_rampage_threshold_start)
+        if (Food < Constants.ogre_rampage_threshold_start)
         {
-            UpdateState(States.RAMPAGE);
+            UpdateState(eStates.RAMPAGE);
         }
 
         // apply logic and update state accordingly
-        switch (currentState)
+        switch (CurrentState)
         {
-            case States.REST:
+            case eStates.REST:
                 {
                     FoodTick();
                     // from state rest to hungry
-                    if (food < Constants.ogre_hungry_threshold_start)
+                    if (Food < Constants.ogre_hungry_threshold_start)
                     {
-                        UpdateState(States.HUNGRY);
-                    }
-                    // if we are not in the resting position, let s reset the position
-                    if (rightHand.transform.position != rightHandRestingPosition.transform.position)
-                    {
-                        rightHand.transform.position = Vector3.MoveTowards(rightHand.transform.position, rightHandRestingPosition.transform.position, Constants.HandSpeed * Time.deltaTime);
-                        if (Vector3.Distance(rightHand.transform.position, rightHandRestingPosition.transform.position) < 0.1f)
-                        {
-                            // close enough we reset the position
-                            rightHand.transform.position = rightHandRestingPosition.transform.position;
-                        }
+                        UpdateState(eStates.HUNGRY);
                     }
                 }
                 break;
-            case States.GETTING_TARGET:
+            case eStates.GETTING_TARGET:
                 {
                     FoodTick();
-                    if (currentTarget)
+                    if (CurrentTarget)
                     {
                         UpdateSprites();
                         UpdatePositions();
 
-                        if (!needEat && Physics2D.IsTouching(rightHand.GetComponent<BoxCollider2D>(), currentTarget.GetComponent<BoxCollider2D>()))
+                        if (!needEat && Physics2D.IsTouching(Hands[(int)eHand.RIGHT].GO.GetComponent<BoxCollider2D>(), CurrentTarget.GetComponent<BoxCollider2D>()))
                         {
                             // remove from conmveyor belt
-                            if (Belt) Belt.removeOnBelt(currentTarget);
+                            if (Belt) Belt.removeOnBelt(CurrentTarget);
 
-                            currentTarget.transform.position = rightHand.transform.position + new Vector3(0, 0.5f);
-                            currentTarget.transform.parent = rightHand.transform;
+                            CurrentTarget.transform.position = Hands[(int)eHand.RIGHT].GO.transform.position + new Vector3(0, 0.5f);
+                            CurrentTarget.transform.parent = Hands[(int)eHand.RIGHT].GO.transform;
                             needEat = true;
                         }
                         else if (needEat)
                         {
                             { // this should go in villager logic
-                                // SFX play Oh nooooo...
-                                refreshAudioManager();
-                                if (!!audio_manager_ref)
-                                {
-                                    AudioManager.Instance.Play(Constants.OH_NO_VOICE);
-                                }
+                                AudioManager.Instance.Play(Constants.OH_NO_VOICE);
                             }
 
-                            if (Physics2D.IsTouching(rightHand.GetComponent<BoxCollider2D>(), mouth.GetComponent<BoxCollider2D>()))
+                            if (Physics2D.IsTouching(Hands[(int)eHand.RIGHT].GO.GetComponent<BoxCollider2D>(), Mouth.GetComponent<BoxCollider2D>()))
                             {
-                                UpdateState(States.EATING);
+                                UpdateState(eStates.EATING);
                             }
                         }
                     }
                 }
                 break;
-            case States.EATING:
+            case eStates.EATING:
                 {
                     FoodTick();
                     EatingAnimation();
                 }
                 break;
-            case States.ANGRY:
+            case eStates.ANGRY:
                 {
                     FoodTick();
                     // destroy village buildings
                     AngryAnimation();
-                    if (this.moral >= Constants.OGRE_GET_CALM_THR)
+                    if (Moral >= Constants.OGRE_GET_CALM_THR)
                     {
-                        UpdateState(States.REST);
-
-
+                        UpdateState(eStates.REST);
                     }
-
                 }
                 break;
-            case States.HUNGRY:
+            case eStates.HUNGRY:
                 {
                     FoodTick();
                     // if we are not in the resting position, let s reset the position
-                    if (rightHand.transform.position != rightHandRestingPosition.transform.position)
+                    if (Hands[(int)eHand.RIGHT].GO.transform.position 
+                        != Hands[(int)eHand.RIGHT].RestPosition.position)
                     {
-                        rightHand.transform.position = Vector3.MoveTowards(rightHand.transform.position, rightHandRestingPosition.transform.position, Constants.HandSpeed * Time.deltaTime);
-                        if (Vector3.Distance(rightHand.transform.position, rightHandRestingPosition.transform.position) < 0.1f)
+                        Hands[(int)eHand.RIGHT].GO.transform.position = Vector3.MoveTowards(Hands[(int)eHand.RIGHT].GO.transform.position, Hands[(int)eHand.RIGHT].RestPosition.transform.position, Constants.HandSpeed * Time.deltaTime);
+                        if (Vector3.Distance(Hands[(int)eHand.RIGHT].GO.transform.position, Hands[(int)eHand.RIGHT].RestPosition.transform.position) < 0.1f)
                         {
                             // close enough we reset the position
-                            rightHand.transform.position = rightHandRestingPosition.transform.position;
+                            Hands[(int)eHand.RIGHT].GO.transform.position = Hands[(int)eHand.RIGHT].RestPosition.transform.position;
                         }
                     }
                     // ask for food
                     if (needAskFood) AskFood(); // to do only once
                 }
                 break;
-            case States.RAMPAGE:
+            case eStates.RAMPAGE:
                 {
                     // disable main ogre sprite
                     // activate little ogre sprite in village
@@ -653,12 +650,11 @@ public class OgreBehaviour : MonoBehaviour
                         var script = go.GetComponent<OgreRampage>();
                         if (script.currentState == OgreRampage.States.DEACTIVATED) script.Activate();
                     }
-                    if (Time.time - last_time_rampage >= Constants.max_time_in_rampage)
+                    if (LastRampage.Tick(Time.deltaTime) >= Constants.max_time_in_rampage)
                     {
                         // Exit rampage, its too long
-                        UpdateState(States.REST);
+                        UpdateState(eStates.REST);
                     }
-
                 }
                 break;
         }

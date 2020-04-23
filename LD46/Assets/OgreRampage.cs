@@ -88,10 +88,10 @@ public class OgreRampage : MonoBehaviour
                 BigOgre.AddFood(Constants.Villager_food);
                 if (BigOgre)
                     {
-                        if (BigOgre.food > Constants.ogre_rampage_threshold_stop)
+                        if (BigOgre.Food > Constants.ogre_rampage_threshold_stop)
                         {
                             DeActivate();
-                            BigOgre.ResetBehavior(); // this will make the ogre come back to its window
+                            BigOgre.Init(); // this will make the ogre come back to its window
                         }
                     }
 
@@ -116,10 +116,10 @@ public class OgreRampage : MonoBehaviour
                     BigOgre.AddFood(Constants.Villager_food);
                     if (BigOgre)
                     {
-                        if (BigOgre.food > Constants.ogre_rampage_threshold_stop)
+                        if (BigOgre.Food > Constants.ogre_rampage_threshold_stop)
                         {
                             DeActivate();
-                            BigOgre.ResetBehavior(); // this will make the ogre come back to its window
+                            BigOgre.Init(); // this will make the ogre come back to its window
                             break;
                         }
                     }
@@ -165,10 +165,10 @@ public class OgreRampage : MonoBehaviour
         {
             if (BigOgre)
             {
-                if (BigOgre.food > Constants.ogre_rampage_threshold_stop)
+                if (BigOgre.Food > Constants.ogre_rampage_threshold_stop)
                 {
                     DeActivate();
-                    BigOgre.ResetBehavior(); // this will make the ogre come back to its window
+                    BigOgre.Init(); // this will make the ogre come back to its window
                 }
             }
 

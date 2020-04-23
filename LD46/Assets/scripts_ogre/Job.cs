@@ -161,7 +161,7 @@ namespace jobs {
             
             OgreBehaviour ob = ogre_ref.GetComponent<OgreBehaviour>();
             if (!!ob)
-                ob.moral = (int) Mathf.Min( ob.moral + Constants.CLERIC_OGRE_MORAL, Constants.MAX_MORAL);
+                ob.AddMoral((int)Constants.CLERIC_OGRE_MORAL);
 
         }
         public override Sprite getJobSprite( Villager.SEX iSex )
