@@ -326,8 +326,10 @@ public class OgreBehaviour : MonoBehaviour
             result += deltaLevel * Constants.OGRE_WRONG_LVL_COMMAND_PENALTY;
             int deltaSex = System.Convert.ToInt32(v.sex != CurrentCommand.sex);
             result -= deltaSex * Constants.OGRE_WRONG_SEX_COMMAND_PENALTY;
-            int deltaJob = System.Convert.ToInt32(v.job != CurrentCommand.job);
+            int deltaJob = System.Convert.ToInt32(v.job.getJobName() != CurrentCommand.job.getJobName());
             result -= deltaJob * Constants.OGRE_WRONG_JOB_COMMAND_PENALTY;
+
+            print(deltaLevel + " " + deltaSex + " " + deltaJob);
 
             if ( result != 0 )
             {
