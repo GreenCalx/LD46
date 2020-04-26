@@ -146,6 +146,7 @@ public class Constants
     public const int Villager_food = 25;
     public const int Ogre_Food_Tick_Loss = -5;
     public const int Ogre_Food_Tick_Time = 3;
+    public const float Ogre_Free_Food_Moral = 10;
 
     // win condition
     public const int WIN_COND_POP = 25;

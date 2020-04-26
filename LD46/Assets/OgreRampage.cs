@@ -87,13 +87,13 @@ public class OgreRampage : MonoBehaviour
                 currentTarget.GetComponent<Villager>().Kill();
                 BigOgre.AddFood(Constants.Villager_food);
                 if (BigOgre)
+                {
+                    if (BigOgre.Food > Constants.ogre_rampage_threshold_stop)
                     {
-                        if (BigOgre.Food > Constants.ogre_rampage_threshold_stop)
-                        {
-                            DeActivate();
-                            BigOgre.Init(); // this will make the ogre come back to its window
-                        }
+                        DeActivate();
+                        BigOgre.Init(); // this will make the ogre come back to its window
                     }
+                }
 
                 currentState = States.GET_TARGET;
             }
@@ -176,6 +176,12 @@ public class OgreRampage : MonoBehaviour
             {
                 GetTarget();
                 if (currentTarget) currentState = States.EAT_TARGET;
+            }
+
+            if (currentState == States.EAT_TARGET && !currentTarget)
+            {
+                // probably in wrong state...
+                currentState = States.GET_TARGET;
             }
 
         }

@@ -1,4 +1,5 @@
 ﻿
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -94,6 +95,7 @@ public class OgreBehaviour : MonoBehaviour
         var Village_go = GameObject.Find(Constants.VILLAGE_GO_NAME);
         Village = Village_go ? Village_go.GetComponent<Village>() : null;
         Animator = GetComponent<Animator>();
+        Mouth = GameObject.Find("Mouth");
         // Ticks
         EatingAnimationTick.Time = 2;
         LastRampage.Time = 5;
@@ -110,6 +112,8 @@ public class OgreBehaviour : MonoBehaviour
 
         Hands[(int)eHand.RIGHT].GO.transform.position = Hands[(int)eHand.RIGHT].RestPosition.position;
         Hands[(int)eHand.LEFT].GO.transform.position = Hands[(int)eHand.LEFT].RestPosition.position;
+
+        UpdateState(eStates.REST);
     }
 
     // internal state mutators
@@ -171,16 +175,12 @@ public class OgreBehaviour : MonoBehaviour
         }
     }
 
-    void DisplayCommand(int level, int job, int sex)
+    void DisplayCommand()
     {
         var ui = GetComponentInChildren<Canvas>();
         if (ui) ui.enabled = true;
         var icon = GetComponentInChildren<Image>();
 
-        CurrentCommand = new Villager();
-        CurrentCommand.sex = (Villager.SEX)sex;
-        CurrentCommand.job = getJob(job);
-        CurrentCommand.level = level;
         icon.sprite = CurrentCommand.job.getJobSprite(CurrentCommand.sex);
     }
 
@@ -192,7 +192,13 @@ public class OgreBehaviour : MonoBehaviour
         int commandJob = Random.Range(0, maxJob);
         int commandSex = Random.Range(0, 2);
 
-        DisplayCommand(commandLvl, commandJob, commandSex);
+        CurrentCommand = new Villager();
+        CurrentCommand.sex = (Villager.SEX)commandSex;
+        CurrentCommand.job = getJob(commandJob);
+        CurrentCommand.level = commandSex;
+
+
+        DisplayCommand();
         needAskFood = false;
     }
 
@@ -212,6 +218,9 @@ public class OgreBehaviour : MonoBehaviour
     {
         Animator.SetBool("isEating", false);
         AudioManager.Instance.Stop(Constants.EATING);
+
+        EatingAnimationTick.CurrentTime = 0;
+        EatingAnimationTick.Done = false;
     }
     void EatingAnimation()
     {
@@ -253,6 +262,7 @@ public class OgreBehaviour : MonoBehaviour
         {
             AddFood(Constants.Ogre_Food_Tick_Loss);
             FoodTickTimer.CurrentTime = 0;
+            FoodTickTimer.Done = false;
         }
     }
 
@@ -298,13 +308,19 @@ public class OgreBehaviour : MonoBehaviour
     {
         int result = 0;
 
-        int deltaLevel = (v.level - CurrentCommand.level);
-        result += deltaLevel * Constants.OGRE_WRONG_LVL_COMMAND_PENALTY;
-        int deltaSex = System.Convert.ToInt32(v.sex != CurrentCommand.sex);
-        result -= deltaSex * Constants.OGRE_WRONG_SEX_COMMAND_PENALTY;
-        int deltaJob = System.Convert.ToInt32(v.job != CurrentCommand.job);
-        result -= deltaJob * Constants.OGRE_WRONG_JOB_COMMAND_PENALTY;
-
+        if (CurrentCommand)
+        {
+            int deltaLevel = (v.level - CurrentCommand.level);
+            result += deltaLevel * Constants.OGRE_WRONG_LVL_COMMAND_PENALTY;
+            int deltaSex = System.Convert.ToInt32(v.sex != CurrentCommand.sex);
+            result -= deltaSex * Constants.OGRE_WRONG_SEX_COMMAND_PENALTY;
+            int deltaJob = System.Convert.ToInt32(v.job != CurrentCommand.job);
+            result -= deltaJob * Constants.OGRE_WRONG_JOB_COMMAND_PENALTY;
+        }
+        else
+        {
+            result = (int)Constants.Ogre_Free_Food_Moral;
+        }
         return result;
     }
 
@@ -373,6 +389,11 @@ public class OgreBehaviour : MonoBehaviour
             case eStates.EATING:
                 switch (newState)
                 {
+                    case eStates.REST:
+                        {
+                            EatingAnimationStop();
+                        }
+                        break;
                     case eStates.ANGRY:
                         {
                             AngryAnimationStart();
@@ -413,6 +434,7 @@ public class OgreBehaviour : MonoBehaviour
                         break;
                     case eStates.RAMPAGE:
                         LastRampage.CurrentTime = 0;
+                        LastRampage.Done = false;
                         break;
                     default: break;
                 }
@@ -426,6 +448,8 @@ public class OgreBehaviour : MonoBehaviour
                             Moral = Constants.MAX_MORAL;
                             Food = Constants.MAX_FOOD;
                             EnableAllSR();
+                            LastRampage.Done = false;
+                            LastRampage.CurrentTime = 0;
                         }
                         break;
                     case eStates.ANGRY:
@@ -448,6 +472,11 @@ public class OgreBehaviour : MonoBehaviour
                 {
                     Hands[(int)eHand.RIGHT].GO.GetComponent<SpriteRenderer>().sprite = Hands[(int)eHand.RIGHT].Sprites[(int)OgreHand.eSprite.REST];
                     Hands[(int)eHand.LEFT].GO.GetComponent<SpriteRenderer>().sprite = Hands[(int)eHand.LEFT].Sprites[(int)OgreHand.eSprite.REST];
+                }
+                break;
+            case eStates.EATING:
+                {
+                    Hands[(int)eHand.RIGHT].GO.GetComponent<SpriteRenderer>().sprite = Hands[(int)eHand.RIGHT].Sprites[(int)OgreHand.eSprite.ANGRY];
                 }
                 break;
             case eStates.GETTING_TARGET:
@@ -484,7 +513,7 @@ public class OgreBehaviour : MonoBehaviour
                         // move right hand towards the incoming food
                         Hands[(int)eHand.RIGHT].GO.transform.position =
                             Vector3.MoveTowards(Hands[(int)eHand.RIGHT].GO.transform.position
-                                               , Hands[(int)eHand.RIGHT].RestPosition.position
+                                               , CurrentTarget.transform.position
                                                , Constants.HandSpeed * Time.deltaTime);
                     }  // we have something to eat, let s go to the Mouth position
                     else
@@ -539,6 +568,10 @@ public class OgreBehaviour : MonoBehaviour
     // TODO move everything linked to physics in fixedUpdate!!!!!
     void Update()
     {
+        // Apply current state
+        UpdateSprites();
+        UpdatePositions();
+
         // FROM ANY STATES
         // NOTe : this is bugged because you can then start a rampage while food is coming
         // you can also get stuck in eating state, etc...
@@ -574,16 +607,16 @@ public class OgreBehaviour : MonoBehaviour
                     FoodTick();
                     if (CurrentTarget)
                     {
-                        UpdateSprites();
-                        UpdatePositions();
+                        //UpdateSprites();
+                        //UpdatePositions();
 
                         if (!needEat && Physics2D.IsTouching(Hands[(int)eHand.RIGHT].GO.GetComponent<BoxCollider2D>(), CurrentTarget.GetComponent<BoxCollider2D>()))
                         {
                             // remove from conmveyor belt
                             if (Belt) Belt.removeOnBelt(CurrentTarget);
 
-                            CurrentTarget.transform.position = Hands[(int)eHand.RIGHT].GO.transform.position + new Vector3(0, 0.5f);
                             CurrentTarget.transform.parent = Hands[(int)eHand.RIGHT].GO.transform;
+                            CurrentTarget.transform.localPosition = new Vector3(0, 0.56f ,0); // as hand position becomes parent, always same local pos
                             needEat = true;
                         }
                         else if (needEat)
@@ -592,6 +625,8 @@ public class OgreBehaviour : MonoBehaviour
                                 AudioManager.Instance.Play(Constants.OH_NO_VOICE);
                             }
 
+                            // probably a fuck in villager that makes them move even when in ogre s hand, this is a quick fix
+                            CurrentTarget.transform.localPosition = new Vector3(0, 0.56f ,0); // as hand position becomes parent, always same local pos
                             if (Physics2D.IsTouching(Hands[(int)eHand.RIGHT].GO.GetComponent<BoxCollider2D>(), Mouth.GetComponent<BoxCollider2D>()))
                             {
                                 UpdateState(eStates.EATING);
@@ -621,7 +656,7 @@ public class OgreBehaviour : MonoBehaviour
                 {
                     FoodTick();
                     // if we are not in the resting position, let s reset the position
-                    if (Hands[(int)eHand.RIGHT].GO.transform.position 
+                    if (Hands[(int)eHand.RIGHT].GO.transform.position
                         != Hands[(int)eHand.RIGHT].RestPosition.position)
                     {
                         Hands[(int)eHand.RIGHT].GO.transform.position = Vector3.MoveTowards(Hands[(int)eHand.RIGHT].GO.transform.position, Hands[(int)eHand.RIGHT].RestPosition.transform.position, Constants.HandSpeed * Time.deltaTime);
