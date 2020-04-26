@@ -49,13 +49,13 @@ public class StatsUI : MonoBehaviour
     private void updateBarWidth(Image iBar, Vector2 iNewSize, bool iInvertBarProgression)
     {
         // get current left coordinates
-        float original_coordinates = (iInvertBarProgression) ? iBar.rectTransform.offsetMax.x : iBar.rectTransform.offsetMin.x;
+        // float original_coordinates = (iInvertBarProgression) ? iBar.rectTransform.offsetMax.x : iBar.rectTransform.offsetMin.x;
         // scale the bar
         iBar.rectTransform.sizeDelta  = iNewSize;
         // translate to keep bar on left using original coordinates
-        float new_coordinates = (iInvertBarProgression) ? iBar.rectTransform.offsetMax.x : iBar.rectTransform.offsetMin.x;
-        float delta = new_coordinates - original_coordinates;
-        iBar.rectTransform.transform.Translate( new Vector2( -delta, 0f) );
+        //float new_coordinates = (iInvertBarProgression) ? iBar.rectTransform.offsetMax.x : iBar.rectTransform.offsetMin.x;
+        //float delta = new_coordinates - original_coordinates;
+        //iBar.rectTransform.transform.Translate( new Vector2( -delta, 0f) );
     }
 
     private void updateBarColor(Image iBar, decimal iResourcePercentage)
