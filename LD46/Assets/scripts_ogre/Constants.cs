@@ -86,7 +86,7 @@ public class Constants
     public const float job_time_step = 5f; // time between doJob in village  
     public const float village_moral_time_step = 5f; // time between moral update
     public const float village_mate_time_step = 5f; // time between try to mate in village
-    public const float move_time_step = 0.5f; // .5 seconds    
+    public const float move_time_step = 1.5f; // .5 seconds    
     public const float belt_time_step = 1f;
     public const float villager_exp_gain_time_step = 5f; // 5 Seconds
     public const float villager_change_job_time = 3f; // 3 Seconds

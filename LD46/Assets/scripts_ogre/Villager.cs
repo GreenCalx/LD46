@@ -43,6 +43,7 @@ public class Villager : MonoBehaviour
     public bool trying_to_mate;
     public Transform destination;
 
+    private Vector2 target;
 
     public void refreshAudioManager()
     {
@@ -177,12 +178,17 @@ public class Villager : MonoBehaviour
 
         if (Time.time - last_move_update >= Constants.move_time_step)
         {
-            float min = Constants.villager_move_step * (-1);
-            float max = Constants.villager_move_step ;
-            var x = UnityEngine.Random.Range( min, max);
-            var y = UnityEngine.Random.Range( min, max);
-            rb2d.velocity = new Vector2( x, y);
-            last_move_update = Time.time;
+            // chose random position in village
+            Village v = village_go.GetComponent<Village>();
+            if (!!v)
+            {
+                var bounds = v.GetComponent<BoxCollider2D>().bounds;
+                target = new Vector2(UnityEngine.Random.Range(bounds.min.x, bounds.max.x), UnityEngine.Random.Range(bounds.min.y, bounds.max.y));
+                last_move_update = Time.time;
+            }
+        } else 
+        {
+            transform.position = Vector2.MoveTowards(transform.position, target, Constants.villager_speed * 0.5f * Time.deltaTime);
         }
     }
 
