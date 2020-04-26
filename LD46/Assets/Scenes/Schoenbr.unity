@@ -664,6 +664,12 @@ PrefabInstance:
       propertyPath: Hands.Array.data[1].GO
       value: 
       objectReference: {fileID: 916308292}
+    - target: {fileID: -8144209133977273766, guid: 1a2540033f8fa314284ada34252e8024,
+        type: 3}
+      propertyPath: villager
+      value: 
+      objectReference: {fileID: 5222546602782046459, guid: b8113b85ce9cf5f46a1cf99402f1d1ee,
+        type: 3}
     - target: {fileID: 7708481378662706458, guid: 1a2540033f8fa314284ada34252e8024,
         type: 3}
       propertyPath: m_SizeDelta.x

@@ -18,6 +18,8 @@ public class StatsUI : MonoBehaviour
     private GameObject info_text;
     private Text info_text_villager;
 
+    private GameObject ogreError;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -41,6 +43,7 @@ public class StatsUI : MonoBehaviour
 
         info_text = GameObject.Find("Info_Text");
         info_text_villager = GameObject.Find("Info_Text_Villager").GetComponent<Text>();
+        ogreError = GameObject.Find("Info_Text_Ogre");
     }
 
     private void updateBarWidth(Image iBar, Vector2 iNewSize, bool iInvertBarProgression)
@@ -161,6 +164,14 @@ public class StatsUI : MonoBehaviour
 
                 this.updateBarColor( this.ogre_food_bar , food_ratio_percentage);
                 this.updateBarColor( this.ogre_moral_bar, moral_ratio_percentage);
+
+                if (ogre.needDisplayCommandError)
+                {
+                    ogreError.SetActive(true);
+                }else
+                {
+                    ogreError.SetActive(false);
+                }
             }
         }
 

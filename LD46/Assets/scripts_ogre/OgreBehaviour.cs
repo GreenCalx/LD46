@@ -53,6 +53,8 @@ public class OgreBehaviour : MonoBehaviour
     public bool needAskFood = false;
     public bool goUp = false;
     public bool goDown = false;
+    public bool needDisplayCommandError = false;
+    private TimedTick DisplayCommandErrorTick = new TimedTick();
 
     [System.Serializable]
     public class TimedTick
@@ -74,6 +76,7 @@ public class OgreBehaviour : MonoBehaviour
     private TimedTick LastRampage = new TimedTick();
     private TimedTick FoodTickTimer = new TimedTick();
     private Villager CurrentCommand;
+    public GameObject villager;
 
     private BeltConveyor Belt;
     private Village Village;
@@ -100,6 +103,7 @@ public class OgreBehaviour : MonoBehaviour
         EatingAnimationTick.Time = 2;
         LastRampage.Time = 5;
         FoodTickTimer.Time = Constants.Ogre_Food_Tick_Time;
+        DisplayCommandErrorTick.Time = 3; // display message for 3 seconds
 
         Init();
     }
@@ -122,7 +126,7 @@ public class OgreBehaviour : MonoBehaviour
     {
         // clamp value
         Moral += m;
-        Mathf.Clamp(Moral, 0, Constants.MAX_MORAL);
+        Moral = Mathf.Clamp(Moral, 0, Constants.MAX_MORAL);
     }
 
     public void AddFood(int f)
@@ -196,7 +200,11 @@ public class OgreBehaviour : MonoBehaviour
         int commandJob = Random.Range(0, maxJob);
         int commandSex = Random.Range(0, 2);
 
-        CurrentCommand = new Villager();
+        // NOTE: we cannot use new for monobehavior inherited obejct
+        // so I create a new one and setactive false to avoir logic of villager being executed
+        var command_go = Instantiate(villager);
+        CurrentCommand = command_go.GetComponent<Villager>();
+        CurrentCommand.gameObject.SetActive(false);
         CurrentCommand.sex = (Villager.SEX)commandSex;
         CurrentCommand.job = getJob(commandJob);
         CurrentCommand.level = commandSex;
@@ -320,6 +328,11 @@ public class OgreBehaviour : MonoBehaviour
             result -= deltaSex * Constants.OGRE_WRONG_SEX_COMMAND_PENALTY;
             int deltaJob = System.Convert.ToInt32(v.job != CurrentCommand.job);
             result -= deltaJob * Constants.OGRE_WRONG_JOB_COMMAND_PENALTY;
+
+            if ( result != 0 )
+            {
+                needDisplayCommandError = true;
+            }
         }
         else
         {
@@ -572,6 +585,19 @@ public class OgreBehaviour : MonoBehaviour
     // TODO move everything linked to physics in fixedUpdate!!!!!
     void Update()
     {
+        // quick qnd dirty displqy messqge error if commqnd is wrong
+        // used in StatsUI.cs
+        if (needDisplayCommandError)
+        {
+            DisplayCommandErrorTick.Tick(Time.deltaTime);
+            if (DisplayCommandErrorTick.Done)
+            {
+                needDisplayCommandError = false;
+                DisplayCommandErrorTick.CurrentTime = 0;
+                DisplayCommandErrorTick.Done = false;
+            }
+        }
+
         // Apply current state
         UpdateSprites();
         UpdatePositions();
