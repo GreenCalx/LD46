@@ -40,6 +40,9 @@ public class OgreRampage : MonoBehaviour
         }
 
         AudioManager.Instance.Play(Constants.FRESH_MEAT);
+
+        CurrentBlockFrameCount = 0;
+        CurrentDisabledTime = 0;
     }
 
 
@@ -99,7 +102,48 @@ public class OgreRampage : MonoBehaviour
             }
             else
             {
-                transform.position = Vector3.MoveTowards(transform.position, currentTarget.transform.position, Constants.LittleOgreSpeed * Time.fixedDeltaTime);
+                // let s try to be a tiny bit smarter (lul) on the path finding
+
+                // if we are gonna it a house and not the currentTarget between us and the house
+                var target_position = Vector3.MoveTowards(transform.position, currentTarget.transform.position, Constants.LittleOgreSpeed * Time.fixedDeltaTime);
+                var target_direction = target_position - transform.position;
+                var raycast_result = Physics2D.BoxCastAll(transform.position, BC.size, 0, target_direction.normalized, Vector2.Distance(transform.position, target_position));
+                bool house_on_the_path = false;
+                foreach(RaycastHit2D hit in raycast_result)
+                {
+                    if ( hit.collider.gameObject.GetComponent<House>() )
+                    {
+                        house_on_the_path = true;
+                    }
+                }
+
+                if (house_on_the_path)
+                {
+                    // are we going mostly up/down or right/left?
+                    if (Mathf.Abs(target_direction.x) > Mathf.Abs(target_direction.y)) {
+                        // mostly going right/left
+                        if (target_direction.x > 0)
+                        {
+                            // mostly going right
+                            target_position = transform.position + new Vector3(10, 0, 0);
+                        } else
+                        {
+                            target_position = transform.position + new Vector3(-10, 0, 0);
+                        }
+                    } else
+                    {
+                        // mostly going up/down 
+                        if (target_direction.y > 0)
+                        {
+                            // mostly going up
+                            target_position = transform.position + new Vector3(0, 10, 0);
+                        } else
+                        {
+                            target_position = transform.position + new Vector3(0, 10, 0);
+                        }
+                    }
+                }
+                transform.position = Vector3.MoveTowards(transform.position, target_position, Constants.LittleOgreSpeed * Time.fixedDeltaTime);
             }
 
             // this is a hack to avoid letting the ogre getting stuck for too long in a house
@@ -125,6 +169,7 @@ public class OgreRampage : MonoBehaviour
                     }
                 }
 
+                // emergency fix
                 // are we blocked by a fucking house?
                 if (c.GetComponent<House>())
                 {

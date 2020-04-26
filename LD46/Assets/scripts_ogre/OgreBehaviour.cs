@@ -177,11 +177,15 @@ public class OgreBehaviour : MonoBehaviour
 
     void DisplayCommand()
     {
+        // TODO : cleanup this gameobject shenanigans non sense
         var ui = GetComponentInChildren<Canvas>();
         if (ui) ui.enabled = true;
-        var icon = GetComponentInChildren<Image>();
-
-        icon.sprite = CurrentCommand.job.getJobSprite(CurrentCommand.sex);
+        var icon_go = GameObject.Find("command");
+        if (icon_go)
+        {
+            var icon = icon_go.GetComponent<Image>();
+            icon.sprite = CurrentCommand.job.getJobSprite(CurrentCommand.sex);
+        }
     }
 
     void AskFood()
