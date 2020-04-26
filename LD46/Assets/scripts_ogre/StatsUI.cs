@@ -15,6 +15,9 @@ public class StatsUI : MonoBehaviour
     private float bar_max_width;
     private float bar_max_height;
 
+    private GameObject info_text;
+    private Text info_text_villager;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -35,6 +38,9 @@ public class StatsUI : MonoBehaviour
         // all bars share same max width && height
         this.bar_max_width = this.ogre_food_bar.rectTransform.sizeDelta.x;
         this.bar_max_height = this.ogre_food_bar.rectTransform.sizeDelta.y;
+
+        info_text = GameObject.Find("Info_Text");
+        info_text_villager = GameObject.Find("Info_Text_Villager").GetComponent<Text>();
     }
 
     private void updateBarWidth(Image iBar, Vector2 iNewSize, bool iInvertBarProgression)
@@ -99,6 +105,10 @@ public class StatsUI : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        info_text.SetActive(false);
+        info_text_villager.text = "";
+        info_text.GetComponent<RectTransform>().sizeDelta = new Vector2 ( info_text.GetComponent<RectTransform>().sizeDelta.x , 0);
+
         //update ogre bars
         if (!!village_go)
         {
@@ -117,6 +127,19 @@ public class StatsUI : MonoBehaviour
 
                 this.updateBarColor( this.village_food_bar , food_ratio_percentage);
                 this.updateBarColor( this.village_moral_bar, moral_ratio_percentage);
+
+                if ( v.food < Constants.VILLAGE_FAMINE_TRH )
+                {
+                    info_text.SetActive(true);
+                    info_text.GetComponent<RectTransform>().sizeDelta += new Vector2 ( 0 , 40);
+                    info_text_villager.text = "Famine is killing villagers!\n You need more farmers!\n";
+                }
+                if ( v.moral < Constants.VILLAGE_MORAL_REQ_TO_MATE )
+                {
+                    info_text.SetActive(true);
+                    info_text.GetComponent<RectTransform>().sizeDelta += new Vector2 ( 0 , 40);
+                    info_text_villager.text += "Moral is too low to mate!\n You need more bards!";
+                }
             }
         }
 
