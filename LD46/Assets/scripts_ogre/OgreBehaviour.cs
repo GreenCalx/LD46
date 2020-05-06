@@ -207,7 +207,7 @@ public class OgreBehaviour : MonoBehaviour
         CurrentCommand.gameObject.SetActive(false);
         CurrentCommand.sex = (Villager.SEX)commandSex;
         CurrentCommand.job = getJob(commandJob);
-        CurrentCommand.level = commandSex;
+        CurrentCommand.level = CurrentCommand.job.getLevelRequired();
 
 
         DisplayCommand();
@@ -323,6 +323,9 @@ public class OgreBehaviour : MonoBehaviour
         if (CurrentCommand)
         {
             int deltaLevel = (v.level - CurrentCommand.level);
+            if (deltaLevel == -1) {
+                int br = 0;
+            }
             result += deltaLevel * Constants.OGRE_WRONG_LVL_COMMAND_PENALTY;
             int deltaSex = System.Convert.ToInt32(v.sex != CurrentCommand.sex);
             result -= deltaSex * Constants.OGRE_WRONG_SEX_COMMAND_PENALTY;
@@ -331,7 +334,7 @@ public class OgreBehaviour : MonoBehaviour
 
             print(deltaLevel + " " + deltaSex + " " + deltaJob);
 
-            if ( result != 0 )
+            if ( result < 0 )
             {
                 needDisplayCommandError = true;
             }
