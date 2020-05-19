@@ -25,6 +25,22 @@ public class Village : MonoBehaviour
     private float last_time_moral_updated;
     private float last_time_tried_mate;
 
+    public List<GameObject> getFarms()
+    {
+        List<GameObject> child_zones = new List<GameObject>();
+        int i_farm=1;
+        Transform t = null;
+        do // lmao
+        {
+            t = this.gameObject.transform.Find( Constants.FARM_GO_NAME + i_farm );
+            i_farm++;
+            if (!!t)
+                child_zones.Add( t.gameObject );
+        } while ( t != null );
+        
+        return child_zones;
+    }
+
     public void refreshAudioManager()
     {
         if (audio_manager_ref==null)

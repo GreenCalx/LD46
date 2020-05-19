@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class House : MonoBehaviour
+public class House : Buildings
 {
     public enum HOUSE_STATE {
         FULL = 0,
@@ -53,4 +53,10 @@ public class House : MonoBehaviour
             state = HOUSE_STATE.FULL;
         update_sprite();
     }
+
+    public override bool canWorkHere( jobs.Job iJob )
+    {
+        return string.Equals( iJob.getJobName(), Constants.builder_job_name); 
+    }
+
 }

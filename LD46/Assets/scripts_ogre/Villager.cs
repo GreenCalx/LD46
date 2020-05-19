@@ -8,7 +8,7 @@ using UnityEngine;
 using jobs;
 
 
-public class Villager : MonoBehaviour
+public class Villager : NPC
 {
 
     public enum SEX {
@@ -17,7 +17,7 @@ public class Villager : MonoBehaviour
     }
 
     // Held GO references
-    private GameObject village_go = null;
+    public GameObject village_go = null;
     public GameObject BloodSplash;
     public GameObject audio_manager_ref;
 
@@ -356,6 +356,8 @@ public class Villager : MonoBehaviour
 
             else if ( trying_to_mate && destination )
                 this.moveToDestination();
+            else if ( job.hasABuildingTarget() )
+                this.job.applyJobMove( this );
             else
                 this.moveRandom();
 
@@ -418,6 +420,17 @@ public class Villager : MonoBehaviour
     void OnCollisionStay2D( Collision2D other) 
     {
         checkMatingCollision(other);
+    }
+
+    public override void onSubscribe() 
+    {
+        // reached destination
+        job.targeted_building_reached = true;
+        job.targeted_building = null;
+    }
+    public override void onUnsubscribe() 
+    {
+        job.targeted_building_reached = false;
     }
 
 }

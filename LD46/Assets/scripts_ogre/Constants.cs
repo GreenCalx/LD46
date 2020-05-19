@@ -18,6 +18,7 @@ public class Constants
     public const string AUDIO_MANAGER_GO_NAME = "AudioManager";
     public const string PLAYER_CONTROLLER_GO_NAME = "PLAYER";
     public const string BELT = "conveyor_belt";
+    public const string FARM_GO_NAME = "farm_zone";
 
 
     // Graphx
